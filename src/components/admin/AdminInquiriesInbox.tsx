@@ -102,6 +102,13 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
     toast({ title: "Lead Deleted", description: "Inquiry removed from the database." });
   };
 
+  const handlePurgeAll = () => {
+    if (!window.confirm("Purge all locally cached data and reload real live submissions only?")) return;
+    localStorage.removeItem("dbst_superadmin_inquiries");
+    loadData();
+    toast({ title: "Cache Purged", description: "Showing real live inquiries only." });
+  };
+
   const handleExport = () => {
     AdminStore.exportInquiriesToCsv(filtered);
     toast({ title: "Export Started", description: "Downloading CSV spreadsheet." });
@@ -158,6 +165,15 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>Refresh</span>
+          </button>
+
+          <button
+            onClick={handlePurgeAll}
+            className="px-3 py-2 text-xs font-mono font-medium rounded-md border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 flex items-center gap-1.5 transition-colors"
+            title="Purge cached test records"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>Purge Mock Data</span>
           </button>
 
           <button
@@ -241,10 +257,22 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
             <span>Synchronizing inquiries...</span>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center text-fg-dim">
-            <MessageSquare className="w-8 h-8 text-zinc-300 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-fg-default">No inquiries match the current filter</p>
-            <p className="text-xs text-fg-dim mt-1">Try broadening your search or resetting the status filter.</p>
+          <div className="p-16 text-center text-fg-dim space-y-3">
+            <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-zinc-400">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-base font-bold font-display text-fg-default">No Incoming Client Inquiries Yet</p>
+              <p className="text-xs text-fg-dim mt-1 max-w-md mx-auto">
+                Real inquiries submitted by visitors via <code className="text-accent font-mono">/contact</code> or the consultation booking panel will appear here live in real time.
+              </p>
+            </div>
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-[10px] font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Live Ingestion Listener Active
+              </span>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">

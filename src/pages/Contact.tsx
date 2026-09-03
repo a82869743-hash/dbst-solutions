@@ -26,6 +26,8 @@ const budgetRanges = [
   "Flexible / To Be Scoped",
 ];
 
+import { AdminStore } from "@/lib/admin/adminStore";
+
 const ContactPage = () => {
   useDocumentMeta({
     title: "Contact & Scoping Intake | D-BST Solutions",
@@ -44,7 +46,7 @@ const ContactPage = () => {
     notes: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.email) {
       toast({
@@ -56,11 +58,20 @@ const ContactPage = () => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await AdminStore.recordInquiry({
+        name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        serviceInterest: `${formData.service} (${formData.budget})`,
+        message: formData.notes,
+        source: "dbst",
+      });
+
       toast({
         title: "Message Sent Successfully!",
-        description: "We'll get back to you within 24 hours.",
+        description: "Thank you. A D-BST Solutions Engineer will reach out within 24 hours.",
       });
       setFormData({
         fullName: "",
@@ -71,7 +82,15 @@ const ContactPage = () => {
         budget: budgetRanges[2],
         notes: "",
       });
-    }, 1000);
+    } catch (err: any) {
+      toast({
+        title: "Submission Error",
+        description: "Could not submit inquiry. Please try again or email info@dbstsolutions.com directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

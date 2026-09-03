@@ -139,69 +139,8 @@ export const defaultCredentials: CredentialsVault = {
   metaPixelId: "",
 };
 
-// Seed inquiries if database table is initially empty
-export const mockInquiries: InquiryItem[] = [
-  {
-    id: "inq-1",
-    name: "Marcus Vance",
-    email: "m.vance@pacificfreight.com.au",
-    company: "Pacific Freight Australia",
-    message: "We operate 140 prime movers on TruckMate TMS. Need automated BOL ingestion via OCR and live EDI integration with Linfox.",
-    source: "dbst",
-    status: "new",
-    created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
-    phone: "+61 412 889 012",
-    serviceInterest: "Professional ERP Services (TruckMate)",
-  },
-  {
-    id: "inq-2",
-    name: "Sarah Jenkins",
-    email: "sarah@growthwave.io",
-    company: "GrowthWave SaaS",
-    message: "Interested in the GrowthMates autonomous AI sales agent fleet. Looking to onboard 15 outbound agents next week.",
-    source: "growthmates",
-    status: "reviewing",
-    created_at: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
-    phone: "+1 415 892 1199",
-    serviceInterest: "Autonomous Outbound Agent",
-  },
-  {
-    id: "inq-3",
-    name: "David Sterling",
-    email: "d.sterling@sterlinglogistics.com.au",
-    company: "Sterling Logistics Group",
-    message: "We need an assessment on migrating legacy SQL Server onto Azure SQL with zero downtime and Odoo 17 ERP cutover.",
-    source: "dbst",
-    status: "contacted",
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    phone: "+61 488 231 990",
-    serviceInterest: "Cloud Migration & Odoo ERP",
-  },
-  {
-    id: "inq-4",
-    name: "Elena Rostova",
-    email: "elena@apexfin.com",
-    company: "Apex Financial",
-    message: "Requesting a quote for AI compliance and automated AML audit report generation.",
-    source: "dbst",
-    status: "closed",
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-    phone: "+61 2 9182 4410",
-    serviceInterest: "AI Automation & RPA",
-  },
-  {
-    id: "inq-5",
-    name: "Liam O'Connor",
-    email: "liam@techstackpro.co",
-    company: "TechStack Pro",
-    message: "Looking for API access to integrate GrowthMates co-pilot directly into our Zendesk portal.",
-    source: "growthmates",
-    status: "new",
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    phone: "+1 206 912 3450",
-    serviceInterest: "Support Co-Pilot API",
-  },
-];
+// Zero fake data - all inquiries collected live from real user submissions
+export const mockInquiries: InquiryItem[] = [];
 
 const CONTENT_STORAGE_KEY = "dbst_superadmin_content";
 const CREDENTIALS_STORAGE_KEY = "dbst_superadmin_credentials";
@@ -251,11 +190,89 @@ export class AdminStore {
     }
   }
 
-  // Get Inquiries (Merges Supabase with local/cached records)
+  // Record a real customer inquiry submitted from website
+  static async recordInquiry(data: {
+    name: string;
+    email: string;
+    phone?: string;
+    company?: string;
+    serviceInterest?: string;
+    message?: string;
+    source?: SiteTarget | string;
+  }): Promise<InquiryItem> {
+    const newItem: InquiryItem = {
+      id: `lead-${Date.now()}`,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      company: data.company || null,
+      serviceInterest: data.serviceInterest,
+      message: data.message || null,
+      source: (data.source || "dbst") as SiteTarget,
+      status: "new",
+      created_at: new Date().toISOString(),
+    };
+
+    // 1. Insert into Supabase table contact_submissions
+    try {
+      await supabase.from("contact_submissions").insert({
+        name: data.name,
+        email: data.email,
+        company: data.company || null,
+        message: data.serviceInterest
+          ? `[${data.serviceInterest}] ${data.message || ""}`
+          : data.message || null,
+        source: data.source || "dbst",
+      });
+    } catch (err) {
+      console.warn("Supabase direct insert fallback", err);
+    }
+
+    // 2. Persist to real live store
+    try {
+      const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
+      let items: InquiryItem[] = local ? JSON.parse(local) : [];
+      items = items.filter(
+        (i) => !["inq-1", "inq-2", "inq-3", "inq-4", "inq-5"].includes(i.id)
+      );
+      items.unshift(newItem);
+      localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(items));
+    } catch (e) {
+      console.error(e);
+    }
+
+    // 3. Dispatch to Webhooks if configured
+    try {
+      const creds = this.getCredentials();
+      if (creds.slackWebhookUrl) {
+        fetch(creds.slackWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: `🚨 New Lead on ${newItem.source.toUpperCase()}: ${newItem.name} (${newItem.email}) - ${newItem.company || "Direct"}\n> ${newItem.message || ""}`,
+          }),
+        }).catch(() => {});
+      }
+      if (creds.discordWebhookUrl) {
+        fetch(creds.discordWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: `🚨 **New Lead on ${newItem.source.toUpperCase()}**: ${newItem.name} (${newItem.email}) - ${newItem.company || "Direct"}\n> ${newItem.message || ""}`,
+          }),
+        }).catch(() => {});
+      }
+    } catch (e) {}
+
+    this.logAction("visitor", `New customer inquiry received from ${newItem.name}`, newItem.source as SiteTarget, newItem.email);
+    return newItem;
+  }
+
+  // Get Inquiries (Only authentic customer submissions)
   static async getInquiries(): Promise<InquiryItem[]> {
     let list: InquiryItem[] = [];
 
-    // 1. Try fetching from Supabase table contact_submissions
+    // 1. Fetch from Supabase contact_submissions
     try {
       const { data, error } = await supabase
         .from("contact_submissions")
@@ -276,26 +293,29 @@ export class AdminStore {
         }));
       }
     } catch (err) {
-      console.warn("Supabase fetch fallback to local cache", err);
+      console.warn("Supabase fetch fallback", err);
     }
 
-    // 2. Merge with locally cached inquiries
+    // 2. Merge with locally cached inquiries (purging any legacy mock items)
     try {
       const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
       if (local) {
         const parsedLocal: InquiryItem[] = JSON.parse(local);
+        const cleanLocal = parsedLocal.filter(
+          (i) => !["inq-1", "inq-2", "inq-3", "inq-4", "inq-5"].includes(i.id)
+        );
+        if (cleanLocal.length !== parsedLocal.length) {
+          localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(cleanLocal));
+        }
         const existingIds = new Set(list.map((i) => i.id));
-        parsedLocal.forEach((item) => {
+        cleanLocal.forEach((item) => {
           if (!existingIds.has(item.id)) {
             list.push(item);
           }
         });
-      } else if (list.length === 0) {
-        list = [...mockInquiries];
-        localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(list));
       }
     } catch (e) {
-      if (list.length === 0) list = [...mockInquiries];
+      console.error(e);
     }
 
     return list;

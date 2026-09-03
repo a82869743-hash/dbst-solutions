@@ -3,6 +3,7 @@ import { Calendar, Mail, Phone, Clock, ArrowRight, CheckCircle2, ShieldCheck, Me
 import { useToast } from "@/hooks/use-toast";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AdminStore } from "@/lib/admin/adminStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,7 +47,7 @@ export const ConsultationPanel = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.email) {
       toast({
@@ -58,14 +59,30 @@ export const ConsultationPanel = () => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await AdminStore.recordInquiry({
+        name: formData.fullName,
+        email: formData.email,
+        company: formData.company,
+        message: formData.notes,
+        serviceInterest: "Executive Architecture Consultation",
+        source: "dbst",
+      });
+
       toast({
         title: "Consultation Request Dispatched",
         description: "Thank you. A D-BST Senior Solutions Architect will reach out within 24 hours.",
       });
       setFormData({ fullName: "", email: "", company: "", notes: "" });
-    }, 1000);
+    } catch (err) {
+      toast({
+        title: "Submission Error",
+        description: "Please email info@dbstsolutions.com directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
