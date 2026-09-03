@@ -20,6 +20,7 @@ import Blog from "./pages/Blog";
 import MegaTrans from "./pages/MegaTrans";
 import BlogPost from "./pages/BlogPost";
 import BlogAdminPage from "./pages/BlogAdmin";
+import SuperAdminPage from "./pages/SuperAdmin";
 import NotFound from "./pages/NotFound";
 import OAuthConsent from "./pages/OAuthConsent";
 import Login from "./pages/Login";
@@ -50,6 +51,8 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/admin" element={<BlogAdminPage />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/super-admin" element={<SuperAdminPage />} />
+          <Route path="/admin" element={<SuperAdminPage />} />
           <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
           <Route path="/login" element={<Login />} />
           {/* CATCH-ALL ROUTE */}
