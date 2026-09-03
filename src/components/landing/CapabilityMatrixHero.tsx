@@ -4,6 +4,8 @@ import { ArrowRight, Terminal, Cpu, Layers, Search, Bell, Activity, ShieldCheck,
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
+
 interface SourceNode {
   id: string;
   name: string;
@@ -21,20 +23,17 @@ interface AgentNode {
   metric: string;
 }
 
-const rotatingHeadlineItems = [
-  {
-    orange: "Smart, Sustainable &",
-    bottom: "Scalable Solutions",
-  },
-  {
-    orange: "Smart, Scalable, Secure &",
-    bottom: "Sustainable Solutions",
-  },
-  {
-    orange: "Sustainable & Reusable",
-    bottom: "Modern Architecture",
-  },
-];
+function parseRotatingItem(item: string, index: number): { orange: string; bottom: string } {
+  if (item.includes("|")) {
+    const [orange, bottom] = item.split("|").map((s) => s.trim());
+    return { orange, bottom: bottom || "Solutions" };
+  }
+  const fallbackBottoms = ["Scalable Solutions", "Sustainable Solutions", "Modern Architecture"];
+  return {
+    orange: item,
+    bottom: fallbackBottoms[index % fallbackBottoms.length] || "Solutions",
+  };
+}
 
 const sourcesList: SourceNode[] = [
   { id: "s1", name: "TruckMate TMS", type: "Transportation & Freight", status: "active", entities: "45,000", snippet: "Automated BOL ingestion and dispatch route optimization with 99.4% accuracy." },
@@ -54,20 +53,45 @@ const agentsList: AgentNode[] = [
 
 export const CapabilityMatrixHero = () => {
   const [selectedSource, setSelectedSource] = useState<SourceNode>(sourcesList[0]);
+  const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
   const [rotationIdx, setRotationIdx] = useState(0);
   const [animPhase, setAnimPhase] = useState<"enter" | "exit">("enter");
 
+  // Subscribe to live content updates from Super Admin CMS
   useEffect(() => {
+    const handleUpdate = () => {
+      setContentConfig(AdminStore.getContent("dbst"));
+    };
+    window.addEventListener("admin_content_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("admin_content_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
+
+  const rotatingHeadlineItems = (
+    contentConfig.heroAnimatedWords && contentConfig.heroAnimatedWords.length > 0
+      ? contentConfig.heroAnimatedWords
+      : [
+          "Smart, Sustainable & | Scalable Solutions",
+          "Smart, Scalable, Secure & | Sustainable Solutions",
+          "Sustainable & Reusable | Modern Architecture",
+        ]
+  ).map((word, idx) => parseRotatingItem(word, idx));
+
+  useEffect(() => {
+    const count = rotatingHeadlineItems.length || 1;
     const timer = setInterval(() => {
       setAnimPhase("exit");
       setTimeout(() => {
-        setRotationIdx((prev) => (prev + 1) % rotatingHeadlineItems.length);
+        setRotationIdx((prev) => (prev + 1) % count);
         setAnimPhase("enter");
       }, 450);
     }, 3200);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [rotatingHeadlineItems.length]);
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -303,14 +327,14 @@ export const CapabilityMatrixHero = () => {
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
             <Terminal className="w-3.5 h-3.5 text-accent" />
-            <span>Sustainable &amp; Reusable Architecture</span>
+            <span>{contentConfig.announcementBadge || "Sustainable & Reusable Architecture"}</span>
           </div>
         </div>
 
         {/* Centered D-BST 3-Line Headline & Subhead */}
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 ref={headlineRef} className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-fg-default tracking-tight leading-[1.04]">
-            <div className="block">Drive your business with</div>
+            <div className="block">{contentConfig.heroHeadline || "Drive your business with"}</div>
             <div className="block overflow-hidden py-1">
               <span
                 className={cn(
@@ -320,7 +344,7 @@ export const CapabilityMatrixHero = () => {
                     : "opacity-0 -translate-y-8 scale-95 filter blur-[2px]"
                 )}
               >
-                {rotatingHeadlineItems[rotationIdx].orange}
+                {rotatingHeadlineItems[rotationIdx % (rotatingHeadlineItems.length || 1)]?.orange}
               </span>
             </div>
             <div className="block overflow-hidden py-1">
@@ -332,13 +356,13 @@ export const CapabilityMatrixHero = () => {
                     : "opacity-0 -translate-y-6"
                 )}
               >
-                {rotatingHeadlineItems[rotationIdx].bottom}
+                {rotatingHeadlineItems[rotationIdx % (rotatingHeadlineItems.length || 1)]?.bottom}
               </span>
             </div>
           </h1>
 
           <p ref={subheadRef} className="text-base sm:text-lg md:text-xl text-fg-dim leading-relaxed max-w-3xl mx-auto font-body">
-            Drive your business with Smart, Scalable, Secure &amp; Sustainable solutions. Built on sustainable and reusable architecture—transforming transportation, logistics, and enterprise operations with intelligent automation, custom TMS integrations, and AI-powered scalability.
+            {contentConfig.heroSubhead || "Drive your business with Smart, Scalable, Secure & Sustainable solutions. Built on sustainable and reusable architecture—transforming transportation, logistics, and enterprise operations with intelligent automation, custom TMS integrations, and AI-powered scalability."}
           </p>
 
           {/* CTAs */}
@@ -347,7 +371,7 @@ export const CapabilityMatrixHero = () => {
               to="/contact"
               className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-105 active:scale-95"
             >
-              <span>SCHEDULE DISCOVERY CALL</span>
+              <span>{contentConfig.primaryCtaText || "SCHEDULE DISCOVERY CALL"}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
@@ -355,24 +379,26 @@ export const CapabilityMatrixHero = () => {
               className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-white/90 border border-border-subtle text-fg-default font-semibold text-sm hover:border-accent hover:text-accent transition-all shadow-flat backdrop-blur-md hover:scale-105 active:scale-95"
             >
               <Layers className="w-4 h-4 text-accent" />
-              <span>EXPLORE SOLUTIONS</span>
+              <span>{contentConfig.secondaryCtaText || "EXPLORE SOLUTIONS"}</span>
             </Link>
           </div>
 
           {/* Compact Trust Strip */}
           <div ref={trustStripRef} className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-fg-dim">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-accent" />
-              <span><strong className="text-accent font-bold">15+</strong> Years Experience</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span><strong className="text-fg-default font-bold">100+</strong> Systems Integrated</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-accent" />
-              <span><strong className="text-accent font-bold">24/7</strong> Follow-the-Sun Support</span>
-            </div>
+            {(contentConfig.trustMetrics || [
+              { label: "Years Experience", value: "15+" },
+              { label: "Systems Integrated", value: "100+" },
+              { label: "Follow-the-Sun Support", value: "24/7" },
+            ]).map((metric, idx) => (
+              <div key={idx} className="flex items-center gap-1.5">
+                {idx === 0 && <ShieldCheck className="w-4 h-4 text-accent" />}
+                {idx === 1 && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                {idx >= 2 && <Award className="w-4 h-4 text-accent" />}
+                <span>
+                  <strong className="text-accent font-bold">{metric.value}</strong> {metric.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 

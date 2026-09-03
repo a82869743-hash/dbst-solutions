@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, MapPin, ChevronDown, Menu, X, ArrowRight, Code, Bot, BarChart3, RefreshCw, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 import LogoMark from "../landing/LogoMark";
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 const serviceLinks = [
   {
@@ -48,7 +49,20 @@ const mainNavLinks = [
 export const DbstNavigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
   const location = useLocation();
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setContentConfig(AdminStore.getContent("dbst"));
+    };
+    window.addEventListener("admin_content_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("admin_content_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
 
   return (
     <>
@@ -56,21 +70,21 @@ export const DbstNavigation = () => {
       <div className="bg-ink-deep text-ink-fg py-2 px-4 text-xs font-mono">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-6">
-            <a href="tel:+61430981166" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
+            <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
               <Phone className="w-3.5 h-3.5 text-accent" />
-              <span>+61 430 981 166</span>
+              <span>{contentConfig.contactPhone || "+61 430 981 166"}</span>
             </a>
-            <a href="mailto:info@dbstsolutions.com" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
+            <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
               <Mail className="w-3.5 h-3.5 text-accent" />
-              <span>info@dbstsolutions.com</span>
+              <span>{contentConfig.contactEmail || "info@dbstsolutions.com"}</span>
             </a>
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-fg-dimmer">
               <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span>Sydney, AU • Area served: AU</span>
+              <span>{contentConfig.address || "Sydney, AU • Area served: AU"}</span>
             </span>
-            <span className="text-accent font-semibold">Strategic Consulting &amp; Automation Solutions</span>
+            <span className="text-accent font-semibold">{contentConfig.tagline || "Strategic Consulting & Automation Solutions"}</span>
           </div>
         </div>
       </div>

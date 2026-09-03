@@ -1,8 +1,24 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 import LogoMark from "../landing/LogoMark";
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 export const DbstFooter = () => {
+  const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setContentConfig(AdminStore.getContent("dbst"));
+    };
+    window.addEventListener("admin_content_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("admin_content_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
+
   return (
     <footer className="bg-ink-deep text-ink-fg border-t border-zinc-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
@@ -12,21 +28,25 @@ export const DbstFooter = () => {
             <LogoMark size="default" variant="full" onBackground="dark" />
 
             <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-              Transforming transportation and logistics operations with intelligent automation, custom TMS integrations, and AI-powered solutions.
+              {contentConfig.tagline || "Transforming transportation and logistics operations with intelligent automation, custom TMS integrations, and AI-powered solutions."}
             </p>
 
             <div className="space-y-3 pt-2 text-xs font-mono text-zinc-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-ink-accent" />
-                <span>+61 430 981 166</span>
+                <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="hover:text-ink-accent transition-colors">
+                  {contentConfig.contactPhone || "+61 430 981 166"}
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-ink-accent" />
-                <span>info@dbstsolutions.com</span>
+                <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="hover:text-ink-accent transition-colors">
+                  {contentConfig.contactEmail || "info@dbstsolutions.com"}
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-ink-accent" />
-                <span>Sydney, AU • Area served: AU</span>
+                <span>{contentConfig.address || "Sydney, AU • Area served: AU"}</span>
               </div>
             </div>
           </div>

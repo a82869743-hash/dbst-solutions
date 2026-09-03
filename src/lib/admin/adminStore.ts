@@ -164,6 +164,17 @@ export class AdminStore {
     try {
       localStorage.setItem(`${CONTENT_STORAGE_KEY}_${site}`, JSON.stringify(config));
       this.logAction(userEmail, `Updated ${config.siteName} content configuration`, site);
+
+      // Dispatch live reactive updates
+      window.dispatchEvent(
+        new CustomEvent("admin_content_updated", { detail: { site, config } })
+      );
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: `${CONTENT_STORAGE_KEY}_${site}`,
+          newValue: JSON.stringify(config),
+        })
+      );
     } catch (e) {
       console.error(e);
     }
