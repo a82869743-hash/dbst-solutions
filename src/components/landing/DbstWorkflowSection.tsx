@@ -18,39 +18,51 @@ interface StepItem {
 const stepsData: StepItem[] = [
   {
     number: "STEP 01",
-    title: "Connect & Ingest Data Sources",
-    tagline: "Unify scattered legacy infrastructure without downtime",
-    description: "Ingest operational data from legacy ERPs, SAP S/4HANA, freight telematics, and unstructured PDF vaults without disrupting existing workflows.",
+    title: "Discovery & Operational Assessment",
+    tagline: "Identify operational bottlenecks and automation opportunities",
+    description: "Analyze manual data entry points, legacy TMS/ERP workflows, and operational friction to establish a measurable digital transformation baseline.",
     features: [
-      "Sub-80ms connectors for SAP & McLeod TMS",
-      "Automated PDF & BIM tender OCR extraction",
-      "High-throughput MQTT broker for IoT PLCs",
+      "Legacy TMS & ERP workflow auditing",
+      "Bottleneck & manual overhead analysis",
+      "Strategic roadmap & ROI scoping",
     ],
-    mobileScreenTitle: "Ingest Sources",
+    mobileScreenTitle: "Discovery Scope",
   },
   {
     number: "STEP 02",
-    title: "Architect D-BST Engineering Ontologies",
-    tagline: "Transform raw data into connected blueprints",
-    description: "Map client data into unified D-BST engineering blueprints. Configure custom vector RAG search, microservices, and enterprise security controls.",
+    title: "Architecture & Integration Design",
+    tagline: "Engineer custom bridges across TMS, ERP, and cloud",
+    description: "Architect bi-directional data connectors, RPA bot workflows, and cloud migrations bridging TruckMate, Odoo, and Microsoft Azure.",
     features: [
-      "48,200 unified ontology entity nodes",
-      "Vector search engine indexing 500-page specs",
-      "SOC2 Type II & ISO 27001 compliant vault",
+      "Trimble TruckMate & Odoo ERP mapping",
+      "UiPath & OpenAI workflow blueprints",
+      "Azure cloud infrastructure & SSO design",
     ],
-    mobileScreenTitle: "Ontology Config",
+    mobileScreenTitle: "Architecture Spec",
   },
   {
     number: "STEP 03",
-    title: "Deploy Autonomous AI & Microservices",
-    tagline: "Launch production-grade agents with 99.8% accuracy",
-    description: "Launch production-grade AI agents and microservices with sub-80ms response SLAs, automated error recovery, and 98.4% uptime guarantees.",
+    title: "Iterative Implementation & Deployment",
+    tagline: "Agile deployment with zero business downtime",
+    description: "Deploy custom web/mobile applications, automated rate validation, and predictive maintenance models in rapid, high-visibility milestones.",
     features: [
-      "Freight OCR agent with 99.4% parsing accuracy",
-      "Predictive MES failure detection reducing downtime by 38%",
-      "High-frequency ledger reconciliation handling $40M daily",
+      "Automated bill-of-lading document processing",
+      "Custom software & API integration delivery",
+      "Live staff training & change management",
     ],
-    mobileScreenTitle: "Deploy Fleet",
+    mobileScreenTitle: "Deploy Systems",
+  },
+  {
+    number: "STEP 04",
+    title: "24/7 Follow-the-Sun Support",
+    tagline: "Continuous monitoring across 4 global hubs",
+    description: "Distributed engineering coverage across Australia, India, Spain, and Singapore ensuring continuous monitoring, rapid incident support, and zero timezone headaches.",
+    features: [
+      "Round-the-clock technical coverage",
+      "Proactive system optimization & tuning",
+      "Dedicated SLA response guarantees",
+    ],
+    mobileScreenTitle: "Global Support",
   },
 ];
 
@@ -129,15 +141,15 @@ export const DbstWorkflowSection = () => {
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
             <Smartphone className="w-3.5 h-3.5 text-accent" />
-            <span>Interactive Mobile &amp; Enterprise Architecture</span>
+            <span>Four-Step Strategic Transformation</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-tight">
-            From Legacy Complexity to <span className="text-accent">Scalable Production</span>
+            From Operational Bottlenecks to <span className="text-accent">Scalable Growth</span>
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body max-w-2xl mx-auto">
-            Three precision engineering steps to transform scattered enterprise data into autonomous AI workflows.
+            Our proven four-step methodology combines market analysis, digital transformation roadmapping, and 24/7 follow-the-sun support.
           </p>
         </div>
 
@@ -190,7 +202,7 @@ export const DbstWorkflowSection = () => {
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
                         <span>DATA INGESTION PIPELINES</span>
-                        <span className="text-emerald-600 font-extrabold">5 ACTIVE</span>
+                        <span className="text-emerald-600 font-extrabold">ACTIVE</span>
                       </div>
 
                       {/* Card 1 */}
@@ -202,7 +214,7 @@ export const DbstWorkflowSection = () => {
                           <span className="text-[9px] px-1.5 py-0.5 bg-accent text-white font-bold rounded">Live OCR</span>
                         </div>
                         <p className="text-[10px] text-fg-dim leading-snug">
-                          1,420 bills of lading parsed automatically via vision agent.
+                          Automated BOL parsing &amp; route dispatch active.
                         </p>
                         <div className="w-full bg-accent/20 h-1.5 rounded-full overflow-hidden">
                           <div className="bg-accent h-full w-[94%] animate-pulse" />
@@ -213,12 +225,12 @@ export const DbstWorkflowSection = () => {
                       <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat transition-transform hover:scale-[1.02]">
                         <div className="flex items-center justify-between font-bold text-fg-default">
                           <span className="flex items-center gap-1.5">
-                            <Database className="w-3.5 h-3.5 text-blue-600" /> SAP S/4HANA Core
+                            <Database className="w-3.5 h-3.5 text-blue-600" /> Odoo ERP Suite
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">&lt;80ms Sync</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active Sync</span>
                         </div>
                         <p className="text-[10px] text-fg-dim leading-snug">
-                          50,000 SKUs multi-channel inventory sync.
+                          Manufacturing, inventory &amp; accounting workflows synced.
                         </p>
                       </div>
 
@@ -226,98 +238,125 @@ export const DbstWorkflowSection = () => {
                       <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat transition-transform hover:scale-[1.02]">
                         <div className="flex items-center justify-between font-bold text-fg-default">
                           <span className="flex items-center gap-1.5">
-                            <Cpu className="w-3.5 h-3.5 text-amber-600" /> IoT MES Telemetry
+                            <Cpu className="w-3.5 h-3.5 text-amber-600" /> Microsoft Azure SQL
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-800 font-bold rounded">-38% Down</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-800 font-bold rounded">Cloud Infra</span>
                         </div>
                         <p className="text-[10px] text-fg-dim leading-snug">
-                          320 CNC machines thermal anomaly stream online.
+                          Zero data loss database migration with continuous backup.
                         </p>
                       </div>
                     </div>
                   )}
 
-                  {/* SCREEN STATE 02: D-BST Ontology Form & Interactive Controls */}
+                  {/* SCREEN STATE 02: Integration & Architecture Spec */}
                   {safeActiveStep === 1 && (
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>ONTOLOGY ARCHITECTURE</span>
-                        <span className="text-accent font-extrabold">48.2K NODES</span>
+                        <span>INTEGRATION ARCHITECTURE</span>
+                        <span className="text-accent font-extrabold">VERIFIED</span>
                       </div>
 
-                      {/* Interactive Controls */}
                       <div className="p-3.5 bg-white border border-border-subtle rounded-xl space-y-2.5 shadow-flat">
                         <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                          <span className="text-[11px] font-bold text-fg-default">Vector RAG Search</span>
-                          <button
-                            onClick={() => setRagActive(!ragActive)}
-                            className={`w-9 h-5 rounded-full p-0.5 transition-colors ${ragActive ? "bg-accent" : "bg-zinc-300"}`}
-                          >
-                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${ragActive ? "translate-x-4" : "translate-x-0"}`} />
-                          </button>
+                          <span className="text-[11px] font-bold text-fg-default">TruckMate &amp; Odoo Bridge</span>
+                          <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Connected</span>
                         </div>
 
                         <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                          <span className="text-[11px] font-bold text-fg-default">Kafka Stream (142.8k/s)</span>
-                          <button
-                            onClick={() => setKafkaActive(!kafkaActive)}
-                            className={`w-9 h-5 rounded-full p-0.5 transition-colors ${kafkaActive ? "bg-accent" : "bg-zinc-300"}`}
-                          >
-                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${kafkaActive ? "translate-x-4" : "translate-x-0"}`} />
-                          </button>
+                          <span className="text-[11px] font-bold text-fg-default">UiPath RPA Bot Triggers</span>
+                          <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active</span>
                         </div>
 
                         <div className="p-2 rounded bg-accent-tint border border-accent/30 text-[10px] font-bold text-accent-deep flex items-center justify-between">
                           <span className="flex items-center gap-1">
-                            <Lock className="w-3 h-3 text-accent" /> Security Vault
+                            <Lock className="w-3 h-3 text-accent" /> Azure Cloud Security
                           </span>
-                          <span>AES-256 &bull; SOC2</span>
+                          <span>Entra ID &bull; SSO</span>
                         </div>
                       </div>
 
                       <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1 text-[10px]">
-                        <div className="font-bold text-fg-default">GRAPH SCHEMA STATUS</div>
-                        <p className="text-fg-dim">50+ Enterprise blueprints ready for production deployment.</p>
+                        <div className="font-bold text-fg-default">SYSTEM INTEROPERABILITY</div>
+                        <p className="text-fg-dim">Zero downtime cutover roadmap ready for deployment.</p>
                       </div>
                     </div>
                   )}
 
-                  {/* SCREEN STATE 03: Live Mobile Agent Dashboard */}
+                  {/* SCREEN STATE 03: Live Deployment */}
                   {safeActiveStep === 2 && (
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>ACTIVE AI AGENT FLEET</span>
-                        <span className="text-emerald-600 font-extrabold">98.4% SLA</span>
+                        <span>ACTIVE DEPLOYMENTS</span>
+                        <span className="text-emerald-600 font-extrabold">PRODUCTION</span>
                       </div>
 
                       <div className="p-3 bg-accent text-white rounded-xl space-y-1 shadow-floating">
                         <div className="flex items-center justify-between font-bold text-xs">
                           <span className="flex items-center gap-1">
-                            <Sparkles className="w-3.5 h-3.5 text-white" /> Freight Dispatch OCR
+                            <Sparkles className="w-3.5 h-3.5 text-white" /> Automated BOL Parsing
                           </span>
                           <span className="text-[9px] px-1.5 py-0.5 bg-white/20 text-white rounded font-bold">99.4%</span>
                         </div>
                         <p className="text-[10px] text-white/90">
-                          Autonomous bill of lading extraction running.
+                          Automated rate validation and paperwork extraction live.
                         </p>
                       </div>
 
                       <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1 shadow-flat">
                         <div className="flex items-center justify-between font-bold text-fg-default text-xs">
                           <span className="flex items-center gap-1">
-                            <Activity className="w-3.5 h-3.5 text-emerald-600" /> MES Predictive Inspector
+                            <Activity className="w-3.5 h-3.5 text-emerald-600" /> IoT Predictive Telemetry
                           </span>
                           <span className="text-[9px] text-emerald-600 font-bold">Active</span>
                         </div>
                         <p className="text-[10px] text-fg-dim">
-                          Thermal anomaly detection stream online.
+                          Real-time equipment monitoring &amp; early alerts online.
                         </p>
                       </div>
 
-                      {/* Live Terminal Log Line */}
                       <div className="p-2 bg-zinc-950 text-emerald-400 font-mono text-[9px] rounded-lg border border-zinc-800 flex items-center justify-between">
-                        <span className="truncate">&gt;_ SLA sub-80ms verified</span>
+                        <span className="truncate">&gt;_ Zero business disruption achieved</span>
                         <span className="text-accent font-bold">LIVE</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SCREEN STATE 04: 24/7 Follow-the-Sun Support */}
+                  {safeActiveStep === 3 && (
+                    <div className="space-y-2.5 text-xs">
+                      <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
+                        <span>GLOBAL COVERAGE</span>
+                        <span className="text-emerald-600 font-extrabold">24/7 LIVE</span>
+                      </div>
+
+                      <div className="p-3 bg-white border-2 border-accent rounded-xl space-y-2 shadow-flat">
+                        <div className="font-bold text-fg-default text-xs flex items-center justify-between">
+                          <span>Follow-the-Sun Network</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1.5 text-[10px]">
+                          <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
+                            <span>🇦🇺</span> <span>Sydney</span>
+                          </div>
+                          <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
+                            <span>🇮🇳</span> <span>India</span>
+                          </div>
+                          <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
+                            <span>🇪🇸</span> <span>Madrid</span>
+                          </div>
+                          <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
+                            <span>🇸🇬</span> <span>Singapore</span>
+                          </div>
+                        </div>
+                        <p className="text-[9px] text-fg-dim pt-1 border-t border-border-subtle">
+                          When you sleep, we work. Faster delivery, zero timezone lag.
+                        </p>
+                      </div>
+
+                      <div className="p-2 bg-zinc-950 text-emerald-400 font-mono text-[9px] rounded-lg border border-zinc-800 flex items-center justify-between">
+                        <span className="truncate">&gt;_ 24/7 direct technical desk active</span>
+                        <span className="text-emerald-400 font-bold">ONLINE</span>
                       </div>
                     </div>
                   )}

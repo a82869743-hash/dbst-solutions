@@ -12,21 +12,21 @@ export const DbstFooter = () => {
             <LogoMark size="default" variant="full" onBackground="dark" />
 
             <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-              We design, architect, and deploy custom enterprise software, AI automation, and intelligence systems across 7 high-stakes industries.
+              Transforming transportation and logistics operations with intelligent automation, custom TMS integrations, and AI-powered solutions.
             </p>
 
             <div className="space-y-3 pt-2 text-xs font-mono text-zinc-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-ink-accent" />
-                <span>+1 (800) 555-0199</span>
+                <span>+61 430 981 166</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-ink-accent" />
-                <span>solutions@dbst.com</span>
+                <span>info@dbstsolutions.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-ink-accent" />
-                <span>San Francisco, CA • Sydney, AU</span>
+                <span>Sydney, AU • Area served: AU</span>
               </div>
             </div>
           </div>
@@ -38,28 +38,28 @@ export const DbstFooter = () => {
             </h4>
             <ul className="space-y-2.5 text-sm text-zinc-400">
               <li>
-                <Link to="/services/custom-software" className="hover:text-ink-accent transition-colors">
-                  Custom Software
+                <Link to="/services/strategic-consulting" className="hover:text-ink-accent transition-colors">
+                  Strategic Consulting
                 </Link>
               </li>
               <li>
-                <Link to="/services/ai-automation" className="hover:text-ink-accent transition-colors">
-                  AI Automation
+                <Link to="/services/custom-software" className="hover:text-ink-accent transition-colors">
+                  Custom Software Development
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/automation-ai" className="hover:text-ink-accent transition-colors">
+                  AI Automation &amp; RPA
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/odoo-truckmate-erp" className="hover:text-ink-accent transition-colors">
+                  Professional ERP Services
                 </Link>
               </li>
               <li>
                 <Link to="/services/data-analytics" className="hover:text-ink-accent transition-colors">
-                  Data Analytics
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/digital-transformation" className="hover:text-ink-accent transition-colors">
-                  Digital Transformation
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/strategic-consulting" className="hover:text-ink-accent transition-colors">
-                  Strategic Advisory
+                  Data Analytics &amp; BI
                 </Link>
               </li>
             </ul>
@@ -133,7 +133,7 @@ export const DbstFooter = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
-            © {new Date().getFullYear()} D-BST Solutions. All rights reserved. Precision engineering consultancy.
+            © {new Date().getFullYear()} D-BST Solutions. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <span>SOC2 Type II Certified</span>

@@ -383,7 +383,13 @@ const ServiceDetailPage = () => {
 
   // Normalized slug matching
   const normalizedSlug = (slug || "").toLowerCase().replace(/\s+/g, "-");
-  const service = serviceMap[normalizedSlug] || serviceMap["strategic-consulting"];
+  const slugAliases: Record<string, string> = {
+    "automation-ai": "ai-automation",
+    "odoo-truckmate-erp": "digital-transformation",
+    "advisory": "strategic-consulting",
+  };
+  const resolvedSlug = slugAliases[normalizedSlug] || normalizedSlug;
+  const service = serviceMap[resolvedSlug] || serviceMap["strategic-consulting"];
 
   const [activeNodeIdx, setActiveNodeIdx] = useState(0);
   const [activeDeliveryStep, setActiveDeliveryStep] = useState(0);
@@ -469,42 +475,42 @@ const ServiceDetailPage = () => {
       <section className="py-20 lg:py-28 bg-bg-surface border-b border-border-subtle relative overflow-hidden">
         <InteractiveGridCanvas />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
           
           <Link
             to="/#services"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-border-subtle text-xs font-mono font-bold text-fg-dim hover:text-accent hover:border-accent/40 transition-all shadow-flat"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-border-subtle text-xs font-mono font-bold text-fg-dim hover:text-accent hover:border-accent/40 transition-all shadow-flat"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to All Capabilities</span>
           </Link>
 
-          <div className="max-w-4xl space-y-5 text-left">
+          <div className="max-w-4xl space-y-4 text-left">
             
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
               <Sparkles className="w-4 h-4 text-accent" />
               <span>{service.badgeText}</span>
             </div>
 
-            <h1 ref={heroTitleRef} className="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl text-fg-default tracking-tight leading-[1.05]">
+            <h1 ref={heroTitleRef} className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-[1.08]">
               {service.title}
             </h1>
 
-            <p className="text-lg sm:text-2xl text-fg-dim font-body leading-relaxed max-w-3xl">
+            <p className="text-base sm:text-lg lg:text-xl text-fg-dim font-body leading-relaxed max-w-3xl">
               {service.tagline}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2 font-mono text-xs">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-bold hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-105"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-accent text-white font-bold hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02]"
               >
                 <span>{service.primaryCtaText}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/use-cases"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white border border-border-subtle text-fg-default font-bold hover:border-accent/40 hover:bg-bg-surface transition-all shadow-flat"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-border-subtle text-fg-default font-bold hover:border-accent/40 hover:bg-bg-surface transition-all shadow-flat hover:scale-[1.02]"
               >
                 <FolderGit2 className="w-4 h-4 text-accent" />
                 <span>{service.secondaryCtaText}</span>

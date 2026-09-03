@@ -15,8 +15,8 @@ import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const Index = () => {
   useDocumentMeta({
-    title: "D-BST Solutions | Precision Software & AI Engineering Consultancy",
-    description: "Enterprise software development, AI automation, and data analytics consultancy specializing in transportation, manufacturing, retail, and financial services.",
+    title: "D-BST Solutions | Smart, Sustainable & Scalable Tech",
+    description: "D-BST Solutions delivers Smart, Sustainable & Scalable technology — Azure, Google Cloud, UiPath, OpenAI consulting, AI automation, and custom software.",
   });
 
   return (

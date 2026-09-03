@@ -17,28 +17,28 @@ interface TicketItem {
 
 const ticketQueue: TicketItem[] = [
   {
-    id: "TCK-892",
-    title: "TruckMate TMS Dispatch Sync Timeout",
-    match: "98.4% Similarity Match",
+    id: "DEP-01",
+    title: "TruckMate TMS Fleet Upgrade & BOL Ingestion",
+    match: "Verified Partner Deployment",
     status: "matched",
-    fix: "Apply sub-80ms gRPC queue buffer fix #142",
+    fix: "Automated BOL parsing & route optimization applied",
     nodeTraceKey: 0,
   },
   {
-    id: "TCK-904",
-    title: "SAP S/4HANA Inventory Quantity Drift",
-    match: "94.2% Similarity Match",
+    id: "DEP-02",
+    title: "Odoo ERP Implementation & Inventory Sync",
+    match: "Verified Client Deployment",
     status: "matched",
-    fix: "Trigger Kafka event offset re-sync #502",
+    fix: "Unified manufacturing, inventory, and accounting sync",
     nodeTraceKey: 1,
   },
   {
-    id: "TCK-915",
-    title: "Unknown CNC PLC Vibration Spike Anomaly",
-    match: "Unseen Pattern &rsaquo; Escalating",
-    status: "escalated",
-    fix: "Escalating to Root Cause Inspector...",
-    nodeTraceKey: 3,
+    id: "DEP-03",
+    title: "Predictive Maintenance IoT Telemetry Hub",
+    match: "Verified Client Deployment",
+    status: "matched",
+    fix: "Real-time vibration sensor monitoring & early warnings",
+    nodeTraceKey: 2,
   },
 ];
 
@@ -51,28 +51,28 @@ interface TraceNode {
 
 const traceNodes: TraceNode[] = [
   {
-    code: "SYMP",
-    label: "Symptom",
-    sub: "TMS Timeout",
-    diagnosis: "gRPC Buffer Overflow &rsaquo; Auto-applied queue buffer patch #142 to prevent dispatch drops.",
+    code: "TRUCK",
+    label: "TMS Dispatch",
+    sub: "TruckMate Sync",
+    diagnosis: "Automated BOL ingestion & route dispatch connector eliminating manual paperwork.",
   },
   {
-    code: "FUNC",
-    label: "Function",
-    sub: "SAP Sync",
-    diagnosis: "Kafka Partition Offset Lag &rsaquo; Re-synced event offsets across SAP S/4HANA connector.",
+    code: "ODOO",
+    label: "ERP Workflow",
+    sub: "Odoo Integration",
+    diagnosis: "Synchronized inventory, order processing, and supplier accounting across divisions.",
   },
   {
-    code: "SIG",
-    label: "Signal",
-    sub: "Telemetry",
-    diagnosis: "High-frequency vibration spike detected &rsaquo; Signal anomaly forwarded to maintenance AI.",
+    code: "AZURE",
+    label: "Cloud Infra",
+    sub: "Azure SQL Migration",
+    diagnosis: "Modernized SQL Server database with zero data loss and automated backups.",
   },
   {
-    code: "CAUSE",
-    label: "Root Cause",
-    sub: "Bearing Friction",
-    diagnosis: "PLC Bearing Friction Thermal Spike &rsaquo; Auto-generated preventive maintenance work order dispatch.",
+    code: "RPA",
+    label: "Automation",
+    sub: "UiPath & OpenAI",
+    diagnosis: "Intelligent robotic process automation cutting administrative overhead by 85%.",
   },
 ];
 
@@ -138,15 +138,15 @@ export const DbstProductFlowSection = () => {
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
             <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
             <GitBranch className="w-3.5 h-3.5 text-accent" />
-            <span>INTEGRATED D-BST SYSTEM INTELLIGENCE</span>
+            <span>ENTERPRISE DEPLOYMENT ARCHITECTURE</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-tight">
-            Automated Triage Meets <span className="text-accent">Deep Root Cause Tracing</span>
+            Proven Solutions in <span className="text-accent">Production</span>
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body max-w-2xl mx-auto">
-            See how operations support triage automatically escalates unseen anomalies directly to deep D-BST engineering root-cause analysis in real time.
+            Explore how D-BST bridges legacy systems, automated document processing, and cloud ERP workflows with verified operational reliability.
           </p>
         </div>
 

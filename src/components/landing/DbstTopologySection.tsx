@@ -13,23 +13,23 @@ interface TopologyNode {
 }
 
 const innerNodes: TopologyNode[] = [
-  { id: "n1", code: "TMS", label: "Freight Dispatch", category: "Logistics", metric: "99.4% OCR Acc", angle: 0 },
-  { id: "n2", code: "ERP", label: "SAP S/4HANA", category: "Enterprise ERP", metric: "<80ms API Sync", angle: 45 },
-  { id: "n3", code: "IoT", label: "MES Telemetry", category: "Manufacturing", metric: "38% Downtime Drop", angle: 90 },
-  { id: "n4", code: "BIM", label: "Tender Auditor", category: "Construction", metric: "4-Min Audit", angle: 135 },
-  { id: "n5", code: "FIN", label: "Core Ledger", category: "Fintech", metric: "$40M Daily Vol", angle: 180 },
-  { id: "n6", code: "WMS", label: "Warehouse Sync", category: "Supply Chain", metric: "Sub-50ms Sync", angle: 225 },
-  { id: "n7", code: "PLM", label: "Teamcenter CAD", category: "Engineering", metric: "18.4k Entities", angle: 270 },
-  { id: "n8", code: "API", label: "GraphQL Gateway", category: "Infrastructure", metric: "99.99% Uptime", angle: 315 },
+  { id: "n1", code: "TMS", label: "Trimble TruckMate", category: "Transportation", metric: "99.4% OCR Acc", angle: 0 },
+  { id: "n2", code: "ERP", label: "Odoo ERP Suite", category: "Supply Chain", metric: "Unified ERP", angle: 45 },
+  { id: "n3", code: "AZURE", label: "Microsoft Azure", category: "Cloud Partner", metric: "Zero Data Loss", angle: 90 },
+  { id: "n4", code: "RPA", label: "UiPath Automation", category: "AI & RPA", metric: "85% Less Time", angle: 135 },
+  { id: "n5", code: "AI", label: "OpenAI Integrations", category: "AI Agents", metric: "24/7 Availability", angle: 180 },
+  { id: "n6", code: "GCP", label: "Google Cloud", category: "Cloud Platform", metric: "Enterprise Scale", angle: 225 },
+  { id: "n7", code: "DATA", label: "Power BI & Analytics", category: "Data & BI", metric: "Real-Time Reports", angle: 270 },
+  { id: "n8", code: "ML", label: "TensorFlow & Python", category: "Predictive ML", metric: "60% Less Downtime", angle: 315 },
 ];
 
 const outerAgents = [
-  { name: "LOGISTICS", icon: Truck, color: "text-accent", angle: 0 },
+  { name: "TRANSPORTATION", icon: Truck, color: "text-accent", angle: 0 },
   { name: "MANUFACTURING", icon: Factory, color: "text-amber-600", angle: 60 },
-  { name: "FINTECH", icon: CreditCard, color: "text-blue-600", angle: 120 },
+  { name: "FINANCIAL", icon: CreditCard, color: "text-blue-600", angle: 120 },
   { name: "CONSTRUCTION", icon: Building2, color: "text-orange-600", angle: 180 },
-  { name: "RETAIL POS", icon: ShoppingBag, color: "text-emerald-600", angle: 240 },
-  { name: "ENERGY IoT", icon: Zap, color: "text-yellow-600", angle: 300 },
+  { name: "RETAIL", icon: ShoppingBag, color: "text-emerald-600", angle: 240 },
+  { name: "SUSTAINABLE ENERGY", icon: Zap, color: "text-yellow-600", angle: 300 },
 ];
 
 export const DbstTopologySection = () => {

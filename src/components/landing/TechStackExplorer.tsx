@@ -22,56 +22,56 @@ interface TechNode {
 
 const leftNodes: TechNode[] = [
   {
-    id: "sap",
-    code: "SAP-S4HANA",
-    title: "SAP S/4HANA ERP Database Sync",
-    badge: "ERP gRPC",
-    badgeColor: "bg-accent-tint text-accent-deep",
-    date: "Apr 2026",
-    shipTime: "4 days to ship",
-    timeBoxLabel: "TIME TO SYNC",
-    timeBoxValue: "< 50 ms",
-    desc: "Bi-directional event stream connecting SAP material ledgers and inventory quantities.",
-    details: ["IDoc event wrapper", "OData v4 RESTlet gateway", "Zero data drift architecture"],
-  },
-  {
     id: "tms",
     code: "TMS-TRUCKMATE",
-    title: "TruckMate Dispatch Telematics",
-    badge: "OCR TMS",
+    title: "Trimble TruckMate TMS Integration",
+    badge: "TMS FLEET",
     badgeColor: "bg-accent-tint text-accent-deep",
-    date: "Jan 2026",
-    shipTime: "3 days to ship",
-    timeBoxLabel: "TIME TO PARSE",
-    timeBoxValue: "1.2 sec",
-    desc: "Multimodal LLM vision parser extracting unstructured paper bills-of-lading.",
-    details: ["McLeod & TMW connectors", "Driver GPS geofence", "Automated load assignment"],
+    date: "Active Practice",
+    shipTime: "4-8 weeks",
+    timeBoxLabel: "DISPATCH SPEED",
+    timeBoxValue: "Instant",
+    desc: "Custom integrations, automated BOL extraction, and TMS upgrade consulting.",
+    details: ["Real-time load dispatch", "Driver GPS tracking", "Automated rate validation"],
   },
   {
-    id: "iot",
-    code: "IOT-MQTT",
-    title: "Industrial MES Sensor Telemetry",
-    badge: "MQTT IoT",
+    id: "odoo",
+    code: "ODOO-ERP",
+    title: "Odoo ERP Enterprise Implementation",
+    badge: "ERP SUITE",
     badgeColor: "bg-amber-100 text-amber-800",
-    date: "Aug 2025",
-    shipTime: "7 days to ship",
-    timeBoxLabel: "TIME TO CAUSE",
-    timeBoxValue: "7 min",
-    desc: "OPC-UA and MQTT telemetry stream predicting CNC bearing failure in advance.",
-    details: ["PyTorch early-warning ML model", "ClickHouse OLAP time-series store", "Automated work-order dispatch"],
+    date: "Active Practice",
+    shipTime: "12-20 weeks",
+    timeBoxLabel: "ERP SYNC",
+    timeBoxValue: "Real-Time",
+    desc: "Unified ERP architecture covering manufacturing, inventory, accounting, and HR.",
+    details: ["Manufacturing & inventory sync", "Automated invoicing & billing", "Multi-warehouse management"],
   },
   {
-    id: "fin",
-    code: "FIN-LEDGER",
-    title: "High-Frequency Core Wire Ledger",
-    badge: "HSM VAULT",
+    id: "azure",
+    code: "AZURE-CLOUD",
+    title: "Microsoft Azure Cloud & SQL Migration",
+    badge: "AZURE PARTNER",
     badgeColor: "bg-blue-100 text-blue-800",
-    date: "Nov 2025",
-    shipTime: "2 days to ship",
-    timeBoxLabel: "TIME TO RECON",
-    timeBoxValue: "< 12 ms",
-    desc: "Distributed double-entry wire ledger with in-memory graph fraud detection.",
-    details: ["ACID compliance guarantee", "SWIFT/Fedwire match engine", "SOC2 HSM encryption"],
+    date: "Active Practice",
+    shipTime: "4-8 weeks",
+    timeBoxLabel: "DATA LOSS",
+    timeBoxValue: "0 %",
+    desc: "Migrating on-premise SQL Server and applications to Azure with high availability.",
+    details: ["Zero data loss migration", "30-50% lower TCO", "Entra ID & M365 security"],
+  },
+  {
+    id: "uipath",
+    code: "UIPATH-AI",
+    title: "UiPath RPA & OpenAI Automation",
+    badge: "AI AUTOMATION",
+    badgeColor: "bg-emerald-100 text-emerald-800",
+    date: "Active Practice",
+    shipTime: "4-6 weeks",
+    timeBoxLabel: "TIME SAVINGS",
+    timeBoxValue: "85 %",
+    desc: "Intelligent robotic process automation and AI agents eliminating repetitive manual overhead.",
+    details: ["24/7 autonomous bot operation", "OpenAI natural language processing", "Automated compliance auditing"],
   },
 ];
 
@@ -129,15 +129,15 @@ export const TechStackExplorer = () => {
         <div className="text-left max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
             <Cpu className="w-4 h-4 text-accent" />
-            <span>MULTI-SYSTEM ARCHITECTURE CONVERGENCE</span>
+            <span>VERIFIED PARTNERS &amp; ENTERPRISE INTEGRATIONS</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-tight">
-            Supported Enterprise <span className="text-accent">Tech Stack &amp; Convergence</span>
+            Supported Enterprise <span className="text-accent">Technologies &amp; Platforms</span>
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body leading-relaxed">
-            See how legacy ERPs, TMS telematics, IoT sensors, and financial ledgers converge into one unified D-BST architecture truth.
+            See how Trimble TruckMate, Odoo ERP, Microsoft Azure, and UiPath converge into scalable, automated business systems.
           </p>
         </div>
 

@@ -59,8 +59,8 @@ const ContactPage = () => {
     setTimeout(() => {
       setLoading(false);
       toast({
-        title: "Inquiry Dispatched",
-        description: "Thank you. A D-BST Senior Solutions Architect will contact you within 24 hours.",
+        title: "Message Sent Successfully!",
+        description: "We'll get back to you within 24 hours.",
       });
       setFormData({
         fullName: "",
@@ -163,7 +163,7 @@ const ContactPage = () => {
                       <Mail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">Direct Technical Email</div>
-                        <p className="text-xs text-fg-dim pt-0.5 font-mono">solutions@dbst.com / support@dbstsolutions.com</p>
+                        <p className="text-xs text-fg-dim pt-0.5 font-mono">info@dbstsolutions.com</p>
                       </div>
                     </div>
 
@@ -171,7 +171,7 @@ const ContactPage = () => {
                       <Phone className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">24/7 Technical Desk</div>
-                        <p className="text-xs text-fg-dim pt-0.5 font-mono">+1 (800) 555-DBST (3278)</p>
+                        <p className="text-xs text-fg-dim pt-0.5 font-mono">+61 430 981 166</p>
                       </div>
                     </div>
                   </div>

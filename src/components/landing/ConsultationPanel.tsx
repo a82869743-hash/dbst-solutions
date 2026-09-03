@@ -114,11 +114,11 @@ export const ConsultationPanel = () => {
               <div className="pt-6 border-t border-border-subtle space-y-3 font-mono text-xs text-fg-dim">
                 <div className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-accent shrink-0" />
-                  <span className="font-bold text-fg-default">support@dbstsolutions.com</span>
+                  <span className="font-bold text-fg-default">info@dbstsolutions.com</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="w-4 h-4 text-accent shrink-0" />
-                  <span>+1 (800) 555-DBST &bull; Direct Technical Desk</span>
+                  <span>+61 430 981 166 &bull; Direct Technical Desk</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Clock className="w-4 h-4 text-accent shrink-0" />

@@ -109,12 +109,12 @@ export const FounderNote = () => {
                 A Note From Our Engineering Leadership
               </h2>
               <p className="text-base sm:text-lg text-fg-dim leading-relaxed font-body italic">
-                &ldquo;We founded D-BST Solutions with a clear mission: eliminate generic tech fluff and deliver battle-tested, high-precision software and AI systems that solve real operational bottlenecks. Every architecture we build is engineered for long-term scalability, security, and measurable ROI.&rdquo;
+                &ldquo;With over 15 years of experience across Transportation, Retail, Manufacturing, and Financial Services, we bring together diverse perspectives, technical excellence, and customer-first thinking to every project. We're not just consultants—we're your partners in growth.&rdquo;
               </p>
               <div className="text-xs font-mono text-fg-default pt-2 border-t border-border-subtle/60 flex items-center gap-2">
                 <span className="font-bold text-sm text-fg-default">Dustin B.</span>
                 <span className="text-fg-dimmer">&bull;</span>
-                <span className="text-fg-dim">Founder &amp; Managing Director</span>
+                <span className="text-fg-dim">Founder &amp; Principal Consultant</span>
                 <span className="text-fg-dimmer">&bull;</span>
                 <span className="text-accent font-bold">D-BST Solutions</span>
               </div>

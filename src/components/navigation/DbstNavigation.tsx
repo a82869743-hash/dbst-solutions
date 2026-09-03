@@ -6,34 +6,34 @@ import LogoMark from "../landing/LogoMark";
 
 const serviceLinks = [
   {
-    title: "Custom Software Engineering",
+    title: "Strategic Consulting",
+    href: "/services/strategic-consulting",
+    desc: "Four-step strategic approach combining market analysis, digital transformation, and change management.",
+    icon: Compass,
+  },
+  {
+    title: "Custom Software Development",
     href: "/services/custom-software",
-    desc: "Mission-critical enterprise software and modern cloud systems.",
+    desc: "Enterprise-grade web & mobile apps, API development, and cloud-native architecture.",
     icon: Code,
   },
   {
-    title: "AI Automation & Workflows",
-    href: "/services/ai-automation",
-    desc: "Custom AI agents, document processing, and automated ops.",
+    title: "AI Automation & RPA",
+    href: "/services/automation-ai",
+    desc: "AI-driven automation with UiPath RPA, OpenAI integration, and machine learning solutions.",
     icon: Bot,
   },
   {
-    title: "Data Analytics & Intelligence",
-    href: "/services/data-analytics",
-    desc: "Real-time data pipelines, dashboards, and predictive ML.",
-    icon: BarChart3,
-  },
-  {
-    title: "Digital Transformation",
-    href: "/services/digital-transformation",
-    desc: "Legacy modernization, cloud migration, and tech stack overhaul.",
+    title: "Professional ERP Services",
+    href: "/services/odoo-truckmate-erp",
+    desc: "Specialized consulting for Odoo ERP and Trimble TruckMate TMS.",
     icon: RefreshCw,
   },
   {
-    title: "Strategic Advisory & Consulting",
-    href: "/services/strategic-consulting",
-    desc: "Fractional CTO, architecture reviews, and AI roadmap.",
-    icon: Compass,
+    title: "Data Analytics & BI",
+    href: "/services/data-analytics",
+    desc: "Transform raw data into actionable insights with real-time analytics and dashboards.",
+    icon: BarChart3,
   },
 ];
 
@@ -51,38 +51,40 @@ export const DbstNavigation = () => {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border-subtle bg-bg-base/95 backdrop-blur-md">
-      {/* Top Contact Bar */}
+    <>
+      {/* Top Contact Bar - Scrolls naturally with the page */}
       <div className="bg-ink-deep text-ink-fg py-2 px-4 text-xs font-mono">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-6">
-            <a href="tel:+18005550199" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
+            <a href="tel:+61430981166" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
               <Phone className="w-3.5 h-3.5 text-accent" />
-              <span>+1 (800) 555-0199</span>
+              <span>+61 430 981 166</span>
             </a>
-            <a href="mailto:solutions@dbst.com" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
+            <a href="mailto:info@dbstsolutions.com" className="flex items-center gap-1.5 hover:text-ink-accent transition-colors">
               <Mail className="w-3.5 h-3.5 text-accent" />
-              <span>solutions@dbst.com</span>
+              <span>info@dbstsolutions.com</span>
             </a>
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-fg-dimmer">
               <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span>Headquarters: San Francisco, CA • Sydney, AU</span>
+              <span>Sydney, AU • Area served: AU</span>
             </span>
-            <span className="text-accent font-semibold">Engineering-Grade Consultancy</span>
+            <span className="text-accent font-semibold">Strategic Consulting &amp; Automation Solutions</span>
           </div>
         </div>
       </div>
 
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Clean D-BST Brand Logo */}
-        <Link to="/" className="flex items-center gap-3">
-          <LogoMark size="default" variant="full" />
-        </Link>
+      {/* Sticky Translucent Frosted Glass Navbar */}
+      <header className="sticky top-0 z-50 w-full border-b border-border-subtle/80 bg-white/75 backdrop-blur-md transition-all shadow-xs">
+        {/* Main Navbar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          {/* Clean D-BST Brand Logo */}
+          <Link to="/" className="flex items-center gap-3">
+            <LogoMark size="default" variant="full" />
+          </Link>
 
-        {/* Desktop Nav Items */}
+          {/* Desktop Nav Items */}
         <nav className="hidden lg:flex items-center gap-8">
           <Link
             to="/"
@@ -259,5 +261,6 @@ export const DbstNavigation = () => {
         </div>
       )}
     </header>
+    </>
   );
 };

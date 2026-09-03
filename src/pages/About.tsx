@@ -288,7 +288,7 @@ export const AboutPage = () => {
               Follow-the-Sun <span className="text-accent">Global Operations</span>
             </h2>
             <p className="text-base sm:text-lg text-fg-dim font-body leading-relaxed max-w-2xl mx-auto">
-              Scroll through our 4 global hubs to inspect live operations, local leadership, and round-the-clock 24/7 technical coverage.
+              With teams across Australia, India, Spain, and Singapore, we provide round-the-clock coverage. When you sleep, we work. Faster delivery, better support, zero timezone headaches.
             </p>
           </div>
 

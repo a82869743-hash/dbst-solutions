@@ -19,13 +19,13 @@ const UseCasesPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-3">
             <div className="text-xs font-mono font-bold uppercase tracking-wider text-accent">
-              Verified Client Deliverables
+              Proven Track Record
             </div>
             <h1 className="font-display font-bold text-4xl sm:text-5xl text-fg-default tracking-tight">
-              Engineering Case Files
+              Real-World Impact Stories
             </h1>
             <p className="text-base text-fg-dim leading-relaxed">
-              In-depth architectural breakdowns of complex software engineering, AI workflow automation, and telemetry streaming systems we have built for market leaders.
+              See how we've helped businesses across industries transform their operations with custom solutions, AI automation, and strategic implementation.
             </p>
           </div>
         </div>

@@ -47,7 +47,7 @@ const PrivacyPage = () => {
             <section className="space-y-2">
               <h2 className="font-display font-bold text-lg text-fg-default">4. Contact Information</h2>
               <p>
-                For questions regarding data privacy or security compliance, contact our team at <a href="mailto:solutions@dbst.com" className="text-accent underline font-mono">solutions@dbst.com</a>.
+                For questions regarding data privacy or security compliance, contact our team at <a href="mailto:info@dbstsolutions.com" className="text-accent underline font-mono">info@dbstsolutions.com</a>.
               </p>
             </section>
           </div>

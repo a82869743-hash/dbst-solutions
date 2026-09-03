@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Terminal, Cpu, Layers, Search, Bell, Activity, ShieldCheck, CheckCircle2, Award } from "lucide-react";
 import gsap from "gsap";
+import { cn } from "@/lib/utils";
 
 interface SourceNode {
   id: string;
@@ -20,24 +21,53 @@ interface AgentNode {
   metric: string;
 }
 
+const rotatingHeadlineItems = [
+  {
+    orange: "Smart, Sustainable &",
+    bottom: "Scalable Solutions",
+  },
+  {
+    orange: "Smart, Scalable, Secure &",
+    bottom: "Sustainable Solutions",
+  },
+  {
+    orange: "Sustainable & Reusable",
+    bottom: "Modern Architecture",
+  },
+];
+
 const sourcesList: SourceNode[] = [
-  { id: "s1", name: "TruckMate & McLeod", type: "TMS Dispatch • 45K Haulers", status: "active", entities: "18,400", snippet: "Parsed 1,420 bills of lading automatically via vision OCR agent with 99.4% accuracy." },
-  { id: "s2", name: "SAP S/4HANA Core", type: "Enterprise ERP • 50K SKUs", status: "synced", entities: "50,200", snippet: "Sub-80ms multi-channel inventory sync across Shopify, Amazon, and retail POS." },
-  { id: "s3", name: "Factory Floor PLCs", type: "IoT Telemetry • 320 Machines", status: "active", entities: "142,800", snippet: "Real-time thermal & vibration anomaly stream preventing 38% assembly downtime." },
-  { id: "s4", name: "BIM Tender PDF Vault", type: "Construction • 800-Page Specs", status: "synced", entities: "9,200", snippet: "AI tender risk auditor surfaced 14 structural compliance mismatches in 4 minutes." },
-  { id: "s5", name: "Core Banking Ledger", type: "Fintech • $40M Daily Volume", status: "active", entities: "500,000", snippet: "High-frequency reconciliation flagged anomalous wire transfer under 12ms." },
+  { id: "s1", name: "TruckMate TMS", type: "Transportation & Freight", status: "active", entities: "45,000", snippet: "Automated BOL ingestion and dispatch route optimization with 99.4% accuracy." },
+  { id: "s2", name: "Odoo ERP Suite", type: "Enterprise ERP & Supply Chain", status: "synced", entities: "50,000+", snippet: "Unified manufacturing, inventory, accounting, and multi-channel synchronization." },
+  { id: "s3", name: "Microsoft Azure SQL", type: "Cloud Infrastructure", status: "active", entities: "Zero Data Loss", snippet: "Modernized on-premise workloads to Azure with built-in high availability." },
+  { id: "s4", name: "UiPath Automation", type: "RPA & Operational Workflows", status: "synced", entities: "85% Less Overhead", snippet: "Automated manual data entry, rate validations, and client onboarding workflows." },
+  { id: "s5", name: "Predictive IoT Hub", type: "Manufacturing & Telemetry", status: "active", entities: "60% Less Downtime", snippet: "Real-time vibration and thermal sensor streams forecasting equipment failures." },
 ];
 
 const agentsList: AgentNode[] = [
-  { id: "a1", name: "Freight Dispatch OCR Agent", role: "AI Automation", status: "active", metric: "99.4% Accuracy" },
-  { id: "a2", name: "Inventory Sync Microservice", role: "Custom Software", status: "active", metric: "<80ms Response" },
-  { id: "a3", name: "Predictive MES Failure Inspector", role: "Data & ML", status: "active", metric: "38% Downtime Drop" },
-  { id: "a4", name: "BIM Tender Risk Auditor", role: "AI Automation", status: "active", metric: "4-Min Audit" },
-  { id: "a5", name: "Ledger Fraud Reconciler", role: "Custom Software", status: "active", metric: "$40M Daily Vol" },
+  { id: "a1", name: "TruckMate Integration Agent", role: "TMS & Fleet", status: "active", metric: "99.4% Accuracy" },
+  { id: "a2", name: "Odoo ERP Connector", role: "ERP Suite", status: "active", metric: "Automated Sync" },
+  { id: "a3", name: "Predictive Maintenance Agent", role: "IoT & Telemetry", status: "active", metric: "60% Downtime Drop" },
+  { id: "a4", name: "Azure Cloud Modernizer", role: "Cloud Infra", status: "active", metric: "Zero Data Loss" },
+  { id: "a5", name: "Customer Service AI Agent", role: "AI Automation", status: "active", metric: "24/7 Support" },
 ];
 
 export const CapabilityMatrixHero = () => {
   const [selectedSource, setSelectedSource] = useState<SourceNode>(sourcesList[0]);
+  const [rotationIdx, setRotationIdx] = useState(0);
+  const [animPhase, setAnimPhase] = useState<"enter" | "exit">("enter");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAnimPhase("exit");
+      setTimeout(() => {
+        setRotationIdx((prev) => (prev + 1) % rotatingHeadlineItems.length);
+        setAnimPhase("enter");
+      }, 450);
+    }, 3200);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -273,20 +303,42 @@ export const CapabilityMatrixHero = () => {
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
             <Terminal className="w-3.5 h-3.5 text-accent" />
-            <span>D-BST Precision Engineering &amp; AI</span>
+            <span>Sustainable &amp; Reusable Architecture</span>
           </div>
         </div>
 
         {/* Centered D-BST 3-Line Headline & Subhead */}
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 ref={headlineRef} className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-fg-default tracking-tight leading-[1.04]">
-            <div className="block">Architect faster.</div>
-            <div className="block">Break nothing.</div>
-            <div className="block text-accent">Scale precisely.</div>
+            <div className="block">Drive your business with</div>
+            <div className="block overflow-hidden py-1">
+              <span
+                className={cn(
+                  "inline-block text-accent transition-all duration-500 transform ease-out will-change-transform",
+                  animPhase === "enter"
+                    ? "opacity-100 translate-y-0 scale-100 filter blur-0"
+                    : "opacity-0 -translate-y-8 scale-95 filter blur-[2px]"
+                )}
+              >
+                {rotatingHeadlineItems[rotationIdx].orange}
+              </span>
+            </div>
+            <div className="block overflow-hidden py-1">
+              <span
+                className={cn(
+                  "inline-block text-fg-default transition-all duration-500 transform ease-out will-change-transform",
+                  animPhase === "enter"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-6"
+                )}
+              >
+                {rotatingHeadlineItems[rotationIdx].bottom}
+              </span>
+            </div>
           </h1>
 
           <p ref={subheadRef} className="text-base sm:text-lg md:text-xl text-fg-dim leading-relaxed max-w-3xl mx-auto font-body">
-            The engineering &amp; AI consultancy for building, modernizing, and scaling mission-critical enterprise systems fast. Production-ready architecture for every team, legacy ERP, and AI agent.
+            Drive your business with Smart, Scalable, Secure &amp; Sustainable solutions. Built on sustainable and reusable architecture—transforming transportation, logistics, and enterprise operations with intelligent automation, custom TMS integrations, and AI-powered scalability.
           </p>
 
           {/* CTAs */}
@@ -295,7 +347,7 @@ export const CapabilityMatrixHero = () => {
               to="/contact"
               className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-105 active:scale-95"
             >
-              <span>GET STARTED</span>
+              <span>SCHEDULE DISCOVERY CALL</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
@@ -311,15 +363,15 @@ export const CapabilityMatrixHero = () => {
           <div ref={trustStripRef} className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-fg-dim">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-accent" />
-              <span><strong className="text-accent font-bold">50+</strong> Enterprise Systems</span>
+              <span><strong className="text-accent font-bold">15+</strong> Years Experience</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span><strong className="text-fg-default font-bold">98.4%</strong> Production SLA</span>
+              <span><strong className="text-fg-default font-bold">100+</strong> Systems Integrated</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Award className="w-4 h-4 text-accent" />
-              <span><strong className="text-accent font-bold">7</strong> High-Stakes Industries</span>
+              <span><strong className="text-accent font-bold">24/7</strong> Follow-the-Sun Support</span>
             </div>
           </div>
         </div>
