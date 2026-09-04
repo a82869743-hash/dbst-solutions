@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Mail, CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { AdminStore } from "@/lib/admin/adminStore";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -56,11 +57,20 @@ export const InsightsSignup = () => {
     setLoading(true);
 
     try {
-      const { error: supabaseError } = await supabase.functions.invoke("submit-newsletter", {
-        body: { email },
+      await AdminStore.recordInquiry({
+        name: "Newsletter Subscriber",
+        email: email.trim(),
+        message: "Subscribed to Executive Intelligence Brief",
+        serviceInterest: "Executive Intelligence Brief Newsletter",
+        source: "dbst",
       });
 
-      if (supabaseError) throw supabaseError;
+      try {
+        await supabase.functions.invoke("submit-newsletter", {
+          body: { email },
+        });
+      } catch {}
+
       setSuccess(true);
     } catch {
       setSuccess(true);

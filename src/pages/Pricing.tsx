@@ -3,6 +3,7 @@ import { Send, MessageSquare, ShieldCheck, Zap, Layers } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import { AdminStore } from "@/lib/admin/adminStore";
 
 type CompanySize = "1-25" | "26-100" | "100+";
 type UserCount = "1-10" | "11-50" | "50+";
@@ -23,17 +24,35 @@ const PlanEstimator = () => {
 
   const currentTier = getTier();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.name || !form.email) return;
+
     setSubmitting(true);
-    setTimeout(() => {
+    try {
+      await AdminStore.recordInquiry({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        company: form.company?.trim() || undefined,
+        message: form.message?.trim() || `Fleet Scale: ${fleetSize}, User Count: ${userCount}`,
+        serviceInterest: `Pricing Estimator: ${currentTier.label} (${fleetSize} fleet, ${userCount} users)`,
+        source: "dbst",
+      });
+
       toast({
         title: "Inquiry received!",
         description: `Thank you ${form.name}! We'll send pricing details for your ${currentTier.label} within 24 hours.`,
       });
       setForm({ name: "", email: "", company: "", message: "" });
+    } catch {
+      toast({
+        title: "Submission Error",
+        description: "Please email info@dbstsolutions.com directly.",
+        variant: "destructive",
+      });
+    } finally {
       setSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (

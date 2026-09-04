@@ -3,6 +3,7 @@ import { Clock, DollarSign, ArrowRight, CheckCircle2, Sparkles, X, Send, Loader2
 import { useToast } from "@/hooks/use-toast";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AdminStore } from "@/lib/admin/adminStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -252,7 +253,7 @@ export const SolutionCatalog = () => {
     ? catalogData
     : catalogData.filter((item) => item.industry === selectedIndustry);
 
-  const handleModalSubmit = (e: React.FormEvent) => {
+  const handleModalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!modalForm.name || !modalForm.email) {
       toast({
@@ -264,15 +265,30 @@ export const SolutionCatalog = () => {
     }
 
     setModalLoading(true);
-    setTimeout(() => {
-      setModalLoading(false);
+    try {
+      await AdminStore.recordInquiry({
+        name: modalForm.name.trim(),
+        email: modalForm.email.trim(),
+        message: modalForm.notes?.trim() || `Requested blueprint proposal for: ${proposalModalItem?.title}`,
+        serviceInterest: `Blueprint Proposal: ${proposalModalItem?.title || "Custom Solution"}`,
+        source: "dbst",
+      });
+
       toast({
         title: "Blueprint Proposal Requested",
         description: `Thank you. A D-BST Senior Architect will dispatch proposal specs for "${proposalModalItem?.title}" within 24 hours.`,
       });
       setProposalModalItem(null);
       setModalForm({ name: "", email: "", notes: "" });
-    }, 1000);
+    } catch {
+      toast({
+        title: "Submission Error",
+        description: "Please email info@dbstsolutions.com directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setModalLoading(false);
+    }
   };
 
   return (
