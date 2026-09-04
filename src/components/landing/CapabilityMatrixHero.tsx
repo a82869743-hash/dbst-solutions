@@ -59,6 +59,11 @@ export const CapabilityMatrixHero = () => {
 
   // Subscribe to live content updates from Super Admin CMS
   useEffect(() => {
+    // 1. Fetch latest published cloud configuration from Supabase
+    AdminStore.fetchRemoteContent("dbst").then((remote) => {
+      if (remote) setContentConfig(remote);
+    });
+
     const handleUpdate = () => {
       setContentConfig(AdminStore.getContent("dbst"));
     };

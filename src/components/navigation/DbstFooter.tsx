@@ -8,6 +8,10 @@ export const DbstFooter = () => {
   const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
 
   useEffect(() => {
+    AdminStore.fetchRemoteContent("dbst").then((remote) => {
+      if (remote) setContentConfig(remote);
+    });
+
     const handleUpdate = () => {
       setContentConfig(AdminStore.getContent("dbst"));
     };

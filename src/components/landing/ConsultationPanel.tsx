@@ -3,19 +3,33 @@ import { Calendar, Mail, Phone, Clock, ArrowRight, CheckCircle2, ShieldCheck, Me
 import { useToast } from "@/hooks/use-toast";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { AdminStore } from "@/lib/admin/adminStore";
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const ConsultationPanel = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     company: "",
     notes: "",
   });
+
+  useEffect(() => {
+    AdminStore.fetchRemoteContent("dbst").then((remote) => {
+      if (remote) setContentConfig(remote);
+    });
+    const handleUpdate = () => setContentConfig(AdminStore.getContent("dbst"));
+    window.addEventListener("admin_content_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("admin_content_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const panelCardRef = useRef<HTMLDivElement>(null);
@@ -131,11 +145,15 @@ export const ConsultationPanel = () => {
               <div className="pt-6 border-t border-border-subtle space-y-3 font-mono text-xs text-fg-dim">
                 <div className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-accent shrink-0" />
-                  <span className="font-bold text-fg-default">info@dbstsolutions.com</span>
+                  <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="font-bold text-fg-default hover:text-accent transition-colors">
+                    {contentConfig.contactEmail || "info@dbstsolutions.com"}
+                  </a>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="w-4 h-4 text-accent shrink-0" />
-                  <span>+61 430 981 166 &bull; Direct Technical Desk</span>
+                  <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="hover:text-accent transition-colors">
+                    {contentConfig.contactPhone || "+61 430 981 166"} &bull; Direct Technical Desk
+                  </a>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Clock className="w-4 h-4 text-accent shrink-0" />

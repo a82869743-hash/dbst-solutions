@@ -33,11 +33,20 @@ export const AdminContentManager: React.FC<AdminContentManagerProps> = ({ adminE
   const [activeSite, setActiveSite] = useState<SiteTarget>("dbst");
   const [config, setConfig] = useState<SiteContentConfig>(AdminStore.getContent("dbst"));
   const [hasChanges, setHasChanges] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<"hero" | "metrics" | "services" | "contact">("hero");
 
   useEffect(() => {
+    // 1. Instant local render
     setConfig(AdminStore.getContent(activeSite));
     setHasChanges(false);
+
+    // 2. Fetch latest cloud configuration from Supabase
+    AdminStore.fetchRemoteContent(activeSite).then((remote) => {
+      if (remote) {
+        setConfig(remote);
+      }
+    });
   }, [activeSite]);
 
   const handleChange = (field: keyof SiteContentConfig, value: any) => {
@@ -45,16 +54,27 @@ export const AdminContentManager: React.FC<AdminContentManagerProps> = ({ adminE
     setHasChanges(true);
   };
 
-  const handleSave = () => {
-    AdminStore.saveContent(activeSite, config, adminEmail);
-    setHasChanges(false);
-    toast({
-      title: "Content Saved & Published",
-      description: `Changes for ${config.siteName} have been deployed to the live store.`,
-    });
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await AdminStore.saveContent(activeSite, config, adminEmail);
+      setHasChanges(false);
+      toast({
+        title: "Content Saved & Published Live",
+        description: `Changes for ${config.siteName} are now synchronized to the cloud database and live for all visitors worldwide.`,
+      });
+    } catch (err) {
+      toast({
+        title: "Save Error",
+        description: "Failed to persist content. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (
       !window.confirm(
         `Are you sure you want to reset all content for ${config.siteName} back to official factory defaults?`
@@ -63,9 +83,14 @@ export const AdminContentManager: React.FC<AdminContentManagerProps> = ({ adminE
       return;
     const defaults = activeSite === "dbst" ? defaultDbstContent : defaultGrowthMatesContent;
     setConfig(defaults);
-    AdminStore.saveContent(activeSite, defaults, adminEmail);
-    setHasChanges(false);
-    toast({ title: "Reset Complete", description: "Content restored to default baseline." });
+    setSaving(true);
+    try {
+      await AdminStore.saveContent(activeSite, defaults, adminEmail);
+      setHasChanges(false);
+      toast({ title: "Reset Complete", description: "Content restored to default baseline in cloud." });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleExportJson = () => {
@@ -168,15 +193,15 @@ export const AdminContentManager: React.FC<AdminContentManagerProps> = ({ adminE
 
           <button
             onClick={handleSave}
-            disabled={!hasChanges}
+            disabled={!hasChanges || saving}
             className={`px-5 py-2 text-xs font-medium rounded-md flex items-center gap-2 shadow-sm transition-all ${
-              hasChanges
+              hasChanges && !saving
                 ? "bg-accent text-white hover:bg-accent-deep animate-pulse"
                 : "bg-zinc-200 text-zinc-500 cursor-not-allowed"
             }`}
           >
             <Save className="w-3.5 h-3.5" />
-            <span>Save &amp; Publish</span>
+            <span>{saving ? "Deploying to Cloud..." : "Save & Publish"}</span>
           </button>
         </div>
       </div>

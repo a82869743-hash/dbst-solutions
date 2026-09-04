@@ -53,6 +53,10 @@ export const DbstNavigation = () => {
   const location = useLocation();
 
   useEffect(() => {
+    AdminStore.fetchRemoteContent("dbst").then((remote) => {
+      if (remote) setContentConfig(remote);
+    });
+
     const handleUpdate = () => {
       setContentConfig(AdminStore.getContent("dbst"));
     };

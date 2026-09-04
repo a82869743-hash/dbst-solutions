@@ -26,7 +26,7 @@ const budgetRanges = [
   "Flexible / To Be Scoped",
 ];
 
-import { AdminStore } from "@/lib/admin/adminStore";
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 const ContactPage = () => {
   useDocumentMeta({
@@ -36,6 +36,20 @@ const ContactPage = () => {
 
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [contentConfig, setContentConfig] = useState<SiteContentConfig>(() => AdminStore.getContent("dbst"));
+
+  useEffect(() => {
+    AdminStore.fetchRemoteContent("dbst").then((remote) => {
+      if (remote) setContentConfig(remote);
+    });
+    const handleUpdate = () => setContentConfig(AdminStore.getContent("dbst"));
+    window.addEventListener("admin_content_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("admin_content_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -182,7 +196,9 @@ const ContactPage = () => {
                       <Mail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">Direct Technical Email</div>
-                        <p className="text-xs text-fg-dim pt-0.5 font-mono">info@dbstsolutions.com</p>
+                        <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                          {contentConfig.contactEmail || "info@dbstsolutions.com"}
+                        </a>
                       </div>
                     </div>
 
@@ -190,7 +206,9 @@ const ContactPage = () => {
                       <Phone className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">24/7 Technical Desk</div>
-                        <p className="text-xs text-fg-dim pt-0.5 font-mono">+61 430 981 166</p>
+                        <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                          {contentConfig.contactPhone || "+61 430 981 166"}
+                        </a>
                       </div>
                     </div>
                   </div>

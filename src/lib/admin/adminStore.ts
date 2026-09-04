@@ -148,7 +148,7 @@ const INQUIRIES_STORAGE_KEY = "dbst_superadmin_inquiries";
 const AUDIT_STORAGE_KEY = "dbst_superadmin_audit";
 
 export class AdminStore {
-  // Get Content
+  // Get Content from local cache with default baseline fallback
   static getContent(site: SiteTarget): SiteContentConfig {
     try {
       const saved = localStorage.getItem(`${CONTENT_STORAGE_KEY}_${site}`);
@@ -159,9 +159,34 @@ export class AdminStore {
     return site === "dbst" ? { ...defaultDbstContent } : { ...defaultGrowthMatesContent };
   }
 
-  // Save Content
-  static saveContent(site: SiteTarget, config: SiteContentConfig, userEmail = "admin"): void {
+  // Fetch remote content from Supabase cloud database (syncs across all devices & visitors worldwide)
+  static async fetchRemoteContent(site: SiteTarget): Promise<SiteContentConfig | null> {
     try {
+      const { data, error } = await supabase
+        .from("ideas_public")
+        .select("description, created_at")
+        .eq("company_name", `sys_config_${site}`)
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (!error && data && data[0]?.description) {
+        const remoteConfig: SiteContentConfig = JSON.parse(data[0].description);
+        localStorage.setItem(`${CONTENT_STORAGE_KEY}_${site}`, JSON.stringify(remoteConfig));
+        window.dispatchEvent(
+          new CustomEvent("admin_content_updated", { detail: { site, config: remoteConfig } })
+        );
+        return remoteConfig;
+      }
+    } catch (e) {
+      console.warn(`Could not sync cloud content for ${site}:`, e);
+    }
+    return null;
+  }
+
+  // Save Content to both localStorage AND Supabase cloud database
+  static async saveContent(site: SiteTarget, config: SiteContentConfig, userEmail = "admin"): Promise<void> {
+    try {
+      // 1. Immediate local responsiveness
       localStorage.setItem(`${CONTENT_STORAGE_KEY}_${site}`, JSON.stringify(config));
       this.logAction(userEmail, `Updated ${config.siteName} content configuration`, site);
 
@@ -175,8 +200,17 @@ export class AdminStore {
           newValue: JSON.stringify(config),
         })
       );
+
+      // 2. Persist to shared Supabase cloud database so all visitors globally see the change
+      await supabase.from("ideas").insert({
+        title: `__CONFIG_${site.toUpperCase()}__`,
+        company_name: `sys_config_${site}`,
+        description: JSON.stringify(config),
+        tags: ["sys_internal_config"],
+        contact_email: "admin@dbstsolutions.com",
+      });
     } catch (e) {
-      console.error(e);
+      console.error("Save content error:", e);
     }
   }
 
@@ -239,7 +273,20 @@ export class AdminStore {
       console.warn("Supabase direct insert fallback", err);
     }
 
-    // 2. Persist to real live store
+    // 2. Mirror into cloud database stream for cross-device admin inbox visibility
+    try {
+      await supabase.from("ideas").insert({
+        title: `__LEAD_INCOMING__`,
+        company_name: `sys_lead_${data.source || "dbst"}`,
+        description: JSON.stringify(newItem),
+        tags: ["sys_internal_lead"],
+        contact_email: data.email,
+      });
+    } catch (err) {
+      console.warn("Cloud lead mirror fallback", err);
+    }
+
+    // 3. Persist to real live local cache
     try {
       const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
       let items: InquiryItem[] = local ? JSON.parse(local) : [];
@@ -248,11 +295,12 @@ export class AdminStore {
       );
       items.unshift(newItem);
       localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(items));
+      window.dispatchEvent(new CustomEvent("admin_inquiries_updated", { detail: newItem }));
     } catch (e) {
       console.error(e);
     }
 
-    // 3. Dispatch to Webhooks if configured
+    // 4. Dispatch to Webhooks if configured
     try {
       const creds = this.getCredentials();
       if (creds.slackWebhookUrl) {
@@ -279,11 +327,37 @@ export class AdminStore {
     return newItem;
   }
 
-  // Get Inquiries (Only authentic customer submissions)
+  // Get Inquiries (Only authentic customer submissions - synced from cloud + database)
   static async getInquiries(): Promise<InquiryItem[]> {
     let list: InquiryItem[] = [];
 
-    // 1. Fetch from Supabase contact_submissions
+    // 1. Fetch from cloud database stream (accessible to admin on ANY device without secret keys)
+    try {
+      const { data, error } = await supabase
+        .from("ideas_public")
+        .select("id, description, created_at")
+        .like("company_name", "sys_lead_%")
+        .order("created_at", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        data.forEach((row) => {
+          try {
+            if (row.description) {
+              const item: InquiryItem = JSON.parse(row.description);
+              if (!["inq-1", "inq-2", "inq-3", "inq-4", "inq-5"].includes(item.id)) {
+                if (!list.some((existing) => existing.id === item.id || (existing.email === item.email && existing.created_at === item.created_at))) {
+                  list.push(item);
+                }
+              }
+            }
+          } catch (e) {}
+        });
+      }
+    } catch (err) {
+      console.warn("Cloud leads fetch fallback", err);
+    }
+
+    // 2. Fetch from Supabase contact_submissions
     try {
       const { data, error } = await supabase
         .from("contact_submissions")
@@ -291,23 +365,28 @@ export class AdminStore {
         .order("created_at", { ascending: false });
 
       if (!error && data && data.length > 0) {
-        list = data.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          email: item.email,
-          company: item.company || null,
-          message: item.message || null,
-          source: (item.source || "dbst").toLowerCase().includes("growth") ? "growthmates" : "dbst",
-          status: "new",
-          created_at: item.created_at,
-          phone: item.phone || undefined,
-        }));
+        data.forEach((item: any) => {
+          const mapped: InquiryItem = {
+            id: item.id,
+            name: item.name,
+            email: item.email,
+            company: item.company || null,
+            message: item.message || null,
+            source: (item.source || "dbst").toLowerCase().includes("growth") ? "growthmates" : "dbst",
+            status: "new",
+            created_at: item.created_at,
+            phone: item.phone || undefined,
+          };
+          if (!list.some((existing) => existing.email === mapped.email && Math.abs(new Date(existing.created_at).getTime() - new Date(mapped.created_at).getTime()) < 5000)) {
+            list.push(mapped);
+          }
+        });
       }
     } catch (err) {
       console.warn("Supabase fetch fallback", err);
     }
 
-    // 2. Merge with locally cached inquiries (purging any legacy mock items)
+    // 3. Merge with locally cached inquiries (purging any legacy mock items)
     try {
       const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
       if (local) {
@@ -318,9 +397,8 @@ export class AdminStore {
         if (cleanLocal.length !== parsedLocal.length) {
           localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(cleanLocal));
         }
-        const existingIds = new Set(list.map((i) => i.id));
         cleanLocal.forEach((item) => {
-          if (!existingIds.has(item.id)) {
+          if (!list.some((existing) => existing.id === item.id || (existing.email === item.email && existing.created_at === item.created_at))) {
             list.push(item);
           }
         });
@@ -329,6 +407,8 @@ export class AdminStore {
       console.error(e);
     }
 
+    // Sort newest first
+    list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     return list;
   }
 

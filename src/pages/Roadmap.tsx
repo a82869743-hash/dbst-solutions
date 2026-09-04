@@ -77,8 +77,18 @@ const RoadmapPage = () => {
         supabase.from("comments_public").select("*").order("created_at", { ascending: true }),
       ]);
 
+      const filterPublicIdeas = (raw: any[]) =>
+        raw.filter(
+          (i: any) =>
+            !i.title?.startsWith("__") &&
+            !i.title?.includes("CONFIG") &&
+            i.title !== "test" &&
+            !i.tags?.includes("sys_internal_config") &&
+            !i.tags?.includes("sys_internal_lead")
+        );
+
       if (itemsRes.data) setRoadmapItems(itemsRes.data as unknown as RoadmapItem[]);
-      if (ideasRes.data) setIdeas(ideasRes.data as unknown as Idea[]);
+      if (ideasRes.data) setIdeas(filterPublicIdeas(ideasRes.data) as unknown as Idea[]);
       if (commentsRes.data) setComments(commentsRes.data as unknown as Comment[]);
 
       const adminConfirmed = await checkAdminStatus();
@@ -86,7 +96,7 @@ const RoadmapPage = () => {
         try {
           const { data: adminData } = await supabase.functions.invoke("get-admin-ideas");
           if (adminData?.ideas) {
-            setIdeas(adminData.ideas as unknown as Idea[]);
+            setIdeas(filterPublicIdeas(adminData.ideas) as unknown as Idea[]);
           }
         } catch (err) {
           console.warn("Admin ideas fetch failed, using public data:", err);
