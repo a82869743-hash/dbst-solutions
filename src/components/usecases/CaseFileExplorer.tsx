@@ -189,7 +189,7 @@ export const CaseFileExplorer = () => {
             return (
               <div
                 key={item.id}
-                className={`p-6 sm:p-8 rounded-3xl border transition-all duration-300 flex flex-col justify-between space-y-6 shadow-floating text-left bg-white ${
+                className={`p-6 sm:p-8 rounded-3xl border transition-all duration-300 flex flex-col justify-between space-y-6 shadow-floating text-left bg-white card-bezel ${
                   isExpanded
                     ? "border-accent ring-1 ring-accent/20"
                     : "border-border-subtle hover:border-accent/60"
@@ -223,7 +223,7 @@ export const CaseFileExplorer = () => {
                     </span>
                     <button
                       className={`p-2.5 rounded-full transition-all ${
-                        isExpanded ? "bg-accent text-white" : "bg-bg-surface text-fg-dim border border-border-subtle"
+                        isExpanded ? "bg-accent-tint text-accent" : "bg-bg-muted text-fg-dim"
                       }`}
                       aria-label="Expand case details"
                     >
@@ -238,7 +238,7 @@ export const CaseFileExplorer = () => {
                     
                     {/* Challenge vs Solution Split */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                      <div className="p-6 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 font-mono text-xs shadow-flat">
+                      <div className="p-6 bg-bg-surface border border-border-subtle/80 rounded-2xl space-y-2 font-mono text-xs shadow-flat card-bezel">
                         <div className="font-bold text-fg-default uppercase tracking-wider flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-fg-dim" /> 1. OPERATIONAL CHALLENGE
                         </div>
@@ -247,7 +247,7 @@ export const CaseFileExplorer = () => {
                         </p>
                       </div>
 
-                      <div className="p-6 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 font-mono text-xs shadow-flat">
+                      <div className="p-6 bg-bg-surface border border-border-subtle/80 rounded-2xl space-y-2 font-mono text-xs shadow-flat card-bezel">
                         <div className="font-bold text-accent uppercase tracking-wider flex items-center gap-1.5">
                           <Sparkles className="w-4 h-4 text-accent" /> 2. D-BST ARCHITECTURE &amp; DELIVERY
                         </div>
@@ -268,27 +268,29 @@ export const CaseFileExplorer = () => {
                       <div className="font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4 text-accent" /> VERIFIED PROJECT DELIVERABLES &amp; ROI:
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         {item.resultsChecklist.map((res, idx) => (
-                          <div key={idx} className="p-4 bg-white border border-border-subtle rounded-2xl text-xs text-fg-default font-body flex items-start gap-2.5 shadow-flat">
+                          <div key={idx} className="p-3.5 bg-white border border-border-subtle/80 rounded-xl text-xs text-fg-default font-body flex items-start gap-2.5 shadow-flat card-bezel">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
-                            <span>{res}</span>
+                            <span className="font-medium">{res}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* CTA Footer */}
+                    {/* CTA Footer with Button-in-Button Trailing Icon */}
                     <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs">
                       <span className="text-fg-dim">
                         Have a similar system challenge in your organization?
                       </span>
                       <Link
                         to="/contact"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
+                        className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating group"
                       >
                         <span>Schedule Architectural Review</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                          <ArrowRight className="w-3 h-3" />
+                        </span>
                       </Link>
                     </div>
 

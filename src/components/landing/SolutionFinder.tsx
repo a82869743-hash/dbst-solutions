@@ -1,64 +1,123 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Sparkles, Terminal, ArrowRight, Loader2, Cpu, Zap, TrendingUp, BookOpen, CheckCircle2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SYSTEM_PROMPT = `You are the D-BST Capability Advisor.
+Your purpose is to help prospective clients clarify a business, operational, data, AI or technology challenge and understand whether it fits D-BST Solutions' capabilities.
+You provide an initial capability assessment. You do not provide a final architecture, formal proposal, quotation, guaranteed business case or implementation commitment.
+
+Expert Behaviour:
+Approach enquiries through the appropriate professional lens: Enterprise Architect, Solution Architect, AI Engineer, Digital Transformation Consultant, Senior Business Analyst, Data/BI Consultant, or Transport Technology Consultant.
+Think critically and consultatively. Understand the underlying business problem, users, workflows, and constraints.
+
+D-BST Services Knowledge:
+1. Digital Transformation & Advisory: Discovery workshops, process mapping, opportunity prioritisation, transformation roadmaps.
+2. Enterprise & Solution Architecture: Current/target-state assessment, API/data/security design, architecture standards, transition roadmaps.
+3. AI Engineering & Adoption: AI opportunity assessment, agent & workflow architecture, MCP/system integration, human oversight & adoption planning. Growthmates AI is D-BST's modular agentic AI platform.
+4. Custom Software & System Integration: Web/mobile/operational applications, APIs/connectors, workflow orchestration, legacy modernisation.
+5. Data Analytics & Business Intelligence: Data discovery, KPI/information models, data pipelines, Power BI & Microsoft Fabric.
+6. Transport Technology & TruckMate: Specialist Trimble TruckMate advisory, DB2/API integrations, Command Center, reporting, AI-assisted decision support.
+
+D-BST Delivery Method:
+Discover and Define -> Design and De-risk -> Deliver and Learn -> Support and Improve.
+
+Honesty Rules:
+- Never invent or guarantee ROI percentages, delivery timeframes, project costs, client names, case studies, or SLAs.
+- Describe potential outcomes qualitatively and realistically as things to validate during discovery.
+- Keep people in control (AI assists workflows, humans supervise).
+
+Return STRICT JSON format:
+{
+  "whatWeHeard": "Concise summary of the challenge and context",
+  "bestFitCapability": "Primary D-BST service capability",
+  "supportingCapabilities": "1-2 supporting D-BST capabilities",
+  "howDbstCouldHelp": "Practical explanation of how D-BST would approach this problem",
+  "suggestedStartingPoint": "The first practical step (e.g. Discover & Define workshop or focused assessment)",
+  "whatSuccessCouldLookLike": "Qualitative operational outcomes and business value to validate during discovery",
+  "assumptionsOrQuestions": "Key questions or operational details to clarify in a discovery conversation",
+  "fitClassification": "Strong Fit" or "Potential Fit" or "Outside Scope"
+}`;
+
 const presetChallenges = [
   {
-    label: "Legacy SAP ERP Mainframe",
-    text: "We have legacy mainframes and paper bill-of-lading documents slowing down freight dispatch.",
-    solution: "Deploy D-BST Vision AI OCR parser integrated with Kafka event stream to SAP S/4HANA gRPC gateway.",
-    roi: "94% reduction in manual data entry errors, 3.8x faster operational throughput, sub-80ms API response time.",
-    caseStudy: "Engineered automated freight dispatch for a global logistics provider, cutting document processing time from 4 hours to 90 seconds.",
+    label: "AI adoption uncertainty",
+    text: "We want to use AI but are unsure where to start.",
+    whatWeHeard: "Desire to adopt AI but seeking clarity on where to begin and how to create tangible operational value without disruption.",
+    bestFitCapability: "AI Engineering & Adoption",
+    supportingCapabilities: "Enterprise & Solution Architecture, Digital Transformation",
+    howDbstCouldHelp: "D-BST can conduct an AI opportunity and value assessment to identify practical use cases aligned with your business priorities and operational workflows, establishing agent architecture and human oversight.",
+    suggestedStartingPoint: "Discover & Define: An initial discovery conversation and opportunity mapping session.",
+    whatSuccessCouldLookLike: "Moving from AI experimentation to a controlled operational capability with clear purpose and teams in control.",
+    assumptionsOrQuestions: "Current systems in place, data sensitivity, and specific operational pain points.",
   },
   {
-    label: "Inventory Overselling Sync Lag",
-    text: "Our e-commerce inventory sync takes 15 minutes, causing overselling across multi-channel marketplaces.",
-    solution: "Architect an in-memory Redis cluster + Go microservices pipeline with sub-50ms webhooks to Shopify & NetSuite.",
-    roi: "Eliminated overselling penalty fees, 99.99% real-time inventory sync accuracy across 40+ channels.",
-    caseStudy: "Streamlined multi-channel inventory sync for a $120M retail brand, processing 15,000 orders/min during peak sale events.",
+    label: "Manual process bottlenecks",
+    text: "Manual processes are slowing our operation.",
+    whatWeHeard: "Operational drag and duplicated effort from manual processes across business teams.",
+    bestFitCapability: "Digital Transformation & Advisory",
+    supportingCapabilities: "Custom Software & System Integration",
+    howDbstCouldHelp: "D-BST can conduct discovery workshops, process and service journey mapping, opportunity prioritisation and a transformation roadmap.",
+    suggestedStartingPoint: "Discover & Define: Process journey mapping workshop with key operational stakeholders.",
+    whatSuccessCouldLookLike: "Eliminating duplicated effort, focusing investment on root causes, and creating a practical path from business intent to measurable outcomes.",
+    assumptionsOrQuestions: "Specific workflows with highest volume, team bottlenecks, and handoff points.",
   },
   {
-    label: "Industrial IoT Predictive Maintenance",
-    text: "Factory IoT machines generate massive telemetry data, but we lack predictive failure alerts.",
-    solution: "Build MQTT telemetry ingestion pipeline into ClickHouse OLAP database with PyTorch early-warning failure ML model.",
-    roi: "38% drop in unscheduled shop floor downtime, saving an estimated $420k annually in emergency part replacements.",
-    caseStudy: "Deployed predictive IoT maintenance across 320 CNC machines, providing 14-day advance notice before bearing failures.",
+    label: "System information silos",
+    text: "Our systems do not share information reliably.",
+    whatWeHeard: "Disconnected business systems causing data fragmentation and unreliable information exchange.",
+    bestFitCapability: "Enterprise & Solution Architecture",
+    supportingCapabilities: "Custom Software & System Integration",
+    howDbstCouldHelp: "A suitable starting point is a current-state assessment and integration architecture review, leading to API, data and security design with a transition roadmap.",
+    suggestedStartingPoint: "Discover & Define: Current-state systems and integration audit.",
+    whatSuccessCouldLookLike: "Making technology decisions with a secure, scalable and sustainable blueprint for change, connecting your core systems.",
+    assumptionsOrQuestions: "Core applications involved, API availability, and data synchronization frequency.",
   },
   {
-    label: "Manual Customer KYC Onboarding",
-    text: "Manual customer onboarding requires 4 hours of document parsing and KYC validation per account.",
-    solution: "Implement autonomous AI document triage agent with zero-trust HSM encryption and automated audit logs.",
-    roi: "Reduced onboarding turnaround time from 4 hours to 45 seconds while maintaining SOC2 and ISO 27001 compliance.",
-    caseStudy: "Automated institutional client onboarding for a fintech ledger platform, processing $40M daily wire volume securely.",
+    label: "Reporting inconsistency",
+    text: "Our reporting is inconsistent or arrives too late.",
+    whatWeHeard: "Fragmented reporting across multiple spreadsheets and tools resulting in conflicting numbers and delayed decisions.",
+    bestFitCapability: "Data Analytics & Business Intelligence",
+    supportingCapabilities: "Enterprise & Solution Architecture",
+    howDbstCouldHelp: "D-BST can help through data and reporting discovery, KPI and information model definition, data pipelines and Power BI or Microsoft Fabric solutions.",
+    suggestedStartingPoint: "Discover & Define: Data source discovery and KPI definitions workshop.",
+    whatSuccessCouldLookLike: "Turning fragmented operational data into trusted information that supports faster, more confident decisions.",
+    assumptionsOrQuestions: "Primary reporting tools used today, data source platforms, and executive reporting cadence.",
   },
 ];
 
 interface SolutionResult {
-  challengeSummary: string;
-  recommendedSolution: string;
-  successStory: string;
-  potentialImpact: string;
+  whatWeHeard: string;
+  bestFitCapability: string;
+  supportingCapabilities: string;
+  howDbstCouldHelp: string;
+  suggestedStartingPoint: string;
+  whatSuccessCouldLookLike: string;
+  assumptionsOrQuestions?: string;
+  fitClassification?: string;
 }
 
 export const SolutionFinder = () => {
   const [challengeInput, setChallengeInput] = useState(presetChallenges[0].text);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SolutionResult>({
-    challengeSummary: presetChallenges[0].text,
-    recommendedSolution: presetChallenges[0].solution,
-    successStory: presetChallenges[0].caseStudy,
-    potentialImpact: presetChallenges[0].roi,
+    whatWeHeard: presetChallenges[0].whatWeHeard,
+    bestFitCapability: presetChallenges[0].bestFitCapability,
+    supportingCapabilities: presetChallenges[0].supportingCapabilities,
+    howDbstCouldHelp: presetChallenges[0].howDbstCouldHelp,
+    suggestedStartingPoint: presetChallenges[0].suggestedStartingPoint,
+    whatSuccessCouldLookLike: presetChallenges[0].whatSuccessCouldLookLike,
+    assumptionsOrQuestions: presetChallenges[0].assumptionsOrQuestions,
+    fitClassification: "Strong Fit",
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const finderCardRef = useRef<HTMLDivElement>(null);
 
-  // Robust GSAP Entrance with clearProps: "all" so elements NEVER stay opacity 0
+  // GSAP Entrance with clearProps: "all"
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -91,53 +150,91 @@ export const SolutionFinder = () => {
 
     setLoading(true);
 
-    // Check if matches preset for instant tailored result
-    const matchedPreset = presetChallenges.find((p) => p.text === textToSubmit);
+    const matchedPreset = presetChallenges.find((p) => p.text.toLowerCase() === textToSubmit.trim().toLowerCase());
 
-    try {
-      const { data, error: invokeErr } = await supabase.functions.invoke("ai-solution-finder", {
-        body: { challenge: textToSubmit },
-      });
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
-      if (invokeErr) throw invokeErr;
-
-      if (data) {
-        setResult({
-          challengeSummary: data.challengeSummary || textToSubmit,
-          recommendedSolution: data.recommendedSolution || matchedPreset?.solution || "Architect an automated microservices pipeline with event-driven queue processing and real-time dashboard telemetry.",
-          successStory: data.successStory || matchedPreset?.caseStudy || "Engineered a similar system for a global enterprise, cutting processing latency by 85%.",
-          potentialImpact: data.potentialImpact || matchedPreset?.roi || "94% reduction in manual data entry errors and 3.8x faster operational throughput.",
+    if (apiKey) {
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              { role: "user", content: textToSubmit },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.3,
+          }),
         });
+
+        if (response.ok) {
+          const json = await response.json();
+          const parsed = JSON.parse(json.choices?.[0]?.message?.content || "{}");
+          if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+            setResult({
+              whatWeHeard: parsed.whatWeHeard,
+              bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
+              supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
+              howDbstCouldHelp: parsed.howDbstCouldHelp,
+              suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
+              whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
+              assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
+              fitClassification: parsed.fitClassification || "Strong Fit",
+            });
+            setTimeout(() => setLoading(false), 300);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("OpenAI Advisor fallback:", err);
       }
-    } catch {
-      // Instant intelligent fallback using matched preset or dynamic AI template
-      if (matchedPreset) {
-        setResult({
-          challengeSummary: matchedPreset.text,
-          recommendedSolution: matchedPreset.solution,
-          successStory: matchedPreset.caseStudy,
-          potentialImpact: matchedPreset.roi,
-        });
-      } else {
-        setResult({
-          challengeSummary: `Operational bottleneck in process: "${textToSubmit.slice(0, 100)}..."`,
-          recommendedSolution: "Architect an automated microservices pipeline with event-driven queue processing, Vision OCR extraction, and real-time dashboard telemetry.",
-          successStory: "Engineered a similar system for a global enterprise, cutting document processing time from 4 hours to 90 seconds.",
-          potentialImpact: "94% reduction in manual data entry errors, 3.8x faster operational throughput, and SOC2-compliant data storage.",
-        });
-      }
-    } finally {
-      setTimeout(() => setLoading(false), 300);
     }
+
+    // Fallback if API key missing or network error
+    if (matchedPreset) {
+      setResult({
+        whatWeHeard: matchedPreset.whatWeHeard,
+        bestFitCapability: matchedPreset.bestFitCapability,
+        supportingCapabilities: matchedPreset.supportingCapabilities,
+        howDbstCouldHelp: matchedPreset.howDbstCouldHelp,
+        suggestedStartingPoint: matchedPreset.suggestedStartingPoint,
+        whatSuccessCouldLookLike: matchedPreset.whatSuccessCouldLookLike,
+        assumptionsOrQuestions: matchedPreset.assumptionsOrQuestions,
+        fitClassification: "Strong Fit",
+      });
+    } else {
+      setResult({
+        whatWeHeard: `Operational challenge: "${textToSubmit.slice(0, 120)}..."`,
+        bestFitCapability: "Enterprise & Solution Architecture",
+        supportingCapabilities: "Digital Transformation & Advisory",
+        howDbstCouldHelp: "D-BST can help through current-state capability discovery and architecture options analysis, identifying integration points and designing a secure transition roadmap.",
+        suggestedStartingPoint: "Discover & Define: A structured discovery session to map workflows and data requirements.",
+        whatSuccessCouldLookLike: "A cohesive target architecture connecting your operational systems with measurable visibility.",
+        assumptionsOrQuestions: "Systems and applications currently in use, and key operational stakeholders.",
+        fitClassification: "Potential Fit",
+      });
+    }
+
+    setTimeout(() => setLoading(false), 300);
   };
 
   const handleSelectPreset = (preset: typeof presetChallenges[0]) => {
     setChallengeInput(preset.text);
     setResult({
-      challengeSummary: preset.text,
-      recommendedSolution: preset.solution,
-      successStory: preset.caseStudy,
-      potentialImpact: preset.roi,
+      whatWeHeard: preset.whatWeHeard,
+      bestFitCapability: preset.bestFitCapability,
+      supportingCapabilities: preset.supportingCapabilities,
+      howDbstCouldHelp: preset.howDbstCouldHelp,
+      suggestedStartingPoint: preset.suggestedStartingPoint,
+      whatSuccessCouldLookLike: preset.whatSuccessCouldLookLike,
+      assumptionsOrQuestions: preset.assumptionsOrQuestions,
+      fitClassification: "Strong Fit",
     });
   };
 
@@ -151,20 +248,20 @@ export const SolutionFinder = () => {
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
               <Sparkles className="w-4 h-4 text-accent" />
-              <span>AI SOLUTION SCOPING ENGINE</span>
+              <span>GUIDED CAPABILITY DISCOVERY</span>
             </div>
             <h2 className="font-display font-bold text-3xl sm:text-5xl text-fg-default tracking-tight">
-              Describe Your Engineering Bottleneck
+              What Are You Trying to Improve?
             </h2>
             <p className="text-base text-fg-dim leading-relaxed font-body max-w-2xl">
-              Input your legacy system bottleneck, manual process, or performance challenge below. Our AI scoping engine maps it to a recommended D-BST architecture blueprint.
+              Describe a business challenge, operational bottleneck or technology opportunity. Our guided advisor will ask a few focused questions and identify where D-BST may be able to help.
             </p>
           </div>
 
           {/* Preset Buttons */}
           <div className="space-y-3">
             <div className="text-xs font-mono font-bold uppercase tracking-wider text-fg-dimmer">
-              TRY A COMMON ENTERPRISE SCENARIO
+              TRY A COMMON BUSINESS CHALLENGE
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {presetChallenges.map((preset, idx) => {
@@ -192,9 +289,13 @@ export const SolutionFinder = () => {
             <textarea
               value={challengeInput}
               onChange={(e) => setChallengeInput(e.target.value)}
-              placeholder="e.g. Our legacy SAP ERP database is too slow for real-time inventory queries across 40 retail locations..."
+              placeholder="Tell us what is happening today, who it affects, the systems involved and what a better outcome would look like."
               className="w-full p-4 rounded-xl bg-white border border-border-subtle text-fg-default placeholder:text-fg-dimmer text-sm font-body focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none h-28 shadow-flat"
             />
+
+            <div className="text-xs text-fg-dimmer font-mono mb-2">
+              Please do not enter passwords, personal information or confidential customer data.
+            </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <span className="text-xs font-mono text-fg-dim font-medium">
@@ -208,12 +309,12 @@ export const SolutionFinder = () => {
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Mapping Blueprint...</span>
+                    <span>Mapping Capability Fit...</span>
                   </>
                 ) : (
                   <>
                     <Cpu className="w-4 h-4" />
-                    <span>GENERATE SOLUTION SPECS</span>
+                    <span>Start Guided Assessment</span>
                   </>
                 )}
               </button>
@@ -223,52 +324,96 @@ export const SolutionFinder = () => {
           {/* Generated Result Display */}
           {result && (
             <div className="pt-8 border-t border-border-subtle space-y-6 animate-in fade-in duration-300">
-              <div className="flex items-center justify-between text-xs font-mono text-accent font-bold">
-                <span className="flex items-center gap-2">
-                  <Terminal className="w-4 h-4 text-accent" /> SCOPING RESULT FOR YOUR CHALLENGE
+              {/* Header */}
+              <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                <span className="flex items-center gap-2 text-accent font-bold">
+                  <Terminal className="w-4 h-4 text-accent" /> INITIAL CAPABILITY ASSESSMENT
                 </span>
-                <span className="px-3 py-1 rounded-full bg-accent-tint text-accent-deep font-bold text-[10px]">
-                  D-BST BLUEPRINT MATCHED
+                <span className="px-3 py-1 rounded-full bg-accent-tint text-accent-deep font-bold text-[10px] border border-accent/20">
+                  {result.fitClassification || "D-BST CAPABILITY MATCHED"}
                 </span>
+              </div>
+
+              {/* What We Heard */}
+              <div className="p-5 bg-white border border-border-subtle rounded-2xl space-y-3 text-left shadow-flat">
+                <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                  WHAT WE HEARD
+                </div>
+                <p className="text-fg-default font-body text-sm leading-relaxed">
+                  {result.whatWeHeard}
+                </p>
+                <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[11px]">
+                  <span className="px-2.5 py-1 rounded-md bg-accent text-white font-bold">
+                    Primary: {result.bestFitCapability}
+                  </span>
+                  {result.supportingCapabilities && (
+                    <span className="px-2.5 py-1 rounded-md bg-accent-tint text-accent-deep border border-accent/20">
+                      Supporting: {result.supportingCapabilities}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
-                {/* Solution */}
+                {/* How D-BST Could Help */}
                 <div className="p-5 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 text-left shadow-flat">
                   <div className="font-bold text-fg-default flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-accent" /> RECOMMENDED ARCHITECTURE
+                    <Zap className="w-4 h-4 text-accent" /> HOW D-BST COULD HELP
                   </div>
                   <p className="text-fg-dim leading-relaxed font-body text-xs pt-1">
-                    {result.recommendedSolution}
+                    {result.howDbstCouldHelp}
                   </p>
                 </div>
 
-                {/* Impact */}
+                {/* What Success Could Look Like */}
                 <div className="p-5 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 text-left shadow-flat">
                   <div className="font-bold text-fg-default flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-600" /> POTENTIAL ROI &amp; IMPACT
+                    <TrendingUp className="w-4 h-4 text-emerald-600" /> WHAT SUCCESS COULD LOOK LIKE
                   </div>
                   <p className="text-fg-dim leading-relaxed font-body text-xs pt-1">
-                    {result.potentialImpact}
+                    {result.whatSuccessCouldLookLike}
                   </p>
                 </div>
               </div>
 
-              {/* Case Study */}
+              {/* Suggested Starting Point & Questions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
+                <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1 text-left shadow-flat">
+                  <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
+                    SUGGESTED STARTING POINT
+                  </div>
+                  <p className="text-fg-default font-body text-xs leading-snug">
+                    {result.suggestedStartingPoint}
+                  </p>
+                </div>
+
+                {result.assumptionsOrQuestions && (
+                  <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1 text-left shadow-flat">
+                    <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
+                      QUESTIONS TO EXPLORE
+                    </div>
+                    <p className="text-fg-dim font-body text-xs leading-snug">
+                      {result.assumptionsOrQuestions}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* CTA */}
               <div className="p-5 bg-accent-tint/70 border border-accent/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs text-left shadow-flat">
                 <div className="space-y-1">
                   <div className="font-bold text-accent-deep flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-accent" /> RELEVANT D-BST CASE STUDY
+                    <BookOpen className="w-4 h-4 text-accent" /> SUGGESTED NEXT STEP
                   </div>
                   <p className="text-fg-default font-body text-xs">
-                    {result.successStory}
+                    Based on this initial assessment, the next practical step would be a focused discovery conversation with D-BST Solutions.
                   </p>
                 </div>
                 <Link
-                  to="/case-studies"
+                  to="/contact"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white font-bold text-xs shrink-0 hover:bg-accent-deep transition-all shadow-flat"
                 >
-                  <span>Read Case Study</span>
+                  <span>Book a Discovery Conversation</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

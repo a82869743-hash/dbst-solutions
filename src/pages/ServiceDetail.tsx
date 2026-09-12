@@ -55,325 +55,362 @@ interface ServiceData {
 const deliveryPillars = [
   {
     step: "01",
-    title: "Outcome-Focused",
-    desc: "We define success metrics upfront and deliver measurable results.",
-    detail: "Clear KPI alignment before any engineering sprint begins.",
+    title: "Discover & Define",
+    desc: "Understand the real business problem, workflows and constraints before selecting technology.",
+    detail: "Stakeholder research, journey mapping and root-cause analysis.",
     icon: Target,
   },
   {
     step: "02",
-    title: "Agile Delivery",
-    desc: "Iterative development with regular demos and feedback loops.",
-    detail: "Bi-weekly sprint demos with production-ready increments.",
+    title: "Design & De-risk",
+    desc: "Create architecture options, validate assumptions with prototypes, and align stakeholders.",
+    detail: "Target architecture blueprints, interface contracts and technical feasibility validation.",
     icon: Repeat,
   },
   {
     step: "03",
-    title: "Production-Ready",
-    desc: "Enterprise-grade security, testing, and documentation.",
-    detail: "Zero-trust auth, automated testing & SOC2 compliance scans.",
+    title: "Deliver & Learn",
+    desc: "Build in controlled increments with working software, regular reviews and user feedback.",
+    detail: "Bi-weekly sprint demos, automated testing and continuous working software increments.",
     icon: ShieldCheck,
   },
   {
     step: "04",
-    title: "Knowledge Transfer",
-    desc: "We train your team to maintain and extend what we build.",
-    detail: "Complete source code ownership & team training workshops.",
+    title: "Support & Improve",
+    desc: "Stay supported beyond delivery with transparent issue ownership and practical improvements.",
+    detail: "Agreed post-go-live support, transparent issue ownership and knowledge transfer.",
     icon: Workflow,
   },
 ];
 
 const serviceMap: Record<string, ServiceData> = {
-  "strategic-consulting": {
-    slug: "strategic-consulting",
-    title: "Strategy That Actually Works",
-    tagline: "No buzzwords, no cookie-cutter frameworks. We provide practical, actionable strategic consulting that delivers real business outcomes—not just reports you'll file away.",
-    badgeText: "Strategic Advisory & Consulting",
-    primaryCtaText: "Schedule Strategy Session",
-    secondaryCtaText: "View Case Studies",
+  "digital-transformation": {
+    slug: "digital-transformation",
+    title: "Digital Transformation & Advisory",
+    tagline: "We help organisations understand complex operational challenges, prioritise investment and create a practical transformation path.",
+    badgeText: "Advisory & Transformation",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Solutions",
     icon: Compass,
-    overview: "From digital strategy to process optimization, we help you make smarter decisions. Practical, actionable strategic consulting.",
-    capabilitiesHeader: "Strategic Consulting Capabilities",
-    capabilitiesSubtitle: "From digital strategy to process optimization, we help you make smarter decisions",
+    overview: "We help organisations understand complex operational challenges, prioritise investment and create a practical transformation path from business intent to measurable outcomes.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Focus investment on the right problems and create a practical path from business intent to measurable outcomes.",
     capabilitiesList: [
       {
-        name: "Digital Strategy & Roadmapping",
-        desc: "Chart your path to digital maturity with actionable, prioritized technology roadmaps.",
-        stack: ["Strategic Frameworks", "Technology Assessment", "ROI Modeling", "Change Management"],
-        benefit: "Clear direction, aligned stakeholders, prioritized investments, reduced technology debt",
+        name: "Business & Technology Discovery",
+        desc: "Discovery workshops, stakeholder research, and root-cause analysis to clarify what is really holding the operation back.",
+        stack: ["Design Thinking", "Business Analysis", "Stakeholder Research", "Discovery Workshops"],
+        benefit: "Clear diagnosis of root operational causes, not just surface symptoms",
       },
       {
-        name: "Process Optimization",
-        desc: "Identify inefficiencies and design streamlined processes powered by the right technology.",
-        stack: ["Process Mining", "Value Stream Mapping", "Lean Six Sigma", "Automation Opportunity Analysis"],
-        benefit: "30-50% efficiency gains, reduced cycle times, improved quality, cost reduction",
+        name: "Process & Service Journey Mapping",
+        desc: "End-to-end mapping of operational workflows and customer touchpoints to identify friction, manual handoffs and duplication.",
+        stack: ["Process Mapping", "Value Stream Mapping", "Service Design", "Lean Workflows"],
+        benefit: "Identified bottlenecks, manual re-keying, and clear efficiency opportunities",
       },
       {
-        name: "Agile Transformation",
-        desc: "Shift your organization to agile ways of working for faster delivery and better outcomes.",
-        stack: ["Scrum", "Kanban", "SAFe", "DevOps", "Agile Tools (Jira, Azure DevOps)"],
-        benefit: "2-3x faster delivery, improved team morale, better product-market fit, reduced rework",
+        name: "Opportunity Prioritisation & Business Cases",
+        desc: "Structured evaluation of technology and digital opportunities with defensible business cases and practical value metrics.",
+        stack: ["Value Assessment", "ROI Modeling", "Feasibility Analysis", "Investment Scoping"],
+        benefit: "Capital focused on high-leverage problems with measurable returns",
       },
       {
-        name: "Technology Due Diligence",
-        desc: "Assess technology assets and risks for M&A, investments, or strategic partnerships.",
-        stack: ["Code Quality Analysis", "Architecture Review", "Security Assessment", "Technical Debt Evaluation"],
-        benefit: "Informed decisions, risk mitigation, accurate valuations, smooth integrations",
+        name: "Transformation & Adoption Roadmaps",
+        desc: "Pragmatic sequencing, change management, and user enablement plans that ensure lasting adoption across teams.",
+        stack: ["Agile Delivery", "Change Management", "Roadmapping", "Team Enablement"],
+        benefit: "Sustained organizational adoption with minimal delivery disruption",
       },
     ],
-    architectureDetails: "Our advisory team consists of senior engineering principals who have built and scaled enterprise systems.",
+    architectureDetails: "We bring strategy, architecture and engineering together to create a practical transformation path.",
     techStackNodes: [
-      { name: "Design Thinking", role: "User-Centric Scoping Framework", category: "Design Framework" },
-      { name: "Value Stream Mapping", role: "Process Efficiency Analysis", category: "Process Mining" },
-      { name: "Agile", role: "Iterative Delivery Protocol", category: "Delivery Engine" },
-      { name: "Scrum", role: "Sprint Execution Framework", category: "Agile Framework" },
-      { name: "SAFe", role: "Scaled Enterprise Alignment", category: "Enterprise Scale" },
-      { name: "ROI Analysis", role: "Financial & Tech Investment Modeling", category: "ROI Modeling" },
+      { name: "Design Thinking", role: "User & Stakeholder Discovery Framework", category: "Discovery" },
+      { name: "Business Analysis", role: "Requirements & Opportunity Scoping", category: "Analysis" },
+      { name: "Process Mapping", role: "Workflow & Value Stream Analysis", category: "Process" },
+      { name: "Value Assessment", role: "ROI & Impact Evaluation", category: "Strategy" },
+      { name: "Agile Delivery", role: "Iterative Implementation Protocol", category: "Execution" },
     ],
-    slaHighlight: "Senior Principal Lead • Unbiased Architecture Guidance",
-    protocolBadge: "ADVISORY PROTOCOL",
-    protocolHeadline: "Executive Engineering Scoping Framework",
+    slaHighlight: "Strategy-Led • Architecture-Driven • Practical Value",
+    protocolBadge: "TRANSFORMATION FRAMEWORK",
+    protocolHeadline: "Operational Discovery & Adoption Blueprint",
     nodes: [
-      { label: "01. CODE & SECURITY AUDIT", detail: "Comprehensive vulnerability & bottleneck inspection", status: "COMPLETE" },
-      { label: "02. STRATEGIC ROADMAP", detail: "ROI-prioritized engineering execution blueprint", status: "SCOPED" },
-      { label: "03. GOVERNANCE & SOC2", detail: "Immutable compliance audit readiness framework", status: "VERIFIED" },
+      { label: "01. DISCOVER & DEFINE", detail: "Stakeholder research, root cause analysis and opportunity scoping", status: "SCOPED" },
+      { label: "02. PROCESS & JOURNEY MAPPING", detail: "End-to-end workflow analysis and friction point identification", status: "MAPPED" },
+      { label: "03. TRANSFORMATION ROADMAP", detail: "Prioritised investment blueprint with adoption milestones", status: "PLANNED" },
     ],
   },
-  "data-analytics": {
-    slug: "data-analytics",
-    title: "Transform Data into Decisions",
-    tagline: "Turn your data into your competitive advantage. From interactive dashboards to predictive analytics, we build solutions that deliver insights you can act on—not just reports you file away.",
-    badgeText: "Data & Intelligence",
-    primaryCtaText: "Schedule Data Assessment",
-    secondaryCtaText: "View Sample Dashboards",
-    icon: BarChart3,
-    overview: "End-to-end analytics solutions from data collection to actionable insights. We build real-time event streaming, cloud data warehouses, and predictive ML models.",
-    capabilitiesHeader: "Data Analytics Capabilities",
-    capabilitiesSubtitle: "End-to-end analytics solutions from data collection to actionable insights",
+  "enterprise-architecture": {
+    slug: "enterprise-architecture",
+    title: "Enterprise & Solution Architecture",
+    tagline: "We translate business priorities into secure, scalable architecture and clear technology decisions.",
+    badgeText: "Architecture & Systems Design",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Solutions",
+    icon: Layers,
+    overview: "Make technology decisions with a secure, scalable and sustainable blueprint for change.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Translate business priorities into secure, scalable architecture and clear technology decisions.",
     capabilitiesList: [
       {
-        name: "Power BI Dashboards",
-        desc: "Transform raw data into actionable insights with interactive, real-time visualizations.",
-        stack: ["Power BI", "DAX", "Power Query", "Power BI Service", "Azure Analysis Services"],
-        benefit: "Decision-making speed increased by 5x, 360° business visibility, mobile-ready insights",
+        name: "Current & Target-State Assessment",
+        desc: "Comprehensive review of application landscapes, technical debt, dependencies, and future-state target vision.",
+        stack: ["Enterprise Architecture", "Capability Mapping", "Gap Analysis", "System Auditing"],
+        benefit: "Full visibility into architectural risk, bottlenecks, and modernization runway",
       },
       {
-        name: "Predictive Analytics",
-        desc: "Leverage machine learning to forecast trends, predict outcomes, and optimize strategies.",
-        stack: ["Python", "scikit-learn", "XGBoost", "ARIMA", "Prophet", "Azure ML"],
-        benefit: "95% forecast accuracy, 30% cost reduction, proactive decision-making",
+        name: "Architecture Options & Recommendations",
+        desc: "Structured trade-off analysis between build, buy, and modernise pathways with clear architectural decision records.",
+        stack: ["Solution Architecture", "Architecture Decision Records", "Trade-Off Analysis"],
+        benefit: "Confident, unbiased decisions aligned with business priorities",
       },
       {
-        name: "Data Engineering",
-        desc: "Build robust data pipelines and warehouses that scale with your business.",
-        stack: ["SQL", "Python", "Apache Airflow", "dbt", "Snowflake", "Azure Data Factory"],
-        benefit: "99.9% data reliability, 70% faster queries, single source of truth",
+        name: "Integration, API, Data & Security Design",
+        desc: "Decoupled integration patterns, robust API standards, and privacy-preserving security architectures.",
+        stack: ["APIs", "Data Architecture", "Cloud Security", "Event-Driven Patterns"],
+        benefit: "Decoupled systems that scale reliably without fragile point-to-point links",
       },
       {
-        name: "Real-time Analytics",
-        desc: "Monitor business metrics as they happen with streaming analytics and live dashboards.",
-        stack: ["Apache Kafka", "Spark Streaming", "Azure Stream Analytics", "Elasticsearch", "Grafana"],
-        benefit: "Sub-second insights, immediate anomaly detection, operational agility",
+        name: "Architecture Standards & Transition Roadmaps",
+        desc: "Pragmatic multi-phase transition plans that minimise operational disruption and technical risk.",
+        stack: ["Architecture Governance", "Transition Roadmaps", "Engineering Standards"],
+        benefit: "Sustainable engineering governance and de-risked system evolution",
       },
     ],
-    architectureDetails: "Using stream processing architecture coupled with dbt data modeling tools.",
+    architectureDetails: "We design resilient architectures tailored to your operational scale and security constraints.",
     techStackNodes: [
-      { name: "Power BI", role: "Interactive Executive Dashboards", category: "Visualization" },
-      { name: "Python", role: "Data Science & ML Pipeline Core", category: "Language Core" },
-      { name: "SQL", role: "Relational Query Engine", category: "Query Engine" },
-      { name: "Snowflake", role: "Cloud Data Warehouse Vault", category: "Warehouse Vault" },
-      { name: "BigQuery", role: "Serverless Analytical Database", category: "Warehouse Vault" },
-      { name: "TensorFlow", role: "Deep Learning Neural Core", category: "ML Engine" },
-      { name: "scikit-learn", role: "Predictive Machine Learning", category: "ML Engine" },
-      { name: "dbt", role: "Real-Time Data Modeling", category: "Transformation" },
-      { name: "Airflow", role: "DAG Workflow Orchestration", category: "Pipeline DAG" },
+      { name: "Enterprise Architecture", role: "Holistic Systems Landscape & Alignment", category: "Strategy" },
+      { name: "Solution Architecture", role: "Component, Flow & System Design", category: "Architecture" },
+      { name: "Cloud Architecture", role: "Scalable AWS & Azure Deployments", category: "Infrastructure" },
+      { name: "API & Event Streams", role: "Decoupled Modern Integration Layer", category: "Integration" },
+      { name: "Data Architecture", role: "Unified Storage, Models & Governance", category: "Data" },
+      { name: "Security Architecture", role: "Zero-Trust, Identity & Data Protection", category: "Security" },
     ],
-    slaHighlight: "Stream Processing Engine • Zero DB Query Overhead",
-    protocolBadge: "TELEMETRY PROTOCOL",
-    protocolHeadline: "High-Throughput Kafka Event Stream",
+    slaHighlight: "Secure • Scalable • Sustainable Blueprint",
+    protocolBadge: "ARCHITECTURE PROTOCOL",
+    protocolHeadline: "Target-State Architectural Blueprint",
     nodes: [
-      { label: "01. TELEMETRY INGESTION", detail: "High-frequency Kafka event log broker", status: "STREAMING" },
-      { label: "02. DBT TRANSFORMER", detail: "Real-time dimensional data modeling", status: "MODELING" },
-      { label: "03. WAREHOUSE VAULT", detail: "Snowflake & ClickHouse executive analytics", status: "QUERY READY" },
+      { label: "01. CURRENT-STATE AUDIT", detail: "Comprehensive review of applications, integrations, data and debt", status: "AUDITED" },
+      { label: "02. TARGET ARCHITECTURE", detail: "Modular target blueprint with security and scalability baked in", status: "DESIGNED" },
+      { label: "03. TRANSITION ROADMAP", detail: "De-risked phased transition plan with clear milestones", status: "ROADMAP" },
     ],
   },
-  "ai-automation": {
-    slug: "ai-automation",
-    title: "Intelligent Automation & AI",
-    tagline: "Leverage intelligent automation and artificial intelligence to optimize processes, reduce manual work, and unlock new capabilities for your business. From RPA to custom AI agents, we build solutions that work.",
-    badgeText: "Automation & AI Solutions",
-    primaryCtaText: "Schedule Discovery Call",
-    secondaryCtaText: "View Use Cases",
+  "ai-engineering": {
+    slug: "ai-engineering",
+    title: "AI Engineering & Adoption",
+    tagline: "We identify valuable AI use cases, engineer controlled solutions and help embed them safely into real operations.",
+    badgeText: "Agentic AI & Engineering",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Growthmates AI",
     icon: Bot,
-    overview: "From rule-based automation to autonomous AI agents, we deliver the full spectrum of intelligent automation solutions. Fully isolated, privacy-compliant, and built for enterprise scale.",
-    capabilitiesHeader: "Core Capabilities",
-    capabilitiesSubtitle: "From rule-based automation to autonomous AI agents, we deliver the full spectrum of intelligent automation solutions",
+    overview: "Move from AI experimentation to controlled operational capability, with a clear purpose and people remaining in control.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Identify valuable AI use cases, engineer controlled solutions and help embed them safely into operations.",
     capabilitiesList: [
       {
-        name: "Robotic Process Automation (RPA)",
-        desc: "Software robots that mimic human actions to automate repetitive, rule-based tasks.",
-        stack: ["UiPath", "Automation Anywhere", "Blue Prism", "Microsoft Power Automate"],
-        benefit: "80% time savings, 99% accuracy, 24/7 operation",
+        name: "AI Opportunity & Value Assessment",
+        desc: "Identify high-leverage workflows and evaluate technical feasibility, business value, and operational impact.",
+        stack: ["AI Opportunity Assessment", "Feasibility Analysis", "Value Modeling"],
+        benefit: "Targeted investment in use cases that produce real, measurable business impact",
       },
       {
-        name: "Intelligent Process Automation (IPA)",
-        desc: "RPA + AI (NLP, ML, Computer Vision) for complex, judgment-based processes.",
-        stack: ["IBM Watson", "Microsoft Azure AI", "Google Cloud AI", "Custom ML models"],
-        benefit: "60% reduction in processing time, adaptive learning, handles exceptions",
+        name: "Agent & Workflow Architecture",
+        desc: "Modular agentic systems, deterministic safeguards, and human-in-the-loop validation checkpoints.",
+        stack: ["Agentic AI", "Human-in-the-Loop", "Workflow Orchestration"],
+        benefit: "Reliable, controlled autonomous workflows that keep human operators in control",
       },
       {
-        name: "AI Agents & Copilots",
-        desc: "Autonomous agents that can plan, execute tasks, and make decisions.",
-        stack: ["LangChain", "AutoGPT", "OpenAI GPT-4", "Anthropic Claude", "Custom LLM fine-tuning"],
-        benefit: "10x productivity boost, 24/7 availability, consistent quality",
+        name: "MCP, Data & System Integration",
+        desc: "Connecting foundation models directly to operational databases and enterprise APIs using Model Context Protocol.",
+        stack: ["Model Context Protocol (MCP)", "REST APIs", "Vector Retrieval"],
+        benefit: "Seamless execution without copy-pasting data across disconnected applications",
       },
       {
-        name: "Custom AI Agents",
-        desc: "Purpose-built AI systems tailored to your specific business logic and data.",
-        stack: ["Python", "TensorFlow/PyTorch", "Hugging Face", "Vector databases", "MLOps pipelines"],
-        benefit: "Competitive advantage, proprietary intelligence, perfect fit for your needs",
+        name: "Human Oversight, Security & Adoption Planning",
+        desc: "Governance guardrails, team enablement, privacy-preserving architecture, and rollout planning.",
+        stack: ["AI Governance", "Privacy & Security", "User Enablement"],
+        benefit: "High user trust, responsible adoption, and zero data leakage",
       },
     ],
-    architectureDetails: "We build secure, privacy-compliant AI pipelines with full data isolation.",
+    architectureDetails: "We engineer controlled, privacy-first AI solutions where people stay in the loop.",
     techStackNodes: [
-      { name: "UiPath", role: "RPA Automation Robot", category: "RPA Engine" },
-      { name: "Power Automate", role: "Enterprise Workflow Engine", category: "Workflow Automation" },
-      { name: "OpenAI", role: "Foundation LLM & Vision Models", category: "AI Foundation" },
-      { name: "LangChain", role: "Multi-Agent Orchestration", category: "AI Framework" },
-      { name: "TensorFlow", role: "Deep Learning ML Core", category: "ML Engine" },
-      { name: "Python", role: "AI & Model Training Language", category: "Language Core" },
-      { name: "AWS", role: "Multi-Region Cloud AI Infrastructure", category: "Cloud Vault" },
-      { name: "Azure", role: "Enterprise Security & Azure AI", category: "Cloud Vault" },
+      { name: "Agentic AI", role: "Modular Autonomous Task Coordination", category: "AI Core" },
+      { name: "Model Context Protocol", role: "Standardized Tool & System Connectors", category: "Protocol" },
+      { name: "OpenAI Models", role: "Advanced Reasoning & Transformation", category: "Foundation" },
+      { name: "Azure AI", role: "Enterprise-Grade Isolated AI Infrastructure", category: "Cloud AI" },
+      { name: "Python", role: "Agent Logic, Pipelines & Evaluation", category: "Language" },
+      { name: "TypeScript", role: "Type-Safe Client Interfaces & Integration", category: "Runtime" },
     ],
-    slaHighlight: "Isolated Data Vault • Multimodal Vision OCR Engine",
-    protocolBadge: "AI VAULT PROTOCOL",
-    protocolHeadline: "Privacy-Isolated RAG Vector Pipeline",
+    slaHighlight: "Human-in-the-Loop • Privacy Preserving • Production Ready",
+    protocolBadge: "AI ADOPTION PROTOCOL",
+    protocolHeadline: "Controlled Agentic Workflow Engine",
     nodes: [
-      { label: "01. DOCUMENT PARSER", detail: "Multimodal Vision OCR paper & PDF scanner", status: "EXTRACTING" },
-      { label: "02. VECTOR RAG RETRIEVER", detail: "Hybrid BM25 + Supabase pgvector embedding search", status: "INDEXED" },
-      { label: "03. LLM AGENT TRIAGE", detail: "Autonomous execution agent with human fallback", status: "VALIDATED" },
+      { label: "01. USE CASE DISCOVERY", detail: "Operational triage and value feasibility assessment", status: "VALIDATED" },
+      { label: "02. AGENT & MCP DESIGN", detail: "Tool-connected workflows with human-in-the-loop gates", status: "CONFIGURED" },
+      { label: "03. CONTROLLED PILOT", detail: "Production rollout with observability, guardrails and training", status: "DEPLOYED" },
     ],
   },
   "custom-software": {
     slug: "custom-software",
-    title: "Software Built Your Way",
-    tagline: "Off-the-shelf doesn't always fit. We build custom web, mobile, and enterprise software that matches your exact business processes—not the other way around.",
-    badgeText: "Tailored Solutions",
-    primaryCtaText: "Discuss Your Project",
-    secondaryCtaText: "View Portfolio",
+    title: "Custom Software & System Integration",
+    tagline: "We build applications and integrations that close operational gaps and connect existing business systems.",
+    badgeText: "Software Engineering & APIs",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Solutions",
     icon: Code,
-    overview: "From concept to deployment, we build software that fits your business like a glove. Designed with type-safe modern frameworks and scalable microservices.",
-    capabilitiesHeader: "Custom Software Development Capabilities",
-    capabilitiesSubtitle: "From concept to deployment, we build software that fits your business like a glove",
+    overview: "Close operational gaps with maintainable software that works with your existing systems and processes.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Build applications and integrations that close operational gaps and connect business systems.",
     capabilitiesList: [
       {
-        name: "Web Applications",
-        desc: "Build scalable, responsive web applications that deliver exceptional user experiences.",
-        stack: ["React", "Next.js", "Vue.js", "Node.js", "Python Django", "PostgreSQL"],
-        benefit: "70% faster time-to-market, scalable to millions of users, 99.9% uptime",
+        name: "Web, Mobile & Operational Applications",
+        desc: "Purpose-built business portals, mobile field apps, and responsive operational tools designed for real users.",
+        stack: ["React", "TypeScript", "Node.js", "Tailwind CSS"],
+        benefit: "Intuitive, fast interfaces that match your exact operational workflows",
       },
       {
-        name: "Mobile Applications",
-        desc: "Native and cross-platform mobile apps that users love, on iOS and Android.",
-        stack: ["React Native", "Flutter", "Swift", "Kotlin", "Firebase"],
-        benefit: "Single codebase for iOS + Android, 50% cost savings, app store optimization",
+        name: "APIs, Connectors & Middleware",
+        desc: "Robust bi-directional system connectors and high-throughput integration layers between legacy and cloud platforms.",
+        stack: ["REST APIs", "GraphQL", "Webhooks", "Event Brokers"],
+        benefit: "Eliminates duplicate manual data entry and bridges disconnected systems",
       },
       {
-        name: "Enterprise Software",
-        desc: "Robust, secure enterprise solutions designed for complex business processes.",
-        stack: ["Java Spring", "C# .NET", "Microservices", "Docker", "Kubernetes", "Azure/AWS"],
-        benefit: "99.99% reliability, enterprise-grade security, scales with business growth",
+        name: "Workflow & Orchestration Solutions",
+        desc: "Automated business logic, scheduled batch processing, and rule-based workflow pipelines.",
+        stack: ["Workflow Engines", "Microservices", "Queue Systems"],
+        benefit: "Reduced operational cycle times and continuous process consistency",
       },
       {
-        name: "API Development & Integration",
-        desc: "Connect your systems with robust APIs and seamless third-party integrations.",
-        stack: ["RESTful APIs", "GraphQL", "gRPC", "WebSockets", "OAuth 2.0", "API Gateway"],
-        benefit: "Systems talk seamlessly, automated workflows, real-time data flow",
+        name: "Modernisation, Testing & Deployment Support",
+        desc: "Systematic refactoring, automated regression testing, and controlled cloud deployment pipelines.",
+        stack: ["Docker", "Automated Testing", "CI/CD", "Cloud Infrastructure"],
+        benefit: "Long-term software maintainability and reduced technical risk",
       },
     ],
-    architectureDetails: "We're technology-agnostic: selecting the right tools for your needs, not our comfort zone.",
+    architectureDetails: "We build maintainable, well-documented software that integrates seamlessly with your existing technology stack.",
     techStackNodes: [
-      { name: "React", role: "UI Framework", category: "Frontend Core" },
-      { name: "Next.js", role: "Server-Rendered Web Engine", category: "Full-Stack" },
-      { name: "Node.js", role: "High-Concurrency Async Runtime", category: "Backend Engine" },
-      { name: "Python", role: "Data Processing & AI Workflows", category: "Language Core" },
-      { name: "Go", role: "High-Throughput Microservices", category: "Backend Engine" },
-      { name: "PostgreSQL", role: "Relational Ledger Storage", category: "Database Vault" },
-      { name: "MongoDB", role: "Document Storage Engine", category: "Database Vault" },
-      { name: "Redis", role: "Atomic In-Memory Cache", category: "Cache Buffer" },
-      { name: "AWS", role: "Multi-Region Cloud Infrastructure", category: "Cloud Vault" },
-      { name: "Azure", role: "Enterprise Security & Cloud", category: "Cloud Vault" },
+      { name: "React", role: "High-Performance Modern Web Interfaces", category: "Frontend" },
+      { name: "Node.js", role: "Scalable Event-Driven Services", category: "Backend" },
+      { name: "TypeScript", role: "Type-Safe Architecture & Reliability", category: "Language" },
+      { name: "Python", role: "Data Processing & Automation Services", category: "Language" },
+      { name: ".NET", role: "Enterprise Services & System Components", category: "Backend" },
+      { name: "REST APIs", role: "Standardized Secure Integration Interfaces", category: "Integration" },
     ],
-    slaHighlight: "High-Concurrency gRPC Stream • High Availability Architecture",
-    protocolBadge: "SYSTEM PROTOCOL",
-    protocolHeadline: "Event-Driven Microservices Router",
+    slaHighlight: "Maintainable Codebase • Secure Integration Layer",
+    protocolBadge: "SOFTWARE PROTOCOL",
+    protocolHeadline: "Integrated Application Architecture",
     nodes: [
-      { label: "01. INGESTION GATEWAY", detail: "High-concurrency gRPC & REST API router", status: "ONLINE" },
-      { label: "02. KAFKA QUEUE BUFFER", detail: "Atomic in-memory event-driven message stream", status: "PROCESSING" },
-      { label: "03. STORAGE LEDGER", detail: "PostgreSQL relational & Redis cache cluster", status: "SYNCED" },
+      { label: "01. SPECIFICATION & DESIGN", detail: "Technical architecture, API schemas and user flows", status: "SPECIFIED" },
+      { label: "02. AGILE BUILD & INTEGRATE", detail: "Iterative development with bi-directional system connectors", status: "ENGINEERED" },
+      { label: "03. TESTED DEPLOYMENT", detail: "Automated test suites, staging validation and production cutover", status: "DEPLOYED" },
     ],
   },
-  "digital-transformation": {
-    slug: "digital-transformation",
-    title: "Modernize Your Operations",
-    tagline: "From legacy systems to modern cloud platforms, we transform your technology foundation to support growth, efficiency, and competitive advantage.",
-    badgeText: "Modernization Experts",
-    primaryCtaText: "Start Your Transformation",
-    secondaryCtaText: "Assessment Checklist",
-    icon: RefreshCw,
-    overview: "Comprehensive modernization services from ERP implementation to legacy migration. We help mid-market and enterprise organizations transition off brittle monoliths onto scalable cloud infrastructure.",
-    capabilitiesHeader: "Digital Transformation Capabilities",
-    capabilitiesSubtitle: "Comprehensive modernization services from ERP implementation to legacy migration",
+  "data-analytics": {
+    slug: "data-analytics",
+    title: "Data Analytics & Business Intelligence",
+    tagline: "We turn fragmented operational data into trusted information, actionable insights and better decisions.",
+    badgeText: "BI & Data Engineering",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Solutions",
+    icon: BarChart3,
+    overview: "Turn fragmented operational data into trusted information that supports faster, more confident decisions.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Turn fragmented operational data into trusted information, actionable insights and better decisions.",
     capabilitiesList: [
       {
-        name: "Odoo ERP Implementation",
-        desc: "End-to-end ERP deployment customized for manufacturing, distribution, and service industries.",
-        stack: ["Odoo 17", "Python", "PostgreSQL", "XML Views", "OWL Framework", "Odoo Studio"],
-        benefit: "Single unified system, 60% faster operations, real-time business visibility",
+        name: "Data & Reporting Discovery",
+        desc: "Audit data sources, identify conflicting metrics, and understand user decision-making requirements.",
+        stack: ["Data Discovery", "Source Auditing", "Requirements Analysis"],
+        benefit: "Clarity on data availability, quality gaps, and priority reports",
       },
       {
-        name: "Truckmate TMS Optimization",
-        desc: "Maximize your TMS investment with custom integrations, reporting, and workflow automation.",
-        stack: ["Truckmate", "SQL Server", "Crystal Reports", "REST APIs", "EDI Integration"],
-        benefit: "50% faster dispatch, automated invoicing, better customer experience",
+        name: "KPI & Information Model Definition",
+        desc: "Establish consistent business definitions, metric hierarchies, and clean semantic data models.",
+        stack: ["Information Architecture", "Semantic Models", "KPI Design"],
+        benefit: "Single source of truth with aligned definitions across business units",
       },
       {
-        name: "Legacy System Modernization",
-        desc: "Breathe new life into outdated systems or migrate to modern platforms.",
-        stack: ["API Wrappers", "Database Migration Tools", "React", "Node.js", "Cloud Platforms"],
-        benefit: "Reduced maintenance costs, improved performance, modern user experience",
+        name: "Data Pipelines, Semantic Models & Dashboards",
+        desc: "Automated ingestion, transformation pipelines, and interactive executive dashboards.",
+        stack: ["Power BI", "Microsoft Fabric", "SQL", "ETL Pipelines"],
+        benefit: "Self-service reporting and live operational visibility",
       },
       {
-        name: "System Integration",
-        desc: "Connect disparate systems to create seamless data flow across your organization.",
-        stack: ["REST APIs", "GraphQL", "Apache Kafka", "Azure Logic Apps", "Zapier", "Custom Middleware"],
-        benefit: "Eliminate data silos, automated workflows, single source of truth",
-      },
-      {
-        name: "Cloud Modernization (Azure)",
-        desc: "Migrate on-premise SQL Server, apps, and infrastructure to Microsoft Azure with zero data loss.",
-        stack: ["Azure SQL", "Azure DMS", "App Service", "Entra ID", "Microsoft 365", "Azure Backup"],
-        benefit: "30-50% lower TCO, enterprise-grade security, scale on demand",
+        name: "Data Quality & Reporting Governance",
+        desc: "Data validation rules, automated reconciliation checks, and access management governance.",
+        stack: ["Data Governance", "Quality Control", "Access Security"],
+        benefit: "Trusted reports that leadership and operational teams can rely upon",
       },
     ],
-    architectureDetails: "We're technology-agnostic: selecting the right tools for your needs, not our comfort zone.",
+    architectureDetails: "We build modern data foundations using Microsoft Fabric, Power BI, and robust cloud pipelines.",
     techStackNodes: [
-      { name: "Odoo 17", role: "Modular Enterprise ERP", category: "ERP Engine" },
-      { name: "Truckmate", role: "Fleet Dispatch & Logistics TMS", category: "TMS Platform" },
-      { name: "Azure", role: "Enterprise Cloud Infrastructure", category: "Cloud Vault" },
-      { name: "AWS", role: "Multi-Region Cloud Microservices", category: "Cloud Vault" },
-      { name: "Power BI", role: "Executive Analytics Dashboards", category: "Data Stream" },
-      { name: "Python", role: "AI & Fast ETL Data Pipelines", category: "Language Core" },
-      { name: "PostgreSQL", role: "Relational Ledger Database", category: "Storage Vault" },
-      { name: "REST APIs", role: "High-Concurrency Integration Layer", category: "API Gateway" },
+      { name: "Power BI", role: "Interactive Visualisation & Reporting", category: "BI Visuals" },
+      { name: "Microsoft Fabric", role: "Unified Enterprise Data Analytics Lake", category: "Platform" },
+      { name: "Azure Data", role: "Scalable Cloud Data Services", category: "Cloud Vault" },
+      { name: "SQL", role: "Relational Query & Transformation Core", category: "Query Core" },
+      { name: "Data Modelling", role: "Star Schema & Semantic Metric Modeling", category: "Architecture" },
+      { name: "Analytics Pipelines", role: "Automated Data Ingestion & Cleansing", category: "Data Pipeline" },
     ],
-    slaHighlight: "Zero Downtime Cutover • Technology-Agnostic Architecture",
-    protocolBadge: "MODERNIZATION PROTOCOL",
-    protocolHeadline: "Enterprise Modernization Framework",
+    slaHighlight: "Trusted Metrics • Real-Time Operational Visibility",
+    protocolBadge: "ANALYTICS PROTOCOL",
+    protocolHeadline: "End-to-End Data Intelligence Pipeline",
     nodes: [
-      { label: "01. LEGACY SYSTEM WRAPPER", detail: "Safely wrap monolithic ERP/TMS APIs without operational disruption", status: "CONTAINED" },
-      { label: "02. MIDDLEWARE ROUTER", detail: "Decouple data streams with Kafka & Azure Logic Apps", status: "ROUTING" },
-      { label: "03. CLOUD PLATFORM DEPLOYMENT", detail: "Deploy scalable Azure/Odoo 17 cloud microservices", status: "DEPLOYED" },
+      { label: "01. DATA SOURCE DISCOVERY", detail: "Source system audit and KPI definition modeling", status: "AUDITED" },
+      { label: "02. PIPELINE & SEMANTIC MODEL", detail: "Automated transformations and unified metric calculation", status: "MODELLED" },
+      { label: "03. EXECUTIVE DASHBOARDS", detail: "Interactive Power BI reports with role-based visibility", status: "PUBLISHED" },
+    ],
+  },
+  "transport-technology": {
+    slug: "transport-technology",
+    title: "Transport Technology & TruckMate",
+    tagline: "We provide specialist advisory, integration and solution engineering for transport and logistics operations, including TruckMate environments.",
+    badgeText: "Transport & TruckMate Specialist",
+    primaryCtaText: "Discuss This Capability →",
+    secondaryCtaText: "Explore Transport Solutions",
+    icon: Compass,
+    overview: "Improve transport operations by extending the systems, data and industry knowledge already within the business.",
+    capabilitiesHeader: "What We Deliver",
+    capabilitiesSubtitle: "Specialist advisory, integration and solution engineering for transport and logistics operations.",
+    capabilitiesList: [
+      {
+        name: "TruckMate Consulting & Custom Extensions",
+        desc: "Specialist consulting, configuration, custom modules, and workflow optimisation for Trimble TruckMate environments.",
+        stack: ["Trimble TruckMate", "Custom Modules", "Process Optimisation"],
+        benefit: "Extract full value from existing TruckMate transport investments",
+      },
+      {
+        name: "API, DB2 & Third-Party Integrations",
+        desc: "Direct database connectors, telematics feeds, customer portals, and EDI links with dispatch and billing.",
+        stack: ["IBM DB2", "REST APIs", "Telematics Feeds", "EDI Systems"],
+        benefit: "Seamless data exchange across dispatch, drivers, and customers",
+      },
+      {
+        name: "Command Center & Operational Workflows",
+        desc: "Tailored dispatch dashboards, automated trip planning, and exception handling for operations teams.",
+        stack: ["Command Center", "Workflow Automation", "Dispatch Tools"],
+        benefit: "Faster turnaround times, reduced dispatch stress, and fewer errors",
+      },
+      {
+        name: "Reporting & AI-Assisted Decision Support",
+        desc: "Fleet telemetry analytics, profit-per-trip metrics, and intelligent trip recommendations that assist human planners.",
+        stack: ["Power BI", "AI Trip Recommendations", "Azure Analytics"],
+        benefit: "Operational visibility and intelligent suggestions that assist planners",
+      },
+    ],
+    architectureDetails: "Deep domain expertise in transport logistics, fleet dispatch, and Trimble TruckMate environments.",
+    techStackNodes: [
+      { name: "Trimble TruckMate", role: "Core Fleet TMS Dispatch & Logistics Platform", category: "TMS Core" },
+      { name: "IBM DB2", role: "TruckMate Relational Database Layer", category: "Database" },
+      { name: "Command Center", role: "Real-Time Fleet & Dispatch Orchestration", category: "Operations" },
+      { name: "REST APIs", role: "Bi-Directional Telematics & Partner Connectors", category: "Integration" },
+      { name: "Power BI", role: "Transport Analytics & Operational Reporting", category: "Analytics" },
+      { name: "Azure Cloud", role: "Scalable Integration & Middleware Services", category: "Cloud" },
+    ],
+    slaHighlight: "Specialist TruckMate Practice • Deep Transport Domain",
+    protocolBadge: "LOGISTICS PROTOCOL",
+    protocolHeadline: "Transport Operations Integration Framework",
+    nodes: [
+      { label: "01. TMS LANDSCAPE AUDIT", detail: "Assessment of TruckMate setup, DB2 schemas and dispatch flows", status: "AUDITED" },
+      { label: "02. INTEGRATION & EXTENSION", detail: "Custom API connectors, telematics links and workflow triggers", status: "INTEGRATED" },
+      { label: "03. OPERATIONAL ROLLOUT", detail: "Live dispatch adoption, planner enablement and ongoing support", status: "ACTIVE" },
     ],
   },
 };
@@ -384,23 +421,25 @@ const ServiceDetailPage = () => {
   // Normalized slug matching
   const normalizedSlug = (slug || "").toLowerCase().replace(/\s+/g, "-");
   const slugAliases: Record<string, string> = {
-    "automation-ai": "ai-automation",
-    "odoo-truckmate-erp": "digital-transformation",
-    "advisory": "strategic-consulting",
+    "digital-transformation-advisory": "digital-transformation",
+    "strategic-consulting": "digital-transformation",
+    "advisory": "digital-transformation",
+    "enterprise-solution-architecture": "enterprise-architecture",
+    "ai-engineering-adoption": "ai-engineering",
+    "ai-automation": "ai-engineering",
+    "automation-ai": "ai-engineering",
+    "custom-software-system-integration": "custom-software",
+    "data-analytics-bi": "data-analytics",
+    "data-analytics-business-intelligence": "data-analytics",
+    "transport-technology-truckmate": "transport-technology",
+    "truckmate": "transport-technology",
+    "odoo-truckmate-erp": "transport-technology",
   };
   const resolvedSlug = slugAliases[normalizedSlug] || normalizedSlug;
-  const service = serviceMap[resolvedSlug] || serviceMap["strategic-consulting"];
-
-  const [activeNodeIdx, setActiveNodeIdx] = useState(0);
-  const [activeDeliveryStep, setActiveDeliveryStep] = useState(0);
-  const [selectedTechIdx, setSelectedTechIdx] = useState(0);
+  const service = serviceMap[resolvedSlug] || serviceMap["digital-transformation"];
 
   const containerRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
-
-  const pipelinePathRefs = useRef<(SVGPathElement | null)[]>([]);
-  const techBezierRefs = useRef<(SVGPathElement | null)[]>([]);
-  const deliveryBezierRefs = useRef<(SVGPathElement | null)[]>([]);
 
   useDocumentMeta({
     title: `${service.title} | D-BST Solutions`,
@@ -418,54 +457,10 @@ const ServiceDetailPage = () => {
           { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", clearProps: "all" }
         );
       }
-
-      [...pipelinePathRefs.current, ...techBezierRefs.current, ...deliveryBezierRefs.current].forEach((path) => {
-        if (path) {
-          gsap.to(path, {
-            strokeDashoffset: -24,
-            duration: 1.2,
-            repeat: -1,
-            ease: "none",
-          });
-        }
-      });
     }, containerRef);
 
     return () => ctx.revert();
   }, [slug]);
-
-  // 3D Interactive Card Tilt
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -3;
-    const rotateY = ((x - centerX) / centerX) * 3;
-
-    gsap.to(card, {
-      rotateX,
-      rotateY,
-      scale: 1.01,
-      duration: 0.3,
-      ease: "power1.out",
-      transformPerspective: 1000,
-    });
-  };
-
-  const handleCardMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    gsap.to(e.currentTarget, {
-      rotateX: 0,
-      rotateY: 0,
-      scale: 1,
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
-
-  const activeTech = service.techStackNodes[selectedTechIdx] || service.techStackNodes[0];
 
   return (
     <div ref={containerRef} className="min-h-screen bg-bg-base text-fg-default font-body antialiased selection:bg-accent-tint selection:text-accent-deep overflow-hidden">
@@ -508,13 +503,25 @@ const ServiceDetailPage = () => {
                 <span>{service.primaryCtaText}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link
-                to="/use-cases"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-border-subtle text-fg-default font-bold hover:border-accent/40 hover:bg-bg-surface transition-all shadow-flat hover:scale-[1.02]"
-              >
-                <FolderGit2 className="w-4 h-4 text-accent" />
-                <span>{service.secondaryCtaText}</span>
-              </Link>
+              {service.slug === "ai-engineering" ? (
+                <a
+                  href="https://growthmates.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-border-subtle text-fg-default font-bold hover:border-accent/40 hover:bg-bg-surface transition-all shadow-flat hover:scale-[1.02]"
+                >
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  <span>Explore Growthmates AI ↗</span>
+                </a>
+              ) : (
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-border-subtle text-fg-default font-bold hover:border-accent/40 hover:bg-bg-surface transition-all shadow-flat hover:scale-[1.02]"
+                >
+                  <FolderGit2 className="w-4 h-4 text-accent" />
+                  <span>{service.secondaryCtaText}</span>
+                </Link>
+              )}
             </div>
 
             {/* Industry Ticker Strip */}
@@ -537,163 +544,76 @@ const ServiceDetailPage = () => {
         </div>
       </section>
 
-      {/* 2. INTERACTIVE ARCHITECTURE TOPOLOGY PIPELINE DIAGRAM */}
-      <section className="py-16 lg:py-20 bg-bg-base border-b border-border-subtle overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-left font-mono">
-          
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-subtle pb-4">
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                <GitBranch className="w-4 h-4 text-accent" /> ARCHITECTURE PIPELINE TOPOLOGY
-              </span>
-              <h2 className="font-display font-bold text-2xl sm:text-3xl text-fg-default font-sans">
-                {service.title} Execution Flow
-              </h2>
-            </div>
-            <div className="px-4 py-2 rounded-full bg-accent-tint border border-accent/20 text-accent-deep text-xs font-bold w-fit flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-accent" />
-              <span>SLA GUARANTEED &bull; PRODUCTION READY</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-6 space-y-4">
-              {service.nodes.map((node, idx) => {
-                const isSelected = activeNodeIdx === idx;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => setActiveNodeIdx(idx)}
-                    className={`p-6 rounded-3xl border transition-all duration-300 cursor-pointer shadow-flat ${
-                      isSelected
-                        ? "bg-white border-2 border-accent ring-2 ring-accent/20 shadow-floating scale-[1.01]"
-                        : "bg-white/80 border-border-subtle hover:border-accent/40 hover:bg-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs font-bold mb-2">
-                      <span className="text-accent flex items-center gap-2">
-                        <Terminal className="w-4 h-4 text-accent" /> {node.label}
-                      </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                        {node.status}
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
-                      {node.detail}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Center Animated Bezier Curve */}
-            <div className="hidden lg:block lg:col-span-1 relative h-[320px] w-full flex items-center justify-center">
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 320" fill="none">
-                {[50, 160, 270].map((yStart, idx) => (
-                  <path
-                    key={idx}
-                    ref={(el) => (pipelinePathRefs.current[idx] = el)}
-                    d={`M 0 ${yStart} C 60 ${yStart}, 40 160, 100 160`}
-                    stroke="#E8622E"
-                    strokeWidth={activeNodeIdx === idx ? "2.5" : "1.5"}
-                    strokeDasharray="6 4"
-                    opacity={activeNodeIdx === idx ? "1" : "0.3"}
-                  />
-                ))}
-              </svg>
-            </div>
-
-            <div className="lg:col-span-5 bg-white border-2 border-accent rounded-3xl p-8 sm:p-10 shadow-floating space-y-6">
-              <div className="flex items-center justify-between border-b border-border-subtle pb-3 text-xs font-bold">
-                <span className="text-accent uppercase tracking-wider flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-accent animate-pulse" /> PRODUCTION PROTOCOL SPECIFICATION
-                </span>
-                <span className="px-3 py-1 rounded-full bg-accent text-white font-bold text-[10px]">
-                  VERIFIED
-                </span>
-              </div>
-
-              <div className="p-6 bg-[#FFF5F0] border border-accent/30 rounded-2xl space-y-2 text-left">
-                <div className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                  {service.protocolBadge}
-                </div>
-                <h3 className="font-display font-bold text-2xl text-fg-default font-sans">
-                  {service.protocolHeadline}
-                </h3>
-              </div>
-
-              <div className="space-y-3 text-xs font-body text-fg-default">
-                <div className="font-mono font-bold text-fg-dimmer uppercase text-[10px]">
-                  ACTIVE STAGE SPECIFICATION
-                </div>
-                <div className="p-4 bg-[#F5F4F0] rounded-xl border border-border-subtle font-mono text-xs leading-relaxed text-fg-default">
-                  {service.nodes[activeNodeIdx].detail}
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 3. CAPABILITIES SECTION WITH 3D TILT CARDS */}
-      <section className="py-20 lg:py-28 bg-bg-surface border-b border-border-subtle">
+      {/* 2. CORE CAPABILITIES (WHAT WE DELIVER) */}
+      <section className="py-20 lg:py-24 bg-bg-base border-b border-border-subtle">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
-          <div className="text-left space-y-3 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
-              <Layers className="w-4 h-4 text-accent" />
-              <span>CORE ENGINEERING SERVICES</span>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-2xl text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                <Layers className="w-3.5 h-3.5 text-accent" />
+                <span>WHAT WE DELIVER</span>
+              </div>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-fg-default tracking-tight">
+                {service.capabilitiesHeader}
+              </h2>
+              <p className="text-sm sm:text-base text-fg-dim font-body leading-relaxed">
+                {service.capabilitiesSubtitle}
+              </p>
             </div>
-            <h2 className="font-display font-bold text-3xl sm:text-5xl text-fg-default tracking-tight">
-              {service.capabilitiesHeader}
-            </h2>
-            <p className="text-base text-fg-dim font-body leading-relaxed">
-              {service.capabilitiesSubtitle}
-            </p>
+            <div className="hidden md:flex items-center gap-2 text-xs font-mono text-fg-dim bg-white px-4 py-2 rounded-full border border-border-subtle shadow-flat self-start md:self-auto">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <span>{service.capabilitiesList.length} Core Capability Modules</span>
+            </div>
           </div>
 
-          <div className="space-y-6 text-left font-mono">
+          {/* 2x2 Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 text-left">
             {service.capabilitiesList.map((cap, idx) => (
               <div
                 key={idx}
-                onMouseMove={handleCardMouseMove}
-                onMouseLeave={handleCardMouseLeave}
-                className="p-8 bg-white border border-border-subtle rounded-3xl shadow-floating hover:border-accent transition-all space-y-5 cursor-pointer"
+                className="p-7 sm:p-8 bg-white border border-border-subtle rounded-2xl shadow-flat hover:shadow-floating hover:border-accent/40 transition-all duration-300 flex flex-col justify-between space-y-6 group"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-subtle pb-4">
-                  <h3 className="font-display font-bold text-2xl text-fg-default font-sans">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="w-8 h-8 rounded-lg font-mono text-xs font-bold bg-accent-tint text-accent border border-accent/20 flex items-center justify-center">
+                      0{idx + 1}
+                    </span>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                      MODULAR DELIVERABLE
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-fg-default group-hover:text-accent transition-colors">
                     {cap.name}
                   </h3>
-                  <span className="text-[10px] px-3 py-1 rounded-full bg-accent-tint text-accent-deep font-bold uppercase tracking-wider w-fit">
-                    CAPABILITY 0{idx + 1}
-                  </span>
-                </div>
 
-                <p className="text-base sm:text-lg text-fg-dim font-body leading-relaxed">
-                  {cap.desc}
-                </p>
+                  <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+                    {cap.desc}
+                  </p>
 
-                <div className="space-y-2 pt-1">
-                  <div className="text-[10px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
-                    TECHNOLOGY STACK
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {cap.stack.map((st) => (
-                      <span
-                        key={st}
-                        className="px-4 py-2 rounded-full bg-[#F5F4F0] border border-border-subtle text-xs font-mono font-bold text-fg-default shadow-flat hover:border-accent/40 transition-colors"
-                      >
-                        {st}
-                      </span>
-                    ))}
+                  <div className="space-y-2 pt-2">
+                    <div className="text-[10px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
+                      METHODS &amp; TOOLS
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {cap.stack.map((st) => (
+                        <span
+                          key={st}
+                          className="px-2.5 py-1 rounded-md bg-bg-muted border border-border-subtle text-[11px] font-mono font-medium text-fg-default"
+                        >
+                          {st}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#FFF5F0] border border-accent/30 rounded-2xl text-xs sm:text-sm font-body text-fg-default font-semibold flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-accent shrink-0" />
-                  <span>{cap.benefit}</span>
+                <div className="pt-4 border-t border-border-subtle/80">
+                  <div className="p-3 bg-accent-tint/40 border border-accent/15 rounded-xl text-xs font-body text-fg-default flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                    <span className="leading-snug">{cap.benefit}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -702,225 +622,244 @@ const ServiceDetailPage = () => {
         </div>
       </section>
 
-      {/* 4. GSAP CONNECTED TECHNOLOGY STACK TOPOLOGY NODE NETWORK */}
-      <section className="py-20 lg:py-28 bg-bg-base border-b border-border-subtle overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left font-mono">
+      {/* 3. ARCHITECTURE & EXECUTION STAGES */}
+      <section className="py-20 lg:py-24 bg-bg-surface border-b border-border-subtle">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           
-          <div className="space-y-3 max-w-3xl">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
-              <Cpu className="w-4 h-4 text-accent" />
-              <span>PROVEN TOOLS &amp; FRAMEWORKS</span>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                <GitBranch className="w-3.5 h-3.5 text-accent" />
+                <span>{service.protocolBadge || "EXECUTION BLUEPRINT"}</span>
+              </div>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight">
+                {service.protocolHeadline || "Operational Execution Framework"}
+              </h2>
+              <p className="text-sm text-fg-dim font-body">
+                {service.architectureDetails || "Structured architectural progression ensuring zero disruption to live operations."}
+              </p>
             </div>
-            <h2 className="font-display font-bold text-3xl sm:text-5xl text-fg-default tracking-tight">
-              Technology Stack Ecosystem
-            </h2>
-            <p className="text-base text-fg-dim font-body">
-              Proven tools and frameworks connected in a unified enterprise topology
-            </p>
+            <div className="px-3.5 py-1.5 rounded-full bg-bg-muted border border-border-subtle text-xs font-mono text-fg-dim font-semibold w-fit self-start sm:self-auto">
+              <span>{service.slaHighlight}</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {service.techStackNodes.map((tech, idx) => {
-                const isSelected = selectedTechIdx === idx;
-                return (
-                  <div
-                    key={tech.name}
-                    onClick={() => setSelectedTechIdx(idx)}
-                    className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer shadow-flat ${
-                      isSelected
-                        ? "bg-white border-2 border-accent ring-2 ring-accent/20 shadow-floating scale-[1.02]"
-                        : "bg-white/80 border-border-subtle hover:border-accent/40 hover:bg-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs font-bold mb-1.5">
-                      <span className="text-accent flex items-center gap-1.5">
-                        <Terminal className="w-3.5 h-3.5 text-accent" /> NODE 0{idx + 1}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-full bg-accent-tint text-accent-deep text-[10px] font-bold">
-                        {tech.category}
-                      </span>
-                    </div>
-
-                    <h3 className="font-display font-bold text-lg text-fg-default font-sans">
-                      {tech.name}
-                    </h3>
-                    <p className="text-xs text-fg-dim font-body mt-1">
-                      {tech.role}
-                    </p>
+          {/* 3-Stage Progressive Timeline */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {service.nodes.map((node, idx) => (
+              <div
+                key={idx}
+                className="p-7 bg-white border border-border-subtle rounded-2xl shadow-flat hover:shadow-floating hover:border-accent/40 transition-all duration-300 space-y-4 relative flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-accent flex items-center gap-1.5">
+                      <Terminal className="w-3.5 h-3.5" /> STAGE 0{idx + 1}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[10px] font-mono font-bold">
+                      {node.status}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Center Animated Bezier Flow Wire */}
-            <div className="hidden lg:block lg:col-span-1 relative h-[380px] w-full flex items-center justify-center">
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 380" fill="none">
-                {[40, 90, 140, 190, 240, 290, 340].map((yStart, idx) => (
-                  <path
-                    key={idx}
-                    ref={(el) => (techBezierRefs.current[idx] = el)}
-                    d={`M 0 ${yStart} C 60 ${yStart}, 40 190, 100 190`}
-                    stroke="#E8622E"
-                    strokeWidth={selectedTechIdx === idx ? "2.5" : "1.5"}
-                    strokeDasharray="6 4"
-                    opacity={selectedTechIdx === idx ? "1" : "0.25"}
-                  />
-                ))}
-              </svg>
-            </div>
+                  <h3 className="font-display font-bold text-lg text-fg-default font-sans">
+                    {node.label}
+                  </h3>
 
-            <div className="lg:col-span-5 bg-white border-2 border-accent rounded-3xl p-8 sm:p-10 shadow-floating space-y-6">
-              <div className="flex items-center justify-between border-b border-border-subtle pb-3 text-xs font-bold">
-                <span className="text-accent uppercase tracking-wider flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-accent animate-pulse" /> SELECTED TECH NODE
-                </span>
-                <span className="px-3 py-1 rounded-full bg-accent text-white font-bold text-[10px]">
-                  VERIFIED ADAPTER
-                </span>
-              </div>
-
-              <div className="p-6 bg-[#FFF5F0] border border-accent/30 rounded-2xl space-y-2 text-left">
-                <div className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                  [{activeTech.category}]
+                  <p className="text-xs text-fg-dim font-body leading-relaxed">
+                    {node.detail}
+                  </p>
                 </div>
-                <h3 className="font-display font-bold text-3xl text-fg-default font-sans">
-                  {activeTech.name}
-                </h3>
-                <p className="text-xs text-fg-dim font-body pt-1">
-                  {activeTech.role}
-                </p>
-              </div>
 
-              <div className="p-5 bg-[#F5F4F0] border border-border-subtle rounded-2xl text-xs font-body text-fg-default space-y-2 text-left">
-                <div className="font-mono font-bold text-accent text-[10px] uppercase tracking-wider flex items-center gap-1.5">
-                  <Cpu className="w-3.5 h-3.5 text-accent" /> TECHNOLOGY-AGNOSTIC COMMITMENT
+                <div className="pt-4 border-t border-border-subtle/60 flex items-center justify-between text-[11px] font-mono text-fg-dimmer">
+                  <span>PROGRESSION</span>
+                  <span className="text-accent font-bold">
+                    {idx === 0 ? "Step 1 of 3" : idx === 1 ? "Step 2 of 3" : "Step 3 of 3"}
+                  </span>
                 </div>
-                <p className="text-fg-dim leading-relaxed">
-                  We&apos;re technology-agnostic: selecting the right tools for your needs, not our comfort zone.
-                </p>
               </div>
-            </div>
-
+            ))}
           </div>
 
         </div>
       </section>
 
-      {/* 5. GSAP CONNECTED STEPPER: HOW WE DELIVER */}
-      <section className="py-20 lg:py-28 bg-bg-surface border-b border-border-subtle overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 text-left font-mono">
+      {/* 4. METHODS & TECHNOLOGY ECOSYSTEM */}
+      <section className="py-20 lg:py-24 bg-bg-base border-b border-border-subtle">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           
-          <div className="space-y-3 max-w-3xl">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
-              <ShieldCheck className="w-4 h-4 text-accent" />
-              <span>THE D-BST DELIVERY STANDARD</span>
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+              <Cpu className="w-3.5 h-3.5 text-accent" />
+              <span>PROVEN TOOLS &amp; METHODS</span>
             </div>
-            <h2 className="font-display font-bold text-3xl sm:text-5xl text-fg-default tracking-tight">
-              How We Deliver
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight">
+              Methods &amp; Technology Stack
             </h2>
-            <p className="text-base sm:text-lg text-fg-dim font-body">
-              A proven approach that combines technical excellence with business understanding
+            <p className="text-sm text-fg-dim font-body">
+              Production tools, enterprise standards and platforms selected specifically for your environment.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-6 space-y-4">
-              {deliveryPillars.map((pillar, idx) => {
-                const isSelected = activeDeliveryStep === idx;
-                const PillarIcon = pillar.icon;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => setActiveDeliveryStep(idx)}
-                    className={`p-6 rounded-3xl border transition-all duration-300 cursor-pointer shadow-flat ${
-                      isSelected
-                        ? "bg-white border-2 border-accent ring-2 ring-accent/20 shadow-floating scale-[1.01]"
-                        : "bg-white/80 border-border-subtle hover:border-accent/40 hover:bg-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs font-bold mb-2">
-                      <span className="text-accent flex items-center gap-2">
-                        <PillarIcon className="w-4 h-4 text-accent" /> STEP {pillar.step}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Tech Stack Chips Grid (8 cols) */}
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {service.techStackNodes.map((tech) => (
+                <div
+                  key={tech.name}
+                  className="p-5 bg-white border border-border-subtle rounded-xl shadow-flat hover:border-accent/40 hover:shadow-floating transition-all space-y-2"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-display font-bold text-base text-fg-default">
+                      {tech.name}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-accent-tint text-accent-deep text-[10px] font-mono font-bold">
+                      {tech.category}
+                    </span>
+                  </div>
+                  <p className="text-xs text-fg-dim font-body leading-relaxed">
+                    {tech.role}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Technology-Agnostic Commitment Card (4 cols) */}
+            <div className="lg:col-span-4 p-8 bg-white border border-border-subtle rounded-2xl shadow-flat space-y-5">
+              <div className="w-10 h-10 rounded-xl bg-accent-tint border border-accent/20 flex items-center justify-center text-accent">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-display font-bold text-xl text-fg-default">
+                  Technology-Agnostic Commitment
+                </h3>
+                <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+                  We begin with your business problem, not a preferred vendor. We select the simplest, most responsible tools that solve the operational challenge, respect your constraints, and integrate cleanly with your existing systems.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-border-subtle space-y-2 text-xs font-mono text-fg-dim">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+                  <span>No proprietary vendor lock-in</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+                  <span>Full source code ownership</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+                  <span>Sustainable architecture runway</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. HOW WE DELIVER (THE 4 PILLARS) */}
+      <section className="py-20 lg:py-24 bg-bg-surface border-b border-border-subtle">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+                <span>THE D-BST DELIVERY STANDARD</span>
+              </div>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight">
+                How We Deliver
+              </h2>
+              <p className="text-sm text-fg-dim font-body">
+                A structured, four-step delivery method designed to minimise risk and deliver lasting business value.
+              </p>
+            </div>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold text-accent hover:text-accent-deep transition-all group self-start md:self-auto"
+            >
+              <span>DISCUSS YOUR PROJECT SCOPE</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {deliveryPillars.map((pillar) => {
+              const PillarIcon = pillar.icon;
+              return (
+                <div
+                  key={pillar.step}
+                  className="p-7 bg-white border border-border-subtle rounded-2xl shadow-flat hover:shadow-floating hover:border-accent/40 transition-all duration-300 flex flex-col justify-between space-y-6"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="w-9 h-9 rounded-xl font-mono text-xs font-bold bg-accent-tint text-accent border border-accent/20 flex items-center justify-center">
+                        {pillar.step}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-deep text-[10px] font-bold">
-                        ACTIVE PRINCIPLE
-                      </span>
+                      <PillarIcon className="w-4 h-4 text-accent" />
                     </div>
 
-                    <h3 className="font-display font-bold text-xl text-fg-default font-sans mb-1">
+                    <h3 className="font-display font-bold text-xl text-fg-default">
                       {pillar.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+                    <p className="text-xs text-fg-dim font-body leading-relaxed">
                       {pillar.desc}
                     </p>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Center Animated Bezier Flow Wire */}
-            <div className="hidden lg:block lg:col-span-1 relative h-[420px] w-full flex items-center justify-center">
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 420" fill="none">
-                {[55, 160, 265, 370].map((yStart, idx) => (
-                  <path
-                    key={idx}
-                    ref={(el) => (deliveryBezierRefs.current[idx] = el)}
-                    d={`M 0 ${yStart} C 60 ${yStart}, 40 210, 100 210`}
-                    stroke="#E8622E"
-                    strokeWidth={activeDeliveryStep === idx ? "2.5" : "1.5"}
-                    strokeDasharray="6 4"
-                    opacity={activeDeliveryStep === idx ? "1" : "0.3"}
-                  />
-                ))}
-              </svg>
-            </div>
-
-            <div className="lg:col-span-5 bg-white border-2 border-accent rounded-3xl p-8 sm:p-10 shadow-floating space-y-6">
-              <div className="flex items-center justify-between border-b border-border-subtle pb-3 text-xs font-bold">
-                <span className="text-accent uppercase tracking-wider flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-accent" /> DELIVERY PRINCIPLE INSPECTOR
-                </span>
-                <span className="px-3 py-1 rounded-full bg-accent text-white font-bold text-[10px]">
-                  VERIFIED
-                </span>
-              </div>
-
-              <div className="p-6 bg-[#FFF5F0] border border-accent/30 rounded-2xl space-y-2 text-left">
-                <div className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                  STEP {deliveryPillars[activeDeliveryStep].step} PRINCIPLE
+                  <div className="pt-4 border-t border-border-subtle/80">
+                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer mb-1">
+                      DELIVERY COMMITMENT
+                    </div>
+                    <p className="text-xs text-fg-default font-body font-medium leading-snug">
+                      {pillar.detail}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-display font-bold text-3xl text-fg-default font-sans">
-                  {deliveryPillars[activeDeliveryStep].title}
-                </h3>
-                <p className="text-xs sm:text-sm text-fg-dim font-body pt-1 leading-relaxed">
-                  {deliveryPillars[activeDeliveryStep].desc}
-                </p>
-              </div>
-
-              <div className="p-4 bg-[#F5F4F0] rounded-xl border border-border-subtle font-mono text-xs leading-relaxed text-fg-default space-y-1">
-                <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
-                  OPERATIONAL COMMITMENT SPECIFICATION
-                </div>
-                <p className="text-fg-default font-semibold font-sans">
-                  {deliveryPillars[activeDeliveryStep].detail}
-                </p>
-              </div>
-
-              <Link
-                to="/contact"
-                className="w-full py-4 px-8 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating flex items-center justify-center gap-2"
-              >
-                <span>{service.primaryCtaText}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
+              );
+            })}
           </div>
 
+        </div>
+      </section>
+
+      {/* 6. FOCUSED CALL-TO-ACTION RIBBON */}
+      <section className="py-14 bg-bg-muted border-b border-border-subtle">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-10 bg-white border border-border-subtle rounded-3xl shadow-floating flex flex-col md:flex-row items-center justify-between gap-6 text-left">
+            <div className="space-y-2 max-w-2xl">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent">
+                NEXT STEP FOR {service.title.toUpperCase()}
+              </span>
+              <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default">
+                Ready to Discuss What You&apos;re Trying to Improve?
+              </h3>
+              <p className="text-xs sm:text-sm text-fg-dim font-body">
+                You do not need a finished brief. Speak with a D-BST principal consultant to evaluate fit, scope priorities, and explore practical solutions.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02]"
+              >
+                <span>Book Discovery Conversation</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              {service.slug === "ai-engineering" && (
+                <a
+                  href="https://growthmates.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-bg-surface border border-border-subtle text-fg-default font-bold text-xs font-mono hover:border-accent/40 transition-all shadow-flat"
+                >
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  <span>Explore Growthmates AI ↗</span>
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 

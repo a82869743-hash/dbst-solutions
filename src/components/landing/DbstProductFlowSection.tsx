@@ -18,26 +18,26 @@ interface TicketItem {
 const ticketQueue: TicketItem[] = [
   {
     id: "DEP-01",
-    title: "TruckMate TMS Fleet Upgrade & BOL Ingestion",
-    match: "Verified Partner Deployment",
+    title: "TruckMate TMS & Order Dispatch Integration",
+    match: "Transport Practice",
     status: "matched",
-    fix: "Automated BOL parsing & route optimization applied",
+    fix: "Automated trip planning & dispatch connectors applied",
     nodeTraceKey: 0,
   },
   {
     id: "DEP-02",
-    title: "Odoo ERP Implementation & Inventory Sync",
-    match: "Verified Client Deployment",
+    title: "Enterprise System & Inventory Integration",
+    match: "Architecture Practice",
     status: "matched",
-    fix: "Unified manufacturing, inventory, and accounting sync",
+    fix: "Unified manufacturing, inventory, and operational sync",
     nodeTraceKey: 1,
   },
   {
     id: "DEP-03",
-    title: "Predictive Maintenance IoT Telemetry Hub",
-    match: "Verified Client Deployment",
+    title: "Predictive Operational Telemetry & BI",
+    match: "Data & BI Practice",
     status: "matched",
-    fix: "Real-time vibration sensor monitoring & early warnings",
+    fix: "Real-time performance monitoring & early warnings",
     nodeTraceKey: 2,
   },
 ];
@@ -54,25 +54,25 @@ const traceNodes: TraceNode[] = [
     code: "TRUCK",
     label: "TMS Dispatch",
     sub: "TruckMate Sync",
-    diagnosis: "Automated BOL ingestion & route dispatch connector eliminating manual paperwork.",
+    diagnosis: "Command Center and API dispatch connectors streamlining transport operations without manual paperwork.",
   },
   {
-    code: "ODOO",
-    label: "ERP Workflow",
-    sub: "Odoo Integration",
-    diagnosis: "Synchronized inventory, order processing, and supplier accounting across divisions.",
+    code: "SYSTEM",
+    label: "Operations",
+    sub: "System Connectors",
+    diagnosis: "Synchronized inventory, order processing, and supplier data across operational business divisions.",
   },
   {
     code: "AZURE",
     label: "Cloud Infra",
-    sub: "Azure SQL Migration",
-    diagnosis: "Modernized SQL Server database with zero data loss and automated backups.",
+    sub: "Azure Architecture",
+    diagnosis: "Modern cloud architecture with role-based access, high availability, and secure enterprise APIs.",
   },
   {
-    code: "RPA",
-    label: "Automation",
-    sub: "UiPath & OpenAI",
-    diagnosis: "Intelligent robotic process automation cutting administrative overhead by 85%.",
+    code: "AGENT",
+    label: "AI Workflows",
+    sub: "Agentic AI & MCP",
+    diagnosis: "Human-guided AI agent workflows streamlining operational decision-making with transparent oversight.",
   },
 ];
 
@@ -146,7 +146,7 @@ export const DbstProductFlowSection = () => {
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body max-w-2xl mx-auto">
-            Explore how D-BST bridges legacy systems, automated document processing, and cloud ERP workflows with verified operational reliability.
+            Explore how D-BST connects existing transport platforms, operational workflows, and modern cloud services with proven reliability.
           </p>
         </div>
 
@@ -208,7 +208,7 @@ export const DbstProductFlowSection = () => {
                 D-BST Support &amp; Incident Analyzer
               </h3>
               <p className="text-xs sm:text-sm text-fg-dim leading-relaxed font-body">
-                Automated incident triage, AI similarity matching, and instant resolution recommendations. Built for operations desks to resolve 85% of support tickets under 60 seconds.
+                Automated incident triage, operational similarity matching, and actionable resolution recommendations. Built for operations desks to resolve issues transparently and improve systems continuously.
               </p>
             </div>
 

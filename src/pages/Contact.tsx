@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DbstNavigation } from "@/components/navigation/DbstNavigation";
 import { DbstFooter } from "@/components/navigation/DbstFooter";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -8,14 +8,17 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 const serviceOptions = [
-  "Custom Software Engineering",
-  "AI Automation & Workflows",
-  "Data Analytics & Intelligence",
-  "Digital Transformation",
-  "Strategic Advisory & Consulting",
-  "General Inquiry / Partnership",
+  "AI Engineering and Adoption",
+  "Enterprise and Solution Architecture",
+  "Digital Transformation and Advisory",
+  "Custom Software and System Integration",
+  "Data Analytics and Business Intelligence",
+  "Transport Technology and TruckMate",
+  "Growthmates AI",
+  "Not Sure Yet",
 ];
 
 const budgetRanges = [
@@ -25,8 +28,6 @@ const budgetRanges = [
   "$100k+",
   "Flexible / To Be Scoped",
 ];
-
-import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 const ContactPage = () => {
   useDocumentMeta({
@@ -118,13 +119,13 @@ const ContactPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-accent" />
-              <span>DIRECT ENGINEERING INTAKE</span>
+              <span>START A CONVERSATION</span>
             </div>
             <h1 className="font-display font-extrabold text-4xl sm:text-6xl text-fg-default tracking-tight">
-              Get in Touch with <span className="text-accent">D-BST Engineering</span>
+              Let&apos;s Discuss What You&apos;re Trying to <span className="text-accent">Improve</span>
             </h1>
             <p className="text-base sm:text-lg text-fg-dim font-body max-w-2xl mx-auto">
-              Schedule a technical scoping session with our engineering principals or submit your system architecture requirements below.
+              You do not need a finished brief. Tell us what is happening today and the outcome you want to achieve. We&apos;ll help determine whether D-BST is the right fit and suggest a practical next step.
             </p>
           </div>
         </section>
@@ -141,19 +142,19 @@ const ContactPage = () => {
                 <div className="p-8 bg-white border border-border-subtle rounded-3xl shadow-floating space-y-6">
                   <div className="flex items-center justify-between text-xs border-b border-border-subtle pb-3">
                     <span className="font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-accent" /> FAST TRACK CALL
+                      <Calendar className="w-4 h-4 text-accent" /> DISCOVERY SESSION
                     </span>
                     <span className="px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-deep font-bold text-[10px]">
-                      CALENDLY
+                      DIRECT CALL
                     </span>
                   </div>
                   
                   <div className="space-y-2">
                     <h2 className="font-display font-bold text-2xl text-fg-default font-sans">
-                      Schedule a 30-Min Scoping Call
+                      Book a Discovery Conversation
                     </h2>
                     <p className="text-xs text-fg-dim font-body leading-relaxed">
-                      Prefer an immediate video call? Book directly on our lead architect&apos;s calendar for a 1-on-1 architecture review.
+                      Speak directly with a D-BST principal consultant to explore your business problem, constraints, and whether D-BST is the right fit.
                     </p>
                   </div>
 
@@ -164,7 +165,7 @@ const ContactPage = () => {
                     className="inline-flex items-center justify-center gap-2.5 w-full py-4 rounded-xl bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
                   >
                     <Calendar className="w-4 h-4" />
-                    <span>BOOK CALENDLY CALL DIRECTLY</span>
+                    <span>BOOK A DISCOVERY CONVERSATION</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
@@ -172,32 +173,24 @@ const ContactPage = () => {
                 {/* Office Locations */}
                 <div className="p-8 bg-white border border-border-subtle rounded-3xl shadow-floating space-y-6">
                   <div className="text-xs font-bold text-fg-dimmer uppercase tracking-wider border-b border-border-subtle pb-3">
-                    GLOBAL HEADQUARTERS &amp; HUBS
+                    OFFICE &amp; COVERAGE
                   </div>
 
                   <div className="space-y-5 text-xs text-fg-dim font-body">
                     <div className="flex items-start gap-3">
                       <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-fg-default font-mono">San Francisco Headquarters</div>
-                        <p className="text-xs text-fg-dim pt-0.5">500 Howard Street, Suite 400, San Francisco, CA 94105</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <Building2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                      <div>
-                        <div className="font-bold text-fg-default font-mono">Sydney Engineering Hub</div>
-                        <p className="text-xs text-fg-dim pt-0.5">100 Barangaroo Avenue, Tower 3, Sydney NSW 2000</p>
+                        <div className="font-bold text-fg-default font-mono">Melbourne, Australia</div>
+                        <p className="text-xs text-fg-dim pt-0.5">Serving Asia Pacific and North America</p>
                       </div>
                     </div>
 
                     <div className="flex items-start gap-3">
                       <Mail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-fg-default font-mono">Direct Technical Email</div>
-                        <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
-                          {contentConfig.contactEmail || "info@dbstsolutions.com"}
+                        <div className="font-bold text-fg-default font-mono">Email</div>
+                        <a href="mailto:info@dbstsolutions.com" className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                          info@dbstsolutions.com
                         </a>
                       </div>
                     </div>
@@ -205,9 +198,9 @@ const ContactPage = () => {
                     <div className="flex items-start gap-3">
                       <Phone className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-fg-default font-mono">24/7 Technical Desk</div>
-                        <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
-                          {contentConfig.contactPhone || "+61 430 981 166"}
+                        <div className="font-bold text-fg-default font-mono">Direct Phone</div>
+                        <a href="tel:+61430981166" className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                          +61 430 981 166
                         </a>
                       </div>
                     </div>
@@ -217,10 +210,10 @@ const ContactPage = () => {
                 {/* Commitment Box */}
                 <div className="p-6 bg-[#FFF5F0] border border-accent/30 rounded-2xl space-y-2 text-xs">
                   <div className="font-bold text-accent flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-accent" /> 24-HOUR SLA RESPONSE GUARANTEE
+                    <Clock className="w-4 h-4 text-accent" /> DIRECT DISCOVERY CONVERSATION
                   </div>
                   <p className="text-fg-dim font-body text-xs leading-relaxed">
-                    All technical intake inquiries receive a direct response from a senior principal within 24 business hours.
+                    We listen, challenge assumptions, and suggest practical next steps focused on tangible operational outcomes.
                   </p>
                 </div>
 
@@ -231,10 +224,10 @@ const ContactPage = () => {
                 
                 <div className="space-y-2 border-b border-border-subtle pb-4">
                   <h2 className="font-display font-bold text-2xl text-fg-default">
-                    Submit Project Intake Form
+                    Send an Enquiry
                   </h2>
                   <p className="text-xs text-fg-dim font-body">
-                    Fill out the technical requirements below to receive a custom architecture scope and estimate.
+                    Tell us what is happening today and the outcome you want to achieve.
                   </p>
                 </div>
 
@@ -275,7 +268,7 @@ const ContactPage = () => {
                       <label className="font-bold text-fg-default">Phone Number</label>
                       <input
                         type="tel"
-                        placeholder="+1 (555) 000-0000"
+                        placeholder="+61 400 000 000"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
@@ -283,10 +276,10 @@ const ContactPage = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="font-bold text-fg-default">Company Name</label>
+                      <label className="font-bold text-fg-default">Company or Organisation</label>
                       <input
                         type="text"
-                        placeholder="Apex Logistics Ltd."
+                        placeholder="Apex Operations Ltd."
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                         className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
@@ -294,39 +287,24 @@ const ContactPage = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="font-bold text-fg-default">Primary Service Practice</label>
-                      <select
-                        value={formData.service}
-                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-xs font-mono focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
-                      >
-                        {serviceOptions.map((opt) => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="font-bold text-fg-default">Target Budget Range</label>
-                      <select
-                        value={formData.budget}
-                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-xs font-mono focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
-                      >
-                        {budgetRanges.map((b) => (
-                          <option key={b} value={b}>{b}</option>
-                        ))}
-                      </select>
-                    </div>
+                  <div className="space-y-1.5">
+                    <label className="font-bold text-fg-default">How Can We Help?</label>
+                    <select
+                      value={formData.service}
+                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                      className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-xs font-mono focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
+                    >
+                      {serviceOptions.map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="font-bold text-fg-default">Project Description / System Requirements</label>
+                    <label className="font-bold text-fg-default">Tell Us About Your Challenge *</label>
                     <textarea
                       rows={4}
-                      placeholder="Detail your existing tech stack, legacy bottlenecks, or project objectives..."
+                      placeholder="Briefly describe what is happening today, who it affects and what a better outcome would look like. Please do not include passwords, personal information or confidential customer data."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all resize-none shadow-flat"
@@ -341,21 +319,20 @@ const ContactPage = () => {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Transmitting Intake...</span>
+                        <span>Sending Enquiry...</span>
                       </>
                     ) : (
                       <>
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>SUBMIT TECHNICAL INTAKE FORM</span>
+                        <span>SEND ENQUIRY →</span>
                       </>
                     )}
                   </button>
 
                 </form>
 
-                <div className="text-[10px] font-mono text-fg-dim text-center flex items-center justify-center gap-1.5 pt-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                  <span>Strict NDA &amp; SOC2 Data Confidentiality Automatically Enforced</span>
+                <div className="text-[11px] font-body text-fg-dim text-center pt-2 leading-relaxed">
+                  By submitting this form, you agree that D-BST Solutions may contact you regarding your enquiry. Please review our Privacy Policy for information about how submitted details are handled.
                 </div>
 
               </div>

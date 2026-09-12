@@ -153,7 +153,7 @@ const PlanEstimator = () => {
                 <Layers className="h-4 w-4 text-accent shrink-0" /> Full MCP Server access
               </div>
               <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-accent shrink-0" /> SOC2 Security &amp; SAML SSO
+                <ShieldCheck className="h-4 w-4 text-accent shrink-0" /> Enterprise Security &amp; SAML SSO
               </div>
             </div>
           </div>

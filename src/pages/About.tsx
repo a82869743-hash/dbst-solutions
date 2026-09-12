@@ -51,14 +51,14 @@ const globalHubSteps: GlobalHubStep[] = [
     country: "Australia",
     role: "Headquarters & Architecture",
     headline: "Executive Strategy & Core Systems Design",
-    description: "Our Sydney headquarters leads global client relationship management, high-level technology roadmaps, and enterprise architecture design.",
+    description: "Our Melbourne headquarters leads client relationship management, technology roadmaps, and enterprise architecture design.",
     phoneFeedTitle: "Australia HQ",
     phoneFeedMetric: "ACTIVE LEADERSHIP",
-    phoneFeedDetail: "Managing Director & Principal Architects online.",
+    phoneFeedDetail: "Principal Consultants & Architects online.",
     bullets: [
       "Executive digital transformation strategy",
-      "Pragmatic, zero-fluff technology scoping",
-      "Direct senior principal account accountability",
+      "Pragmatic, outcome-focused technology scoping",
+      "Direct senior principal accountability",
     ],
   },
   {
@@ -67,14 +67,14 @@ const globalHubSteps: GlobalHubStep[] = [
     country: "India",
     role: "Development & AI R&D Hub",
     headline: "High-Density Software & AI Engineering",
-    description: "Our India engineering hub drives high-speed full-stack software development, AI model training, and continuous automated testing.",
+    description: "Our India engineering hub drives full-stack software development, AI model integration, and continuous automated testing.",
     phoneFeedTitle: "India Dev Hub",
     phoneFeedMetric: "ENGINEERING HUB",
-    phoneFeedDetail: "Microservices & AI pipeline development active.",
+    phoneFeedDetail: "Microservices & AI workflow development active.",
     bullets: [
-      "Full-stack React, Go, Python & Java microservices",
-      "Custom LLM, RAG & Vision OCR pipeline R&D",
-      "Continuous CI/CD pipeline & SOC2 compliance testing",
+      "Full-stack React, TypeScript, Python & .NET solutions",
+      "Agentic AI, MCP tool & system connector R&D",
+      "Continuous CI/CD pipeline & automated regression testing",
     ],
   },
   {
@@ -83,14 +83,14 @@ const globalHubSteps: GlobalHubStep[] = [
     country: "Spain",
     role: "European Operations & Cloud",
     headline: "EMEA Operations & Cloud Security",
-    description: "Our European team handles EMEA client integration, multi-cloud infrastructure automation, and zero-trust security audits.",
+    description: "Our European team handles EMEA client integration, multi-cloud infrastructure automation, and security reviews.",
     phoneFeedTitle: "Spain EU Hub",
-    phoneFeedMetric: "EMEA 24/7 SRE",
+    phoneFeedMetric: "EMEA PRACTICE",
     phoneFeedDetail: "Multi-cloud infrastructure monitoring active.",
     bullets: [
-      "AWS, Azure & GCP multi-region cluster management",
-      "GDPR & ISO 27001 zero-trust data compliance",
-      "European enterprise logistics & ERP integrations",
+      "AWS, Azure & multi-cloud architecture management",
+      "Privacy-by-design & enterprise data governance",
+      "European enterprise logistics & workflow integrations",
     ],
   },
   {
@@ -374,8 +374,8 @@ export const AboutPage = () => {
                     onClick={() => setActiveStepIdx(idx)}
                     className={`p-6 sm:p-8 rounded-3xl border transition-all duration-300 cursor-pointer shadow-flat ${
                       isSelected
-                        ? "bg-white border-2 border-accent ring-2 ring-accent/20 shadow-floating scale-[1.01]"
-                        : "bg-white/80 border-border-subtle hover:border-accent/40 hover:bg-white"
+                        ? "bg-white border-2 border-accent shadow-floating card-bezel scale-[1.01]"
+                        : "bg-white/80 border-border-subtle hover:border-accent/40 hover:bg-white card-bezel"
                     }`}
                   >
                     <div className="flex items-center justify-between border-b border-border-subtle/80 pb-3 mb-3 text-xs font-bold">
@@ -387,7 +387,7 @@ export const AboutPage = () => {
                       <span className="text-accent text-[11px] uppercase tracking-wider font-mono font-bold">{hub.role}</span>
                     </div>
 
-                    <h3 className="font-display font-bold text-xl sm:text-2xl text-fg-default font-sans mb-2">
+                    <h3 className="font-display font-bold text-xl sm:text-2xl text-fg-default font-sans mb-2 tracking-tight">
                       {hub.headline}
                     </h3>
 
@@ -395,13 +395,25 @@ export const AboutPage = () => {
                       {hub.description}
                     </p>
 
-                    <div className="pt-3 border-t border-border-subtle space-y-2 text-xs font-body text-fg-default">
-                      {hub.bullets.map((b, bIdx) => (
-                        <div key={bIdx} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
-                          <span>{b}</span>
-                        </div>
-                      ))}
+                    <div className="pt-4 border-t border-border-subtle/80 space-y-2">
+                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                        REGIONAL CAPABILITIES
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {hub.bullets.map((b, bIdx) => (
+                          <span
+                            key={bIdx}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-2 transition-all ${
+                              isSelected
+                                ? "bg-accent-tint text-accent-deep border border-accent/30 font-bold shadow-flat"
+                                : "bg-bg-muted/70 text-fg-dim border border-border-subtle/70"
+                            }`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-accent" : "bg-fg-dimmer"}`} />
+                            <span>{b}</span>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 );

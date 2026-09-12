@@ -18,51 +18,51 @@ interface StepItem {
 const stepsData: StepItem[] = [
   {
     number: "STEP 01",
-    title: "Discovery & Operational Assessment",
-    tagline: "Identify operational bottlenecks and automation opportunities",
-    description: "Analyze manual data entry points, legacy TMS/ERP workflows, and operational friction to establish a measurable digital transformation baseline.",
+    title: "Discover & Define",
+    tagline: "Understand the problem before recommending technology",
+    description: "We work closely with stakeholders to map existing workflows, clarify root causes, identify constraints, and prioritise high-value opportunities.",
     features: [
-      "Legacy TMS & ERP workflow auditing",
-      "Bottleneck & manual overhead analysis",
-      "Strategic roadmap & ROI scoping",
+      "Stakeholder discovery & workflow mapping",
+      "Pain-point and root-cause analysis",
+      "Opportunity prioritisation & roadmap scoping",
     ],
-    mobileScreenTitle: "Discovery Scope",
+    mobileScreenTitle: "Discover & Define",
   },
   {
     number: "STEP 02",
-    title: "Architecture & Integration Design",
-    tagline: "Engineer custom bridges across TMS, ERP, and cloud",
-    description: "Architect bi-directional data connectors, RPA bot workflows, and cloud migrations bridging TruckMate, Odoo, and Microsoft Azure.",
+    title: "Design & De-risk",
+    tagline: "Architecture-led design with clear trade-offs",
+    description: "We architect secure, scalable target states, design integrations and APIs, and de-risk technical decisions before writing production code.",
     features: [
-      "Trimble TruckMate & Odoo ERP mapping",
-      "UiPath & OpenAI workflow blueprints",
-      "Azure cloud infrastructure & SSO design",
+      "Target-state architecture & options analysis",
+      "API, data, security and integration design",
+      "Pilot scoping & human-in-the-loop oversight",
     ],
-    mobileScreenTitle: "Architecture Spec",
+    mobileScreenTitle: "Design & De-risk",
   },
   {
     number: "STEP 03",
-    title: "Iterative Implementation & Deployment",
-    tagline: "Agile deployment with zero business downtime",
-    description: "Deploy custom web/mobile applications, automated rate validation, and predictive maintenance models in rapid, high-visibility milestones.",
+    title: "Deliver & Learn",
+    tagline: "Iterative engineering with continuous user validation",
+    description: "We engineer solutions iteratively in production-ready increments, validating early with actual users to ensure high adoption and tangible value.",
     features: [
-      "Automated bill-of-lading document processing",
-      "Custom software & API integration delivery",
-      "Live staff training & change management",
+      "Iterative solution engineering & API integration",
+      "Agentic AI workflows with human oversight",
+      "User validation, testing and change support",
     ],
-    mobileScreenTitle: "Deploy Systems",
+    mobileScreenTitle: "Deliver & Learn",
   },
   {
     number: "STEP 04",
-    title: "24/7 Follow-the-Sun Support",
-    tagline: "Continuous monitoring across 4 global hubs",
-    description: "Distributed engineering coverage across Australia, India, Spain, and Singapore ensuring continuous monitoring, rapid incident support, and zero timezone headaches.",
+    title: "Support & Improve",
+    tagline: "Stay supported beyond delivery",
+    description: "After go-live, we provide the support agreed for the engagement, respond transparently to issues and use customer feedback to identify practical improvements.",
     features: [
-      "Round-the-clock technical coverage",
-      "Proactive system optimization & tuning",
-      "Dedicated SLA response guarantees",
+      "Agreed post-go-live and ongoing support",
+      "Clear communication and issue ownership",
+      "Feedback-led enhancements and knowledge transfer",
     ],
-    mobileScreenTitle: "Global Support",
+    mobileScreenTitle: "Support & Improve",
   },
 ];
 
@@ -149,7 +149,7 @@ export const DbstWorkflowSection = () => {
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body max-w-2xl mx-auto">
-            Our proven four-step methodology combines market analysis, digital transformation roadmapping, and 24/7 follow-the-sun support.
+            Our proven four-step methodology brings strategy, architecture and engineering together to turn complex challenges into lasting digital capability.
           </p>
         </div>
 
@@ -197,166 +197,176 @@ export const DbstWorkflowSection = () => {
                 {/* Animated Mobile Screen Content Container */}
                 <div ref={phoneScreenRef} className="flex-1 my-3 flex flex-col justify-between space-y-3">
                   
-                  {/* SCREEN STATE 01: Pick/Select Ingestion Source */}
+                  {/* SCREEN STATE 01: Discover & Define */}
                   {safeActiveStep === 0 && (
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>DATA INGESTION PIPELINES</span>
-                        <span className="text-emerald-600 font-extrabold">ACTIVE</span>
+                        <span>OPERATIONAL DISCOVERY</span>
+                        <span className="text-accent font-extrabold">STAGE 01</span>
                       </div>
 
-                      {/* Card 1 */}
-                      <div className="p-3 bg-accent-tint border-2 border-accent rounded-xl space-y-1.5 shadow-flat transition-transform hover:scale-[1.02]">
-                        <div className="flex items-center justify-between font-bold text-accent-deep">
-                          <span className="flex items-center gap-1.5">
-                            <Truck className="w-3.5 h-3.5 text-accent" /> TruckMate TMS
-                          </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-accent text-white font-bold rounded">Live OCR</span>
+                      <div className="p-3 bg-accent-tint border-2 border-accent rounded-xl space-y-1.5 shadow-flat text-left">
+                        <div className="flex items-center justify-between font-bold text-accent-deep text-[11px]">
+                          <span>Process &amp; Service Mapping</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-accent text-white font-bold rounded">Mapped</span>
                         </div>
                         <p className="text-[10px] text-fg-dim leading-snug">
-                          Automated BOL parsing &amp; route dispatch active.
-                        </p>
-                        <div className="w-full bg-accent/20 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-accent h-full w-[94%] animate-pulse" />
-                        </div>
-                      </div>
-
-                      {/* Card 2 */}
-                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat transition-transform hover:scale-[1.02]">
-                        <div className="flex items-center justify-between font-bold text-fg-default">
-                          <span className="flex items-center gap-1.5">
-                            <Database className="w-3.5 h-3.5 text-blue-600" /> Odoo ERP Suite
-                          </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active Sync</span>
-                        </div>
-                        <p className="text-[10px] text-fg-dim leading-snug">
-                          Manufacturing, inventory &amp; accounting workflows synced.
+                          Identified operational friction points across order ingestion, handoffs, and dispatch.
                         </p>
                       </div>
 
-                      {/* Card 3 */}
-                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat transition-transform hover:scale-[1.02]">
-                        <div className="flex items-center justify-between font-bold text-fg-default">
-                          <span className="flex items-center gap-1.5">
-                            <Cpu className="w-3.5 h-3.5 text-amber-600" /> Microsoft Azure SQL
-                          </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-800 font-bold rounded">Cloud Infra</span>
+                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat text-left">
+                        <div className="flex items-center justify-between font-bold text-fg-default text-[11px]">
+                          <span>Root-Cause Prioritisation</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Scoped</span>
                         </div>
                         <p className="text-[10px] text-fg-dim leading-snug">
-                          Zero data loss database migration with continuous backup.
+                          Targeting underlying operational causes rather than surface symptoms.
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1.5 shadow-flat text-left">
+                        <div className="flex items-center justify-between font-bold text-fg-default text-[11px]">
+                          <span>Transformation Roadmap</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-zinc-700 font-bold rounded">Active</span>
+                        </div>
+                        <p className="text-[10px] text-fg-dim leading-snug">
+                          Practical investment path aligned with measurable business outcomes.
                         </p>
                       </div>
                     </div>
                   )}
 
-                  {/* SCREEN STATE 02: Integration & Architecture Spec */}
+                  {/* SCREEN STATE 02: Design & De-risk */}
                   {safeActiveStep === 1 && (
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>INTEGRATION ARCHITECTURE</span>
-                        <span className="text-accent font-extrabold">VERIFIED</span>
+                        <span>ARCHITECTURE &amp; INTEGRATION</span>
+                        <span className="text-accent font-extrabold">STAGE 02</span>
                       </div>
 
-                      <div className="p-3.5 bg-white border border-border-subtle rounded-xl space-y-2.5 shadow-flat">
-                        <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                          <span className="text-[11px] font-bold text-fg-default">TruckMate &amp; Odoo Bridge</span>
-                          <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Connected</span>
+                      <div className="p-3.5 bg-white border border-border-subtle rounded-xl space-y-2 text-left shadow-flat">
+                        <div className="flex items-center justify-between border-b border-border-subtle pb-1.5">
+                          <span className="text-[11px] font-bold text-fg-default">Target-State Blueprint</span>
+                          <span className="text-[10px] px-2 py-0.5 bg-accent-tint text-accent-deep font-bold rounded">Designed</span>
                         </div>
+                        <p className="text-[10px] text-fg-dim leading-snug">
+                          Structured options and trade-off analysis before implementation commitments.
+                        </p>
 
-                        <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                          <span className="text-[11px] font-bold text-fg-default">UiPath RPA Bot Triggers</span>
-                          <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active</span>
+                        <div className="flex items-center justify-between border-b border-border-subtle pb-1.5 pt-1">
+                          <span className="text-[11px] font-bold text-fg-default">API &amp; System Connectors</span>
+                          <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">De-risked</span>
                         </div>
 
                         <div className="p-2 rounded bg-accent-tint border border-accent/30 text-[10px] font-bold text-accent-deep flex items-center justify-between">
                           <span className="flex items-center gap-1">
-                            <Lock className="w-3 h-3 text-accent" /> Azure Cloud Security
+                            <Lock className="w-3 h-3 text-accent" /> Security &amp; Governance
                           </span>
-                          <span>Entra ID &bull; SSO</span>
+                          <span>Role-Based &bull; Human Oversight</span>
                         </div>
                       </div>
 
-                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1 text-[10px]">
-                        <div className="font-bold text-fg-default">SYSTEM INTEROPERABILITY</div>
-                        <p className="text-fg-dim">Zero downtime cutover roadmap ready for deployment.</p>
+                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1 text-[10px] text-left">
+                        <div className="font-bold text-fg-default">PHASED TRANSITION PLAN</div>
+                        <p className="text-fg-dim">Controlled pilot deployment protecting ongoing business operations.</p>
                       </div>
                     </div>
                   )}
 
-                  {/* SCREEN STATE 03: Live Deployment */}
+                  {/* SCREEN STATE 03: Deliver & Learn — Growthmates AI Demo Workspace */}
                   {safeActiveStep === 2 && (
-                    <div className="space-y-2.5 text-xs">
-                      <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>ACTIVE DEPLOYMENTS</span>
-                        <span className="text-emerald-600 font-extrabold">PRODUCTION</span>
-                      </div>
-
-                      <div className="p-3 bg-accent text-white rounded-xl space-y-1 shadow-floating">
-                        <div className="flex items-center justify-between font-bold text-xs">
-                          <span className="flex items-center gap-1">
-                            <Sparkles className="w-3.5 h-3.5 text-white" /> Automated BOL Parsing
+                    <div className="space-y-2 text-xs text-left">
+                      {/* Workspace Header */}
+                      <div className="p-2.5 bg-zinc-950 text-white rounded-xl space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-accent">Growthmates AI</span>
+                          <span className="text-[8px] px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 font-bold rounded">
+                            Human-Guided Workflow
                           </span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-white/20 text-white rounded font-bold">99.4%</span>
                         </div>
-                        <p className="text-[10px] text-white/90">
-                          Automated rate validation and paperwork extraction live.
-                        </p>
+                        <div className="text-[11px] font-bold">Transport Operations &bull; Demo Workspace</div>
                       </div>
 
-                      <div className="p-3 bg-white border border-border-subtle rounded-xl space-y-1 shadow-flat">
-                        <div className="flex items-center justify-between font-bold text-fg-default text-xs">
-                          <span className="flex items-center gap-1">
-                            <Activity className="w-3.5 h-3.5 text-emerald-600" /> IoT Predictive Telemetry
-                          </span>
-                          <span className="text-[9px] text-emerald-600 font-bold">Active</span>
+                      {/* Main Workflow Card */}
+                      <div className="p-2.5 bg-white border-2 border-accent rounded-xl space-y-2 shadow-flat">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-[11px] text-fg-default">Intelligent Trip Creation</span>
+                          <span className="text-[8px] px-1.5 py-0.5 bg-accent-tint text-accent-deep font-bold rounded">Active</span>
                         </div>
-                        <p className="text-[10px] text-fg-dim">
-                          Real-time equipment monitoring &amp; early alerts online.
-                        </p>
+                        <div className="text-[9px] text-fg-dim space-y-0.5 border-b border-border-subtle pb-1.5">
+                          <div>Trigger: <span className="text-fg-default font-medium">New orders ready for planning</span></div>
+                          <div>Schedule: <span className="text-fg-default font-medium">Checks every 30 minutes</span></div>
+                        </div>
+
+                        {/* Progress */}
+                        <div className="space-y-1 text-[9px] font-mono">
+                          <div className="flex items-center justify-between text-emerald-700">
+                            <span>Orders retrieved</span> <span className="font-bold">✓</span>
+                          </div>
+                          <div className="flex items-center justify-between text-emerald-700">
+                            <span>Trip recommendation generated</span> <span className="font-bold">✓</span>
+                          </div>
+                          <div className="flex items-center justify-between text-emerald-700">
+                            <span>Planner approval received</span> <span className="font-bold">✓</span>
+                          </div>
+                          <div className="flex items-center justify-between text-emerald-700">
+                            <span>Trip created in TruckMate</span> <span className="font-bold">✓</span>
+                          </div>
+                        </div>
+
+                        {/* Success */}
+                        <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded text-[9px] text-emerald-900 leading-snug">
+                          <span className="font-bold">Trip TRP-1042 Created:</span> Approved recommendation written to TruckMate.
+                        </div>
                       </div>
 
-                      <div className="p-2 bg-zinc-950 text-emerald-400 font-mono text-[9px] rounded-lg border border-zinc-800 flex items-center justify-between">
-                        <span className="truncate">&gt;_ Zero business disruption achieved</span>
-                        <span className="text-accent font-bold">LIVE</span>
+                      {/* Smaller capability cards */}
+                      <div className="grid grid-cols-2 gap-1.5 text-[9px]">
+                        <div className="p-1.5 bg-[#F5F4F0] rounded-lg border border-border-subtle">
+                          <div className="font-bold text-fg-default">Knowledge Agent</div>
+                          <div className="text-emerald-600 font-bold">Ready</div>
+                        </div>
+                        <div className="p-1.5 bg-[#F5F4F0] rounded-lg border border-border-subtle">
+                          <div className="font-bold text-fg-default">Exception Review</div>
+                          <div className="text-amber-600 font-bold">1 awaiting</div>
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {/* SCREEN STATE 04: 24/7 Follow-the-Sun Support */}
+                  {/* SCREEN STATE 04: Support & Improve */}
                   {safeActiveStep === 3 && (
                     <div className="space-y-2.5 text-xs">
                       <div className="flex items-center justify-between text-[10px] text-fg-dim font-bold uppercase tracking-wider">
-                        <span>GLOBAL COVERAGE</span>
-                        <span className="text-emerald-600 font-extrabold">24/7 LIVE</span>
+                        <span>POST-DELIVERY SUPPORT</span>
+                        <span className="text-emerald-600 font-extrabold">ACTIVE</span>
                       </div>
 
                       <div className="p-3 bg-white border-2 border-accent rounded-xl space-y-2 shadow-flat">
                         <div className="font-bold text-fg-default text-xs flex items-center justify-between">
-                          <span>Follow-the-Sun Network</span>
-                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Active</span>
+                          <span>Ongoing Support</span>
+                          <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded">Agreed</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1.5 text-[10px]">
+                        <div className="space-y-1.5 text-[10px]">
                           <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
-                            <span>🇦🇺</span> <span>Sydney</span>
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> <span>Agreed post-go-live support</span>
                           </div>
                           <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
-                            <span>🇮🇳</span> <span>India</span>
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> <span>Issue ownership & communication</span>
                           </div>
                           <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
-                            <span>🇪🇸</span> <span>Madrid</span>
-                          </div>
-                          <div className="p-1.5 bg-zinc-50 rounded border border-border-subtle flex items-center gap-1">
-                            <span>🇸🇬</span> <span>Singapore</span>
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> <span>Knowledge transfer complete</span>
                           </div>
                         </div>
                         <p className="text-[9px] text-fg-dim pt-1 border-t border-border-subtle">
-                          When you sleep, we work. Faster delivery, zero timezone lag.
+                          Feedback-led enhancements and practical improvements.
                         </p>
                       </div>
 
                       <div className="p-2 bg-zinc-950 text-emerald-400 font-mono text-[9px] rounded-lg border border-zinc-800 flex items-center justify-between">
-                        <span className="truncate">&gt;_ 24/7 direct technical desk active</span>
-                        <span className="text-emerald-400 font-bold">ONLINE</span>
+                        <span className="truncate">&gt;_ Support & continuous improvement active</span>
+                        <span className="text-emerald-400 font-bold">LIVE</span>
                       </div>
                     </div>
                   )}
@@ -391,12 +401,12 @@ export const DbstWorkflowSection = () => {
                   onClick={() => handleStepClick(idx)}
                   className={`p-7 rounded-2xl border transition-all duration-300 cursor-pointer text-left ${
                     isActive
-                      ? "bg-white/95 border-accent shadow-floating scale-[1.02]"
-                      : "bg-white/60 border-border-subtle/60 hover:border-accent/40 hover:bg-white/80 shadow-flat"
+                      ? "bg-white border-accent shadow-floating card-bezel scale-[1.01]"
+                      : "bg-white/70 border-border-subtle hover:border-accent/40 hover:bg-white shadow-flat"
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-mono font-extrabold ${isActive ? "bg-accent text-white" : "bg-accent-tint text-accent-deep"}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-mono font-extrabold ${isActive ? "bg-accent text-white shadow-flat" : "bg-accent-tint text-accent-deep"}`}>
                       {step.number}
                     </span>
                     <span className="text-xs font-mono text-fg-dim font-semibold">
@@ -404,7 +414,7 @@ export const DbstWorkflowSection = () => {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default mb-3">
+                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default mb-3 tracking-tight">
                     {step.title}
                   </h3>
 
@@ -412,27 +422,41 @@ export const DbstWorkflowSection = () => {
                     {step.description}
                   </p>
 
-                  {/* Feature Bullet Points */}
-                  <div className="space-y-2.5 pt-3 border-t border-border-subtle/60 text-xs font-mono text-fg-default">
-                    {step.features.map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-center gap-2.5">
-                        <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
-                        <span className="font-semibold">{feat}</span>
-                      </div>
-                    ))}
+                  {/* Modern Structured Capability Deliverable Chips (Replacing PPT Bullets) */}
+                  <div className="pt-4 border-t border-border-subtle/60 space-y-2">
+                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                      CORE DELIVERABLES
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {step.features.map((feat, fIdx) => (
+                        <span
+                          key={fIdx}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-2 transition-all ${
+                            isActive
+                              ? "bg-accent-tint text-accent-deep border border-accent/30 font-bold shadow-flat"
+                              : "bg-bg-muted/70 text-fg-dim border border-border-subtle/70"
+                          }`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-accent" : "bg-fg-dimmer"}`} />
+                          <span>{feat}</span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               );
             })}
 
-            {/* Bottom CTA Button */}
+            {/* Bottom CTA Button with Button-in-Button Trailing Icon */}
             <div className="pt-4 text-left">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-bold text-sm uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-105 active:scale-95"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-white font-bold text-sm tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02] active:scale-[0.98] group"
               >
                 <span>Request Custom Architecture Review</span>
-                <ArrowRight className="w-4 h-4" />
+                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </Link>
             </div>
           </div>

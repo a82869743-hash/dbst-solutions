@@ -9,68 +9,83 @@ gsap.registerPlugin(ScrollTrigger);
 const servicesIndex = [
   {
     num: "01",
-    title: "Strategic Consulting",
-    href: "/services/strategic-consulting",
-    desc: "Four-step strategic approach combining market analysis, digital transformation planning, and change management.",
+    title: "Digital Transformation & Advisory",
+    href: "/services/digital-transformation",
+    desc: "We help organisations understand complex operational challenges, prioritise investment and create a practical transformation path.",
     features: [
-      "Digital Transformation Strategy",
-      "Market Analysis & Competitive Audits",
-      "Process Reengineering & Optimization",
-      "Change Management & Staff Upskilling",
+      "Business and technology discovery",
+      "Process and service journey mapping",
+      "Opportunity prioritisation and business cases",
+      "Transformation and adoption roadmaps",
     ],
-    techStack: ["Strategic Frameworks", "Digital Roadmapping", "Agile", "Process Mapping"],
+    techStack: ["Design Thinking", "Business Analysis", "Process Mapping", "Value Assessment", "Agile Delivery"],
   },
   {
     num: "02",
-    title: "Custom Software Development",
-    href: "/services/custom-software",
-    desc: "Tailored software solutions for business optimization and scalable growth with enterprise-grade web, mobile, and API architectures.",
+    title: "Enterprise & Solution Architecture",
+    href: "/services/enterprise-architecture",
+    desc: "We translate business priorities into secure, scalable architecture and clear technology decisions.",
     features: [
-      "Enterprise Web & Mobile Applications",
-      "High-Throughput API Gateway Engineering",
-      "Custom Integration Connectors",
-      "Cloud-Native Architecture",
+      "Current and target-state assessment",
+      "Architecture options and recommendations",
+      "Integration, API, data and security design",
+      "Architecture standards and transition roadmaps",
     ],
-    techStack: ["React", "Node.js", "Python", "PostgreSQL", "Docker", "AWS", "Azure"],
+    techStack: ["Enterprise Architecture", "Solution Architecture", "Cloud", "APIs", "Data", "Security"],
   },
   {
     num: "03",
-    title: "AI Automation & RPA",
-    href: "/services/automation-ai",
-    desc: "AI-driven automation with UiPath RPA, OpenAI integration, and machine learning solutions using TensorFlow and Python.",
+    title: "AI Engineering & Adoption",
+    href: "/services/ai-engineering",
+    desc: "We identify valuable AI use cases, engineer controlled solutions and help embed them safely into real operations.",
     features: [
-      "UiPath Robotic Process Automation (RPA)",
-      "OpenAI Integration & Intelligent Chatbots",
-      "Document & Invoice Processing (OCR)",
-      "Predictive Machine Learning Models",
+      "AI opportunity and value assessment",
+      "Agent and workflow architecture",
+      "MCP, data and system integration",
+      "Human oversight, security and adoption planning",
     ],
-    techStack: ["Python", "TensorFlow", "UiPath", "OpenAI APIs", "FastAPI"],
+    techStack: ["Agentic AI", "MCP", "OpenAI", "Azure AI", "Python", "TypeScript"],
+    externalPlatformUrl: "https://growthmates.ai",
+    externalPlatformLabel: "Explore Growthmates AI ↗",
   },
   {
     num: "04",
-    title: "Professional ERP Services",
-    href: "/services/odoo-truckmate-erp",
-    desc: "Specialized consulting for Odoo ERP and Trimble TruckMate transportation management systems.",
+    title: "Custom Software & System Integration",
+    href: "/services/custom-software",
+    desc: "We build applications and integrations that close operational gaps and connect existing business systems.",
     features: [
-      "Odoo ERP Implementation & Customization",
-      "Trimble TruckMate TMS Upgrades & Integrations",
-      "Database & Workload Migration",
-      "Dedicated 24/7 Training & Support",
+      "Web, mobile and operational applications",
+      "APIs, connectors and middleware",
+      "Workflow and orchestration solutions",
+      "Modernisation, testing and deployment",
     ],
-    techStack: ["Odoo ERP", "Trimble TruckMate", "PostgreSQL", "SQL Server", "Python", ".NET"],
+    techStack: ["React", "Node.js", "TypeScript", "Python", ".NET", "REST APIs"],
   },
   {
     num: "05",
-    title: "Data Analytics & BI",
+    title: "Data Analytics & Business Intelligence",
     href: "/services/data-analytics",
-    desc: "Transform raw business data into actionable insights with real-time analytics, predictive modeling, and executive dashboards.",
+    desc: "We turn fragmented operational data into trusted information, actionable insights and better decisions.",
     features: [
-      "Real-Time Executive BI Dashboards",
-      "Predictive Equipment & Demand Analytics",
-      "Data Warehouse & Pipeline Consolidation",
-      "Automated Regulatory & KPI Reporting",
+      "Data and reporting discovery",
+      "KPI and information model design",
+      "Data integration, pipelines and dashboards",
+      "Data quality and reporting governance",
     ],
-    techStack: ["Power BI", "Azure SQL", "Python", "SQL Server", "PostgreSQL"],
+    techStack: ["Power BI", "Microsoft Fabric", "Azure", "SQL", "Data Modelling", "Analytics"],
+  },
+  {
+    num: "06",
+    title: "Transport Technology & TruckMate",
+    href: "/services/transport-technology",
+    desc: "We provide specialist advisory, integration and solution engineering for transport and logistics operations, including TruckMate environments.",
+    features: [
+      "TruckMate consulting and custom extensions",
+      "API, DB2 and third-party integrations",
+      "Command Center and operational workflows",
+      "Reporting and AI-assisted decision support",
+    ],
+    techStack: ["Trimble TruckMate", "DB2", "Command Center", "REST APIs", "Power BI", "Azure"],
   },
 ];
 
@@ -135,14 +150,14 @@ export const CapabilityIndex = () => {
           <div className="space-y-3 text-left max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
               <Layers className="w-3.5 h-3.5 text-accent" />
-              <span>CAPABILITIES INDEX</span>
+              <span>OUR CAPABILITIES</span>
             </div>
             <h2 className="font-display font-bold text-3xl sm:text-5xl text-fg-default tracking-tight">
-              5 Core Engineering Practices
+              6 Core Capability Areas
             </h2>
           </div>
           <p className="text-sm sm:text-base text-fg-dim font-body max-w-md text-left md:text-right">
-            Click any service practice to inspect deliverable capabilities, architecture features, and core technology stacks.
+            Click any service to inspect what we deliver, architecture capabilities, and methods &amp; technology.
           </p>
         </div>
 
@@ -156,8 +171,8 @@ export const CapabilityIndex = () => {
                 key={service.num}
                 className={`border rounded-2xl transition-all duration-300 overflow-hidden text-left ${
                   isExpanded
-                    ? "bg-white border-accent shadow-floating ring-1 ring-accent/20"
-                    : "bg-bg-surface border-border-subtle hover:border-accent/50 hover:bg-white"
+                    ? "bg-white border-accent shadow-floating card-bezel"
+                    : "bg-white/80 border-border-subtle/80 hover:border-accent/40 hover:bg-white shadow-flat"
                 }`}
               >
                 {/* Accordion Bar Header */}
@@ -186,7 +201,7 @@ export const CapabilityIndex = () => {
                         isExpanded ? "text-accent" : "text-fg-dim"
                       }`}
                     >
-                      {isExpanded ? "Collapse Practice" : "Inspect Practice"}
+                      {isExpanded ? "Collapse Service" : "Explore This Service"}
                     </span>
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
@@ -209,34 +224,37 @@ export const CapabilityIndex = () => {
                       {service.desc}
                     </p>
 
-                    {/* Light Grey Inner Capabilities Grid Container */}
-                    <div className="p-6 bg-[#F5F4F0] border border-border-subtle rounded-xl grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    {/* Double-Bezel Inner Capabilities Specification Container */}
+                    <div className="p-6 bg-bg-surface/90 border border-border-subtle/80 rounded-xl card-bezel grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                       
-                      {/* Features */}
+                      {/* Structured Deliverables */}
                       <div className="space-y-3">
                         <div className="text-xs font-mono font-bold uppercase tracking-wider text-fg-default flex items-center gap-1.5">
-                          <CheckCircle2 className="w-4 h-4 text-accent" /> DELIVERABLE CAPABILITIES
+                          <CheckCircle2 className="w-4 h-4 text-accent" /> WHAT WE DELIVER
                         </div>
                         <div className="space-y-2">
                           {service.features.map((feat, fIdx) => (
-                            <div key={fIdx} className="flex items-start gap-2.5 text-xs text-fg-dim font-body leading-snug">
-                              <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1 shrink-0" />
+                            <div
+                              key={fIdx}
+                              className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-xs text-fg-default font-medium leading-snug"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                               <span>{feat}</span>
                             </div>
                           ))}
                         </div>
                       </div>
 
-                      {/* Tech Stack Chips */}
+                      {/* Methods & Technology Stack Chips */}
                       <div className="space-y-3">
                         <div className="text-xs font-mono font-bold uppercase tracking-wider text-fg-default flex items-center gap-1.5">
-                          <Cpu className="w-4 h-4 text-accent" /> ENGINEERING STACK
+                          <Cpu className="w-4 h-4 text-accent" /> METHODS &amp; TECHNOLOGY
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {service.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="px-3 py-1 rounded-full bg-white border border-border-subtle text-xs font-mono text-fg-default font-bold shadow-flat"
+                              className="px-3 py-1.5 rounded-lg bg-white border border-border-subtle/80 text-xs font-mono text-fg-default font-bold shadow-flat hover:border-accent/40 transition-colors"
                             >
                               {tech}
                             </span>
@@ -246,15 +264,26 @@ export const CapabilityIndex = () => {
 
                     </div>
 
-                    {/* Service Detail Link */}
-                    <div className="pt-2 flex items-center justify-between border-t border-border-subtle/60">
+                    {/* Service Detail Link & Secondary Links */}
+                    <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-border-subtle/60">
                       <Link
-                        to={service.href}
-                        className="inline-flex items-center gap-2 text-xs font-mono font-bold text-accent hover:text-accent-deep transition-all group"
+                        to="/contact"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold hover:bg-accent hover:text-white transition-all group"
                       >
-                        <span>VIEW PRACTICE SPECS &amp; CASE STUDIES</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <span>DISCUSS THIS CAPABILITY</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
+
+                      {service.externalPlatformUrl && (
+                        <a
+                          href={service.externalPlatformUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-fg-dim hover:text-accent transition-colors"
+                        >
+                          <span>{service.externalPlatformLabel}</span>
+                        </a>
+                      )}
                     </div>
 
                   </div>

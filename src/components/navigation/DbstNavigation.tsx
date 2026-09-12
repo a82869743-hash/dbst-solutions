@@ -7,34 +7,40 @@ import { AdminStore, SiteContentConfig } from "@/lib/admin/adminStore";
 
 const serviceLinks = [
   {
-    title: "Strategic Consulting",
-    href: "/services/strategic-consulting",
-    desc: "Four-step strategic approach combining market analysis, digital transformation, and change management.",
+    title: "Digital Transformation & Advisory",
+    href: "/services/digital-transformation",
+    desc: "Understand complex challenges, prioritise investment and create a practical transformation path.",
     icon: Compass,
   },
   {
-    title: "Custom Software Development",
-    href: "/services/custom-software",
-    desc: "Enterprise-grade web & mobile apps, API development, and cloud-native architecture.",
-    icon: Code,
-  },
-  {
-    title: "AI Automation & RPA",
-    href: "/services/automation-ai",
-    desc: "AI-driven automation with UiPath RPA, OpenAI integration, and machine learning solutions.",
-    icon: Bot,
-  },
-  {
-    title: "Professional ERP Services",
-    href: "/services/odoo-truckmate-erp",
-    desc: "Specialized consulting for Odoo ERP and Trimble TruckMate TMS.",
+    title: "Enterprise & Solution Architecture",
+    href: "/services/enterprise-architecture",
+    desc: "Translate business priorities into secure, scalable architecture and clear technology decisions.",
     icon: RefreshCw,
   },
   {
-    title: "Data Analytics & BI",
+    title: "AI Engineering & Adoption",
+    href: "/services/ai-engineering",
+    desc: "Identify valuable AI use cases, engineer controlled solutions and embed them safely into operations.",
+    icon: Bot,
+  },
+  {
+    title: "Custom Software & System Integration",
+    href: "/services/custom-software",
+    desc: "Build applications and integrations that close operational gaps and connect business systems.",
+    icon: Code,
+  },
+  {
+    title: "Data Analytics & Business Intelligence",
     href: "/services/data-analytics",
-    desc: "Transform raw data into actionable insights with real-time analytics and dashboards.",
+    desc: "Turn fragmented operational data into trusted information and better decisions.",
     icon: BarChart3,
+  },
+  {
+    title: "Transport Technology & TruckMate",
+    href: "/services/transport-technology",
+    desc: "Specialist advisory, integration and solution engineering for transport and logistics operations.",
+    icon: Compass,
   },
 ];
 
@@ -86,9 +92,9 @@ export const DbstNavigation = () => {
           <div className="hidden sm:flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-fg-dimmer">
               <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span>{contentConfig.address || "Sydney, AU • Area served: AU"}</span>
+              <span>{contentConfig.address || "Melbourne, Australia • Serving Asia Pacific and North America"}</span>
             </span>
-            <span className="text-accent font-semibold">{contentConfig.tagline || "Strategic Consulting & Automation Solutions"}</span>
+            <span className="text-accent font-semibold">{contentConfig.tagline || "AI Engineering, Adoption & Digital Transformation Partner"}</span>
           </div>
         </div>
       </div>
@@ -133,7 +139,7 @@ export const DbstNavigation = () => {
             {servicesOpen && (
               <div className="absolute top-full left-0 w-96 p-3 bg-bg-surface border border-border-subtle rounded-md shadow-floating animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="text-[11px] font-mono font-semibold uppercase text-fg-dim px-3 py-1.5 mb-1 border-b border-border-subtle">
-                  Consulting Capabilities
+                  Our Capabilities
                 </div>
                 <div className="space-y-1">
                   {serviceLinks.map((service) => {

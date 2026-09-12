@@ -23,55 +23,55 @@ interface TechNode {
 const leftNodes: TechNode[] = [
   {
     id: "tms",
-    code: "TMS-TRUCKMATE",
-    title: "Trimble TruckMate TMS Integration",
-    badge: "TMS FLEET",
+    code: "TRANSPORT-TECH",
+    title: "Transport Technology & TruckMate",
+    badge: "LOGISTICS PRACTICE",
     badgeColor: "bg-accent-tint text-accent-deep",
-    date: "Active Practice",
-    shipTime: "4-8 weeks",
-    timeBoxLabel: "DISPATCH SPEED",
-    timeBoxValue: "Instant",
-    desc: "Custom integrations, automated BOL extraction, and TMS upgrade consulting.",
-    details: ["Real-time load dispatch", "Driver GPS tracking", "Automated rate validation"],
-  },
-  {
-    id: "odoo",
-    code: "ODOO-ERP",
-    title: "Odoo ERP Enterprise Implementation",
-    badge: "ERP SUITE",
-    badgeColor: "bg-amber-100 text-amber-800",
-    date: "Active Practice",
-    shipTime: "12-20 weeks",
-    timeBoxLabel: "ERP SYNC",
+    date: "Core Practice",
+    shipTime: "Production Ready",
+    timeBoxLabel: "SYSTEM INTEROPERABILITY",
     timeBoxValue: "Real-Time",
-    desc: "Unified ERP architecture covering manufacturing, inventory, accounting, and HR.",
-    details: ["Manufacturing & inventory sync", "Automated invoicing & billing", "Multi-warehouse management"],
+    desc: "Specialist TruckMate consulting, DB2/API data connectors, and Command Center operational workflows.",
+    details: ["Command Center workflow extensions", "Bidirectional DB2 & REST API integrations", "AI-assisted dispatch decision support"],
   },
   {
-    id: "azure",
-    code: "AZURE-CLOUD",
-    title: "Microsoft Azure Cloud & SQL Migration",
-    badge: "AZURE PARTNER",
-    badgeColor: "bg-blue-100 text-blue-800",
-    date: "Active Practice",
-    shipTime: "4-8 weeks",
-    timeBoxLabel: "DATA LOSS",
-    timeBoxValue: "0 %",
-    desc: "Migrating on-premise SQL Server and applications to Azure with high availability.",
-    details: ["Zero data loss migration", "30-50% lower TCO", "Entra ID & M365 security"],
-  },
-  {
-    id: "uipath",
-    code: "UIPATH-AI",
-    title: "UiPath RPA & OpenAI Automation",
-    badge: "AI AUTOMATION",
+    id: "ai",
+    code: "AGENTIC-AI",
+    title: "AI Engineering & Growthmates Platform",
+    badge: "AI & ADOPTION",
     badgeColor: "bg-emerald-100 text-emerald-800",
-    date: "Active Practice",
-    shipTime: "4-6 weeks",
-    timeBoxLabel: "TIME SAVINGS",
-    timeBoxValue: "85 %",
-    desc: "Intelligent robotic process automation and AI agents eliminating repetitive manual overhead.",
-    details: ["24/7 autonomous bot operation", "OpenAI natural language processing", "Automated compliance auditing"],
+    date: "Core Practice",
+    shipTime: "Governed AI",
+    timeBoxLabel: "HUMAN OVERSIGHT",
+    timeBoxValue: "In Control",
+    desc: "Modular agentic AI architectures, MCP tool connections, and human-in-the-loop operational workflows.",
+    details: ["MCP tools & enterprise system connectors", "Auditable agent decision pipelines", "Human review & approval gates"],
+  },
+  {
+    id: "cloud",
+    code: "AZURE-CLOUD",
+    title: "Enterprise Architecture & Cloud",
+    badge: "CLOUD ARCHITECTURE",
+    badgeColor: "bg-blue-100 text-blue-800",
+    date: "Core Practice",
+    shipTime: "Secure & Scalable",
+    timeBoxLabel: "ARCHITECTURE BLUEPRINT",
+    timeBoxValue: "Target-State",
+    desc: "Translating business priorities into secure, scalable multi-cloud architectures and API ecosystems.",
+    details: ["Current-state to target-state roadmap", "Integration, API & security design", "High availability and governance"],
+  },
+  {
+    id: "data",
+    code: "DATA-FABRIC",
+    title: "Data Analytics & Microsoft Fabric",
+    badge: "DATA & BI",
+    badgeColor: "bg-amber-100 text-amber-800",
+    date: "Core Practice",
+    shipTime: "Trusted BI",
+    timeBoxLabel: "DATA TRUST",
+    timeBoxValue: "Unified",
+    desc: "Turning fragmented operational data across spreadsheets and databases into trusted, actionable insights.",
+    details: ["Data pipeline & semantic model engineering", "Power BI & Fabric executive dashboards", "Consistent KPI definitions & governance"],
   },
 ];
 
@@ -129,7 +129,7 @@ export const TechStackExplorer = () => {
         <div className="text-left max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/25 text-xs font-mono font-bold uppercase tracking-wider shadow-flat">
             <Cpu className="w-4 h-4 text-accent" />
-            <span>VERIFIED PARTNERS &amp; ENTERPRISE INTEGRATIONS</span>
+            <span>ARCHITECTURE &amp; METHODS</span>
           </div>
 
           <h2 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-tight">
@@ -137,7 +137,7 @@ export const TechStackExplorer = () => {
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body leading-relaxed">
-            See how Trimble TruckMate, Odoo ERP, Microsoft Azure, and UiPath converge into scalable, automated business systems.
+            See how modern cloud architecture, agentic AI workflows, data pipelines, and specialist transport systems converge into scalable digital solutions.
           </p>
         </div>
 
@@ -147,7 +147,7 @@ export const TechStackExplorer = () => {
           {/* LEFT STACK: 4 Systems Cards */}
           <div className="lg:col-span-6 space-y-4">
             <div className="text-xs font-bold text-fg-dimmer uppercase tracking-wider mb-2">
-              CONNECTED ENTERPRISE SYSTEMS
+              CONNECTED CAPABILITY DOMAINS
             </div>
 
             {leftNodes.map((node) => {
@@ -211,7 +211,7 @@ export const TechStackExplorer = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs border-b border-border-subtle pb-3">
                 <span className="font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-accent" /> D-BST CORE ONTOLOGY ENGINE
+                  <ShieldCheck className="w-4 h-4 text-accent" /> D-BST ARCHITECTURE FRAMEWORK
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-accent text-white font-bold text-[10px]">
                   {activeNode.date}
@@ -220,7 +220,7 @@ export const TechStackExplorer = () => {
 
               <div className="space-y-2">
                 <span className="text-xs font-mono font-bold text-accent">
-                  ACTIVE TARGET: [{activeNode.code}]
+                  ACTIVE DOMAIN: [{activeNode.code}]
                 </span>
                 <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default tracking-tight leading-tight">
                   {activeNode.title}
@@ -243,7 +243,7 @@ export const TechStackExplorer = () => {
               {/* Specs Breakdown */}
               <div className="space-y-2 pt-2">
                 <div className="text-[10px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
-                  VERIFIED DEPLOYMENT CAPABILITIES
+                  CORE CAPABILITY SCOPE
                 </div>
                 <div className="space-y-2">
                   {activeNode.details.map((detail, idx) => (
@@ -259,13 +259,13 @@ export const TechStackExplorer = () => {
             {/* Action CTA */}
             <div className="pt-4 border-t border-border-subtle flex items-center justify-between text-xs">
               <span className="px-3 py-1 rounded-full bg-accent text-white font-bold text-[10px] uppercase tracking-wider">
-                RECOMMENDED ARCHITECTURE
+                CAPABILITY SPEC
               </span>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat"
               >
-                <span>REQUEST SPECS</span>
+                <span>DISCUSS SPEC</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

@@ -99,12 +99,12 @@ const inspectionData: Record<string, InspectionDetail> = {
 };
 
 const defaultInspection: InspectionDetail = {
-  title: "D-BST Enterprise Solution Architecture",
+  title: "D-BST Industry Solutions",
   code: "CORE-SOLUTION",
   category: "ENTERPRISE",
-  spec: "Enterprise software, cloud migrations, and AI automation tailored to your workflows.",
-  metric: "15+ Years Experience",
-  details: ["Enterprise architecture", "24/7 Follow-the-Sun support", "Proven business outcomes"],
+  spec: "Strategy, architecture and engineering solutions tailored to your industry workflows.",
+  metric: "20+ Years Experience",
+  details: ["Industry-led delivery", "Practical, secure solutions", "Proven business outcomes"],
 };
 
 export const DbstIndustryShowcase = () => {
@@ -236,12 +236,13 @@ export const DbstIndustryShowcase = () => {
         
         {/* Section Header */}
         <div className="text-left space-y-3 max-w-3xl">
+          <div className="text-xs font-mono font-bold uppercase tracking-wider text-accent">INDUSTRY EXPERIENCE</div>
           <h2 className="font-display font-bold text-3xl sm:text-5xl lg:text-6xl text-fg-default tracking-tight leading-tight">
-            Built for <span className="text-accent">complex operations.</span>
+            Built Around How <span className="text-accent">Your Industry Works</span>
           </h2>
 
           <p className="text-base sm:text-lg text-fg-dim font-body leading-relaxed">
-            Deploy practical D-BST solutions across freight dispatch, predictive manufacturing maintenance, and financial compliance automation.
+            We combine industry knowledge with strategy, architecture and engineering to design solutions that fit real workflows, connect existing systems and support sustainable growth.
           </p>
         </div>
 
@@ -490,39 +491,39 @@ export const DbstIndustryShowcase = () => {
           {/* Column 1 */}
           <div className="space-y-3">
             <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
-              IND.01 &mdash; LOGISTICS &amp; TRANSPORT
+              IND.01 &mdash; TRANSPORT &amp; LOGISTICS
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
-              Freight &amp; Logistics Dispatch
+              Transport &amp; Logistics
             </h3>
             <p className="text-sm text-fg-dim leading-relaxed font-body">
-              Streamline bill-of-lading document parsing, multi-stop dispatch routing, and real-time fleet telematics with D-BST Vision AI and custom TMS integrations.
+              Specialist advisory, integration and solution engineering for transport and logistics operations, including TruckMate environments and AI-assisted decision support.
             </p>
           </div>
 
           {/* Column 2 */}
           <div className="space-y-3">
             <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
-              IND.02 &mdash; MANUFACTURING &amp; IOT
+              IND.02 &mdash; RETAIL &amp; SUPPLY CHAIN
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
-              Industrial IoT &amp; MES Telemetry
+              Retail &amp; Supply Chain
             </h3>
             <p className="text-sm text-fg-dim leading-relaxed font-body">
-              Predict machine bottlenecks before breakdown, track shop floor OEE in real-time, and automate PLC telemetry streaming across high-speed assembly lines.
+              Connect systems across the supply chain with custom integrations, data analytics and process transformation to support faster, more confident decisions.
             </p>
           </div>
 
           {/* Column 3 */}
           <div className="space-y-3">
             <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
-              IND.03 &mdash; FINTECH &amp; ENTERPRISE
+              IND.03 &mdash; ENTERPRISE &amp; BEYOND
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
-              Enterprise Banking &amp; Core Ledger
+              Manufacturing, Construction &amp; Financial Services
             </h3>
             <p className="text-sm text-fg-dim leading-relaxed font-body">
-              Process high-frequency wire reconciliations, sub-12ms anomaly fraud detection, zero-trust data encryption, and automated SOC2-compliant reporting.
+              Enterprise architecture, AI engineering, data analytics and custom software across manufacturing, construction, financial services and sustainable energy.
             </p>
           </div>
         </div>

@@ -32,7 +32,7 @@ export const DbstFooter = () => {
             <LogoMark size="default" variant="full" onBackground="dark" />
 
             <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-              {contentConfig.tagline || "Transforming transportation and logistics operations with intelligent automation, custom TMS integrations, and AI-powered solutions."}
+              {contentConfig.tagline || "We bring strategy, architecture and engineering together to solve complex business and operational challenges."}
             </p>
 
             <div className="space-y-3 pt-2 text-xs font-mono text-zinc-300">
@@ -50,7 +50,7 @@ export const DbstFooter = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-ink-accent" />
-                <span>{contentConfig.address || "Sydney, AU • Area served: AU"}</span>
+                <span>{contentConfig.address || "Melbourne, Australia • Serving Asia Pacific and North America"}</span>
               </div>
             </div>
           </div>
@@ -58,32 +58,37 @@ export const DbstFooter = () => {
           {/* Column 3: Services */}
           <div className="space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-              Consulting Services
+              Our Capabilities
             </h4>
             <ul className="space-y-2.5 text-sm text-zinc-400">
               <li>
-                <Link to="/services/strategic-consulting" className="hover:text-ink-accent transition-colors">
-                  Strategic Consulting
+                <Link to="/services/digital-transformation" className="hover:text-ink-accent transition-colors">
+                  Digital Transformation & Advisory
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/enterprise-architecture" className="hover:text-ink-accent transition-colors">
+                  Enterprise & Solution Architecture
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/ai-engineering" className="hover:text-ink-accent transition-colors">
+                  AI Engineering & Adoption
                 </Link>
               </li>
               <li>
                 <Link to="/services/custom-software" className="hover:text-ink-accent transition-colors">
-                  Custom Software Development
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/automation-ai" className="hover:text-ink-accent transition-colors">
-                  AI Automation &amp; RPA
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/odoo-truckmate-erp" className="hover:text-ink-accent transition-colors">
-                  Professional ERP Services
+                  Custom Software & System Integration
                 </Link>
               </li>
               <li>
                 <Link to="/services/data-analytics" className="hover:text-ink-accent transition-colors">
-                  Data Analytics &amp; BI
+                  Data Analytics & Business Intelligence
+                </Link>
+              </li>
+              <li>
+                <Link to="/services/transport-technology" className="hover:text-ink-accent transition-colors">
+                  Transport Technology & TruckMate
                 </Link>
               </li>
             </ul>
@@ -92,17 +97,17 @@ export const DbstFooter = () => {
           {/* Column 4: Quick Links */}
           <div className="space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-              Solutions & Resources
+              Explore
             </h4>
             <ul className="space-y-2.5 text-sm text-zinc-400">
               <li>
                 <Link to="/solutions" className="hover:text-ink-accent transition-colors">
-                  Solution Catalog
+                  Our Approach
                 </Link>
               </li>
               <li>
                 <Link to="/use-cases" className="hover:text-ink-accent transition-colors">
-                  Case Studies
+                  Industry Experience
                 </Link>
               </li>
               <li>
@@ -111,8 +116,13 @@ export const DbstFooter = () => {
                 </Link>
               </li>
               <li>
+                <a href="https://growthmates.ai" target="_blank" rel="noreferrer" className="hover:text-ink-accent transition-colors">
+                  Growthmates AI
+                </a>
+              </li>
+              <li>
                 <Link to="/contact" className="hover:text-ink-accent transition-colors">
-                  Request Consultation
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -121,12 +131,12 @@ export const DbstFooter = () => {
           {/* Column 5: Ecosystem & Legal */}
           <div className="space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-              Product Ecosystem
+              Our Agentic AI Platform
             </h4>
             <div className="p-3 bg-zinc-900/80 border border-zinc-800 rounded-md space-y-2">
-              <div className="text-xs font-semibold text-white">GrowthMates.ai</div>
+              <div className="text-xs font-semibold text-white">Growthmates AI</div>
               <p className="text-xs text-zinc-400 leading-snug">
-                D-BST&apos;s productized AI platform for automated workforce agents.
+                Connect business systems with modular AI agents, tools and controlled workflows&mdash;while keeping people informed and in control.
               </p>
               <a
                 href="https://growthmates.ai"
@@ -134,7 +144,7 @@ export const DbstFooter = () => {
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 text-xs font-mono text-ink-accent hover:underline pt-1"
               >
-                <span>Visit Platform</span>
+                <span>Explore Growthmates AI</span>
                 <ArrowUpRight className="w-3 h-3" />
               </a>
             </div>
@@ -155,14 +165,18 @@ export const DbstFooter = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+          <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
-            © {new Date().getFullYear()} D-BST Solutions. All rights reserved.
+            © {new Date().getFullYear()} D-BST Solutions Pty Ltd. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
-            <span>SOC2 Type II Certified</span>
+          <div className="flex items-center gap-2 text-zinc-400 font-bold tracking-widest uppercase text-[10px]">
+            <span>Smart</span>
             <span>•</span>
-            <span>ISO 27001 Compliant</span>
+            <span>Secure</span>
+            <span>•</span>
+            <span>Scalable</span>
+            <span>•</span>
+            <span>Sustainable</span>
           </div>
         </div>
       </div>

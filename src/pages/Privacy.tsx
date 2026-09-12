@@ -33,7 +33,7 @@ const PrivacyPage = () => {
             <section className="space-y-2">
               <h2 className="font-display font-bold text-lg text-fg-default">2. Enterprise Data Protection & Security</h2>
               <p>
-                Client system specifications, codebase audits, and architecture data shared during consulting engagements are treated as strictly confidential under non-disclosure agreements (NDAs). We adhere to SOC2 Type II security principles and ISO 27001 controls.
+                Client system specifications, codebase audits, and architecture data shared during consulting engagements are treated as strictly confidential under non-disclosure agreements (NDAs). We adhere to enterprise-grade data protection principles and robust security controls.
               </p>
             </section>
 

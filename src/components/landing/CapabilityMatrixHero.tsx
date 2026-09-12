@@ -36,19 +36,19 @@ function parseRotatingItem(item: string, index: number): { orange: string; botto
 }
 
 const sourcesList: SourceNode[] = [
-  { id: "s1", name: "TruckMate TMS", type: "Transportation & Freight", status: "active", entities: "45,000", snippet: "Automated BOL ingestion and dispatch route optimization with 99.4% accuracy." },
-  { id: "s2", name: "Odoo ERP Suite", type: "Enterprise ERP & Supply Chain", status: "synced", entities: "50,000+", snippet: "Unified manufacturing, inventory, accounting, and multi-channel synchronization." },
-  { id: "s3", name: "Microsoft Azure SQL", type: "Cloud Infrastructure", status: "active", entities: "Zero Data Loss", snippet: "Modernized on-premise workloads to Azure with built-in high availability." },
-  { id: "s4", name: "UiPath Automation", type: "RPA & Operational Workflows", status: "synced", entities: "85% Less Overhead", snippet: "Automated manual data entry, rate validations, and client onboarding workflows." },
-  { id: "s5", name: "Predictive IoT Hub", type: "Manufacturing & Telemetry", status: "active", entities: "60% Less Downtime", snippet: "Real-time vibration and thermal sensor streams forecasting equipment failures." },
+  { id: "s1", name: "AI Engineering & Adoption", type: "AI & Automation", status: "active", entities: "Controlled AI", snippet: "Unclear AI use cases, pilots that cannot reach production, governance and adoption concerns." },
+  { id: "s2", name: "Enterprise & Solution Architecture", type: "Architecture", status: "synced", entities: "Scalable", snippet: "Fragmented systems, point-to-point integrations, unclear target-state architecture." },
+  { id: "s3", name: "Digital Transformation & Advisory", type: "Strategy", status: "active", entities: "Practical Path", snippet: "Manual and duplicated processes, unclear priorities and business-technology misalignment." },
+  { id: "s4", name: "Custom Software & Integration", type: "Engineering", status: "synced", entities: "Maintainable", snippet: "Standard software does not fit the operation, disconnected systems and legacy constraints." },
+  { id: "s5", name: "Data Analytics & BI", type: "Intelligence", status: "active", entities: "Trusted Data", snippet: "Data spread across systems, conflicting reports, slow retrospective reporting." },
 ];
 
 const agentsList: AgentNode[] = [
-  { id: "a1", name: "TruckMate Integration Agent", role: "TMS & Fleet", status: "active", metric: "99.4% Accuracy" },
-  { id: "a2", name: "Odoo ERP Connector", role: "ERP Suite", status: "active", metric: "Automated Sync" },
-  { id: "a3", name: "Predictive Maintenance Agent", role: "IoT & Telemetry", status: "active", metric: "60% Downtime Drop" },
-  { id: "a4", name: "Azure Cloud Modernizer", role: "Cloud Infra", status: "active", metric: "Zero Data Loss" },
-  { id: "a5", name: "Customer Service AI Agent", role: "AI Automation", status: "active", metric: "24/7 Support" },
+  { id: "a1", name: "AI Opportunity Assessment", role: "AI Engineering", status: "active", metric: "Value-Driven" },
+  { id: "a2", name: "Target-State Architecture", role: "Architecture", status: "active", metric: "Blueprint Ready" },
+  { id: "a3", name: "Transformation Roadmap", role: "Advisory", status: "active", metric: "Prioritised" },
+  { id: "a4", name: "System Integration", role: "Engineering", status: "active", metric: "Connected" },
+  { id: "a5", name: "Power BI & Fabric Solutions", role: "Analytics", status: "active", metric: "Trusted Info" },
 ];
 
 export const CapabilityMatrixHero = () => {
@@ -79,11 +79,15 @@ export const CapabilityMatrixHero = () => {
     contentConfig.heroAnimatedWords && contentConfig.heroAnimatedWords.length > 0
       ? contentConfig.heroAnimatedWords
       : [
-          "Smart, Sustainable & | Scalable Solutions",
-          "Smart, Scalable, Secure & | Sustainable Solutions",
-          "Sustainable & Reusable | Modern Architecture",
+          "Smart",
+          "Secure",
+          "Scalable",
+          "Sustainable",
         ]
-  ).map((word, idx) => parseRotatingItem(word, idx));
+  ).map((word, idx) => ({
+    orange: word,
+    bottom: "Digital Solutions by Design.",
+  }));
 
   useEffect(() => {
     const count = rotatingHeadlineItems.length || 1;
@@ -339,7 +343,7 @@ export const CapabilityMatrixHero = () => {
         {/* Centered D-BST 3-Line Headline & Subhead */}
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 ref={headlineRef} className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-fg-default tracking-tight leading-[1.04]">
-            <div className="block">{contentConfig.heroHeadline || "Drive your business with"}</div>
+            <div className="block">{contentConfig.heroHeadline || "Strategy-Led. Architecture-Driven."}</div>
             <div className="block overflow-hidden py-1">
               <span
                 className={cn(
@@ -367,21 +371,23 @@ export const CapabilityMatrixHero = () => {
           </h1>
 
           <p ref={subheadRef} className="text-base sm:text-lg md:text-xl text-fg-dim leading-relaxed max-w-3xl mx-auto font-body">
-            {contentConfig.heroSubhead || "Drive your business with Smart, Scalable, Secure & Sustainable solutions. Built on sustainable and reusable architecture—transforming transportation, logistics, and enterprise operations with intelligent automation, custom TMS integrations, and AI-powered scalability."}
+            {contentConfig.heroSubhead || "Turning complex business challenges into practical, future-ready AI and digital solutions."}
           </p>
 
           {/* CTAs */}
-          <div ref={ctaContainerRef} className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div ref={ctaContainerRef} className="flex flex-wrap items-center justify-center gap-4 pt-3">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02] active:scale-[0.98] group"
             >
               <span>{contentConfig.primaryCtaText || "SCHEDULE DISCOVERY CALL"}</span>
-              <ArrowRight className="w-4 h-4" />
+              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </span>
             </Link>
             <Link
               to="/solutions"
-              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-white/90 border border-border-subtle text-fg-default font-semibold text-sm hover:border-accent hover:text-accent transition-all shadow-flat backdrop-blur-md hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-white border border-border-subtle text-fg-default font-semibold text-sm hover:border-accent hover:text-accent transition-all shadow-flat hover:shadow-raised hover:scale-[1.02] active:scale-[0.98]"
             >
               <Layers className="w-4 h-4 text-accent" />
               <span>{contentConfig.secondaryCtaText || "EXPLORE SOLUTIONS"}</span>
@@ -389,21 +395,24 @@ export const CapabilityMatrixHero = () => {
           </div>
 
           {/* Compact Trust Strip */}
-          <div ref={trustStripRef} className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-fg-dim">
-            {(contentConfig.trustMetrics || [
-              { label: "Years Experience", value: "15+" },
-              { label: "Systems Integrated", value: "100+" },
-              { label: "Follow-the-Sun Support", value: "24/7" },
-            ]).map((metric, idx) => (
-              <div key={idx} className="flex items-center gap-1.5">
-                {idx === 0 && <ShieldCheck className="w-4 h-4 text-accent" />}
-                {idx === 1 && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
-                {idx >= 2 && <Award className="w-4 h-4 text-accent" />}
-                <span>
-                  <strong className="text-accent font-bold">{metric.value}</strong> {metric.label}
-                </span>
-              </div>
-            ))}
+          <div ref={trustStripRef} className="pt-5 flex flex-wrap items-center justify-center">
+            <div className="px-6 py-2 rounded-full bg-white/90 border border-border-subtle/80 shadow-flat backdrop-blur-sm flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-fg-dim">
+              {(contentConfig.trustMetrics || [
+                { label: "Years Experience", value: "20+" },
+                { label: "Projects Delivered", value: "70+" },
+                { label: "Industries", value: "7+" },
+                { label: "Regions", value: "5+" },
+              ]).map((metric, idx) => (
+                <div key={idx} className="flex items-center gap-1.5">
+                  {idx === 0 && <ShieldCheck className="w-4 h-4 text-accent" />}
+                  {idx === 1 && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                  {idx >= 2 && <Award className="w-4 h-4 text-accent" />}
+                  <span>
+                    <strong className="text-accent font-bold">{metric.value}</strong> {metric.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -452,11 +461,11 @@ export const CapabilityMatrixHero = () => {
             </svg>
           </div>
 
-          {/* Console Mockup Card */}
-          <div ref={consoleCardRef} className="bg-bg-surface/95 backdrop-blur-md border border-border-subtle rounded-lg shadow-floating overflow-hidden">
+          {/* Console Mockup Card with Double-Bezel Tactile Elevation */}
+          <div ref={consoleCardRef} className="bg-bg-surface/95 backdrop-blur-xl border border-border-subtle rounded-2xl shadow-floating card-bezel overflow-hidden">
             
             {/* Window Bar */}
-            <div className="bg-bg-muted px-4 py-3 border-b border-border-subtle flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+            <div className="bg-bg-muted/80 px-4 py-3 border-b border-border-subtle flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-400/80" />
@@ -493,16 +502,16 @@ export const CapabilityMatrixHero = () => {
                     PLATFORM
                   </div>
                   <div className="space-y-1">
-                    <div className="p-2 rounded bg-accent-tint text-accent-deep font-bold flex items-center justify-between">
+                    <div className="p-2 rounded bg-accent-tint text-accent-deep font-bold flex items-center justify-between shadow-flat">
                       <span>Overview</span>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-accent text-white rounded">Active</span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-accent text-white rounded font-bold">Active</span>
                     </div>
                   </div>
                 </div>
 
                 <div>
                   <div className="text-[10px] text-fg-dimmer font-bold uppercase tracking-wider mb-2">
-                    DATA SOURCES (5)
+                    CORE WORKSTREAMS (5)
                   </div>
                   <div className="space-y-1">
                     {sourcesList.map((src) => {
@@ -511,14 +520,14 @@ export const CapabilityMatrixHero = () => {
                         <button
                           key={src.id}
                           onClick={() => setSelectedSource(src)}
-                          className={`w-full p-2 rounded text-left transition-all flex items-center justify-between ${
+                          className={`w-full p-2.5 rounded-lg text-left transition-all flex items-center justify-between ${
                             isSelected
-                              ? "bg-accent-tint text-accent-deep font-bold border-l-2 border-accent"
-                              : "text-fg-dim hover:text-fg-default hover:bg-bg-muted"
+                              ? "bg-accent-tint text-accent-deep font-bold border-l-2 border-accent shadow-flat"
+                              : "text-fg-dim hover:text-fg-default hover:bg-bg-muted/70"
                           }`}
                         >
                           <span className="truncate">{src.name}</span>
-                          <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-accent animate-ping" : "bg-emerald-500"}`} />
+                          <span className={`w-2 h-2 rounded-full shrink-0 ml-1.5 ${isSelected ? "bg-accent animate-ping" : "bg-emerald-500"}`} />
                         </button>
                       );
                     })}
@@ -527,14 +536,18 @@ export const CapabilityMatrixHero = () => {
 
                 <div>
                   <div className="text-[10px] text-fg-dimmer font-bold uppercase tracking-wider mb-2">
-                    D-BST SERVICES
+                    CORE CAPABILITIES
                   </div>
-                  <ul className="space-y-1 text-fg-dim">
-                    <li className="p-1.5 hover:text-accent cursor-pointer">&bull; Custom Software</li>
-                    <li className="p-1.5 hover:text-accent cursor-pointer">&bull; AI Workflows</li>
-                    <li className="p-1.5 hover:text-accent cursor-pointer">&bull; Data Analytics</li>
-                    <li className="p-1.5 hover:text-accent cursor-pointer">&bull; Transformation</li>
-                  </ul>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {["AI Engineering", "Solution Architecture", "Data & BI", "Digital Transformation", "Custom Software", "Transport Tech"].map((cap) => (
+                      <span
+                        key={cap}
+                        className="px-2 py-1 rounded-md bg-white border border-border-subtle text-[10px] font-mono text-fg-dim hover:text-accent hover:border-accent/40 transition-colors shadow-flat"
+                      >
+                        {cap}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -546,34 +559,34 @@ export const CapabilityMatrixHero = () => {
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border-subtle pb-4">
                     <div>
                       <h3 className="font-display font-bold text-lg text-fg-default">
-                        D-BST Engineering Ontology
+                        D-BST Capability Explorer
                       </h3>
                       <p className="text-xs text-fg-dim font-mono">
-                        5 sources feeding 1 unified D-BST architecture — consumed by 5 apps and 5 agents
+                        6 capabilities delivering practical business outcomes across 7+ industries
                       </p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                    <div className="p-3 bg-bg-surface border border-border-subtle rounded">
-                      <div className="text-fg-dim font-semibold">Entities</div>
-                      <div ref={entityCountRef} className="text-xl font-bold text-fg-default mt-1 font-mono">
-                        48,200
+                    <div className="p-3.5 bg-white border border-border-subtle/80 rounded-xl shadow-flat card-bezel">
+                      <div className="text-fg-dim font-semibold text-[11px]">Experience</div>
+                      <div ref={entityCountRef} className="text-xl font-bold text-fg-default mt-1 font-mono tracking-tight">
+                        20+ Years
                       </div>
                     </div>
-                    <div className="p-3 bg-bg-surface border border-border-subtle rounded">
-                      <div className="text-fg-dim font-semibold">Connections</div>
-                      <div ref={kafkaCountRef} className="text-xl font-bold text-fg-default mt-1 font-mono">
-                        142,800
+                    <div className="p-3.5 bg-white border border-border-subtle/80 rounded-xl shadow-flat card-bezel">
+                      <div className="text-fg-dim font-semibold text-[11px]">Delivery</div>
+                      <div ref={kafkaCountRef} className="text-xl font-bold text-fg-default mt-1 font-mono tracking-tight">
+                        70+ Projects
                       </div>
                     </div>
-                    <div className="p-3 bg-bg-surface border border-border-subtle rounded">
-                      <div className="text-fg-dim font-semibold">Blueprints</div>
-                      <div className="text-xl font-bold text-fg-default mt-1 font-mono">50+ Specs</div>
+                    <div className="p-3.5 bg-white border border-border-subtle/80 rounded-xl shadow-flat card-bezel">
+                      <div className="text-fg-dim font-semibold text-[11px]">Industry Reach</div>
+                      <div className="text-xl font-bold text-fg-default mt-1 font-mono tracking-tight">7+ Industries</div>
                     </div>
-                    <div className="p-3 bg-bg-surface border border-border-subtle rounded">
-                      <div className="text-fg-dim font-semibold">Data quality</div>
-                      <div className="text-xl font-bold text-accent mt-1 font-mono">99.8%</div>
+                    <div className="p-3.5 bg-white border border-border-subtle/80 rounded-xl shadow-flat card-bezel">
+                      <div className="text-fg-dim font-semibold text-[11px]">Regional Reach</div>
+                      <div className="text-xl font-bold text-accent mt-1 font-mono tracking-tight">5+ Regions</div>
                     </div>
                   </div>
                 </div>
@@ -584,7 +597,7 @@ export const CapabilityMatrixHero = () => {
                   {/* Sources */}
                   <div className="w-full md:w-1/3 space-y-2 text-left">
                     <div className="text-[10px] font-mono font-bold uppercase text-fg-dim">
-                      SOURCES
+                      YOUR CHALLENGES
                     </div>
                     {sourcesList.slice(0, 4).map((src) => {
                       const isSelected = selectedSource.id === src.id;
@@ -625,7 +638,7 @@ export const CapabilityMatrixHero = () => {
                   {/* Agents */}
                   <div className="w-full md:w-1/3 space-y-2 text-right">
                     <div className="text-[10px] font-mono font-bold uppercase text-fg-dim">
-                      AGENTS
+                      WHAT WE DELIVER
                     </div>
                     {agentsList.slice(0, 4).map((agent) => (
                       <div
@@ -648,7 +661,7 @@ export const CapabilityMatrixHero = () => {
                 <div className="p-3 bg-bg-surface border border-border-subtle rounded text-xs font-mono text-left space-y-2">
                   <div className="flex items-center justify-between border-b border-border-subtle pb-1 text-[11px] text-fg-dim">
                     <span className="font-bold text-fg-default flex items-center gap-1.5">
-                      <Terminal className="w-3.5 h-3.5 text-accent" /> LIVE TELEMETRY &amp; ACTIVITY
+                      <Terminal className="w-3.5 h-3.5 text-accent" /> BUSINESS OUTCOME
                     </span>
                     <span className="text-accent font-semibold">{selectedSource.name}</span>
                   </div>

@@ -115,15 +115,15 @@ export const ConsultationPanel = () => {
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-tint text-accent-deep border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
                   <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
                   <Calendar className="w-4 h-4 text-accent" />
-                  <span>DIRECT CONSULTATION</span>
+                  <span>START A CONVERSATION</span>
                 </div>
 
                 <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight leading-tight">
-                  Schedule Your Free Engineering Consultation
+                  Let&rsquo;s Discuss What You&rsquo;re Trying to Improve
                 </h2>
 
                 <p className="text-sm sm:text-base text-fg-dim font-body leading-relaxed">
-                  Connect directly with a D-BST senior solutions architect. We will review your current software stack, operational bottlenecks, and scope a concrete implementation plan.
+                  You do not need a finished brief. Tell us what is happening today and the outcome you want to achieve. We&rsquo;ll help determine whether D-BST is the right fit and suggest a practical next step.
                 </p>
               </div>
 
@@ -136,7 +136,7 @@ export const ConsultationPanel = () => {
                   className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>BOOK CALENDLY CALL DIRECTLY</span>
+                  <span>BOOK A DISCOVERY CONVERSATION</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
@@ -157,7 +157,7 @@ export const ConsultationPanel = () => {
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Clock className="w-4 h-4 text-accent shrink-0" />
-                  <span>24-Hour SLA Response Commitment</span>
+                  <span>Melbourne, Australia &bull; Serving Asia Pacific and North America</span>
                 </div>
               </div>
 
@@ -210,10 +210,10 @@ export const ConsultationPanel = () => {
                 </div>
 
                 <div className="space-y-1.5 font-mono text-xs text-left">
-                  <label className="font-bold text-fg-default">Project Notes / Technical Requirements</label>
+                  <label className="font-bold text-fg-default">Tell Us About Your Challenge *</label>
                   <textarea
                     rows={3}
-                    placeholder="Briefly describe your existing system stack, timeline, or key objectives..."
+                    placeholder="Briefly describe what is happening today, who it affects and what a better outcome would look like. Please do not include passwords, personal information or confidential customer data."
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default placeholder:text-fg-dimmer text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all resize-none shadow-flat"
@@ -233,7 +233,7 @@ export const ConsultationPanel = () => {
                   ) : (
                     <>
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>SUBMIT CONSULTATION REQUEST</span>
+                      <span>SEND ENQUIRY</span>
                     </>
                   )}
                 </button>
@@ -242,7 +242,7 @@ export const ConsultationPanel = () => {
 
               <div className="text-[10px] font-mono text-fg-dim text-center flex items-center justify-center gap-1.5 pt-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                <span>NDA &amp; Confidentiality Automatically Applied to All Inquiries</span>
+                <span>By submitting, you agree that D-BST Solutions may contact you regarding your enquiry. See our Privacy Policy.</span>
               </div>
 
             </div>

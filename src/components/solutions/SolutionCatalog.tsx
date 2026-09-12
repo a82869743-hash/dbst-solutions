@@ -322,7 +322,7 @@ export const SolutionCatalog = () => {
             <div
               key={item.id}
               ref={(el) => (cardsRef.current[idx] = el)}
-              className="p-8 sm:p-10 rounded-3xl border border-border-subtle hover:border-accent bg-white shadow-floating flex flex-col justify-between space-y-7 text-left transition-all duration-300 hover:-translate-y-1.5 group relative overflow-hidden"
+              className="p-8 sm:p-10 rounded-3xl border border-border-subtle hover:border-accent bg-white shadow-floating card-bezel flex flex-col justify-between space-y-7 text-left transition-all duration-300 hover:-translate-y-1.5 group relative overflow-hidden"
             >
               <div className="space-y-6">
                 
@@ -332,11 +332,11 @@ export const SolutionCatalog = () => {
                     {item.industry}
                   </span>
                   <div className="flex items-center gap-2 text-[11px] font-bold text-fg-dim">
-                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-[#F5F4F0] border border-border-subtle">
+                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-bg-surface border border-border-subtle">
                       <Clock className="w-3.5 h-3.5 text-accent" />
                       <span>{item.timeline}</span>
                     </span>
-                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-[#F5F4F0] border border-border-subtle text-fg-default">
+                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-bg-surface border border-border-subtle text-fg-default">
                       <DollarSign className="w-3.5 h-3.5 text-accent" />
                       <span>{item.priceRange}</span>
                     </span>
@@ -354,7 +354,7 @@ export const SolutionCatalog = () => {
                 </div>
 
                 {/* Architecture Highlight Spec */}
-                <div className="p-4 bg-accent-tint/60 border border-accent/30 rounded-2xl font-mono text-xs space-y-1">
+                <div className="p-4 bg-accent-tint/60 border border-accent/30 rounded-2xl font-mono text-xs space-y-1 card-bezel">
                   <div className="font-bold text-accent flex items-center gap-1.5">
                     <Cpu className="w-4 h-4 text-accent" /> D-BST ARCHITECTURE HIGHLIGHT
                   </div>
@@ -380,8 +380,8 @@ export const SolutionCatalog = () => {
                   </div>
                 </div>
 
-                {/* Full Details Box (Always Open & Detailed) */}
-                <div className="p-6 sm:p-7 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-4 font-mono text-xs shadow-flat">
+                {/* Full Details Box (Double-Bezel & Structured ROI Rows) */}
+                <div className="p-6 sm:p-7 bg-bg-surface/90 border border-border-subtle/80 rounded-2xl space-y-4 font-mono text-xs shadow-flat card-bezel">
                   <p className="text-xs text-fg-default font-body leading-relaxed">
                     {item.fullDescription}
                   </p>
@@ -392,8 +392,11 @@ export const SolutionCatalog = () => {
                     </div>
                     <div className="space-y-2">
                       {item.benefits.map((b, bIdx) => (
-                        <div key={bIdx} className="flex items-start gap-2.5 text-xs text-fg-dim font-body leading-snug">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
+                        <div
+                          key={bIdx}
+                          className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-xs text-fg-default font-medium leading-snug"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                           <span>{b}</span>
                         </div>
                       ))}
@@ -403,7 +406,7 @@ export const SolutionCatalog = () => {
 
               </div>
 
-              {/* Action Button Footer */}
+              {/* Action Button Footer with Button-in-Button Trailing Icon */}
               <div className="pt-6 border-t border-border-subtle/80 flex items-center justify-between">
                 <span className="text-[10px] font-mono text-fg-dim font-bold uppercase tracking-wider flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-accent" /> Production Ready SLA
@@ -411,10 +414,12 @@ export const SolutionCatalog = () => {
 
                 <button
                   onClick={() => setProposalModalItem(item)}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating group"
                 >
-                  <span>Request Proposal Blueprint</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Request Solution Specs</span>
+                  <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                    <ArrowRight className="w-3 h-3" />
+                  </span>
                 </button>
               </div>
 

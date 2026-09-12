@@ -21,7 +21,7 @@ export default {
         display: ["Manrope", "system-ui", "sans-serif"],
         body: ["Manrope", "system-ui", "sans-serif"],
         sans: ["Manrope", "system-ui", "sans-serif"],
-        mono: ["Manrope", "system-ui", "sans-serif"],
+        mono: ["'JetBrains Mono'", "monospace"],
       },
       colors: {
         "bg-base": "var(--bg-base)",
@@ -73,6 +73,7 @@ export default {
         flat: "var(--shadow-flat)",
         raised: "var(--shadow-raised)",
         floating: "var(--shadow-floating)",
+        tactile: "var(--shadow-tactile)",
       },
       keyframes: {
         "accordion-down": {
