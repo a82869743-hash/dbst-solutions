@@ -8,7 +8,7 @@ import type { ROIInputs } from "./types";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const STREAM_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/roi-chat`;
+const STREAM_URL = `${import.meta.env.VITE_SUPABASE_URL || "https://pmfyqcmoqrgxfplugqid.supabase.co"}/functions/v1/roi-chat`;
 
 const ConversationalROI = () => {
   const [messages, setMessages] = useState<Msg[]>([

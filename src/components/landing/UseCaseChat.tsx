@@ -13,7 +13,7 @@ interface UseCase {
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const STREAM_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/use-case-qa`;
+const STREAM_URL = `${import.meta.env.VITE_SUPABASE_URL || "https://pmfyqcmoqrgxfplugqid.supabase.co"}/functions/v1/use-case-qa`;
 
 interface UseCaseChatProps {
   useCase: UseCase | null;
