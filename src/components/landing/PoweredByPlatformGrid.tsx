@@ -46,7 +46,7 @@ export const PoweredByPlatformGrid = () => {
 
                 {/* Prompt Bubble */}
                 <div className="relative z-10 rounded-xl bg-[#FAF9F6] border border-[#E7E5DE] p-3 text-[11px] font-mono text-[#14171F] shadow-sm max-w-[170px] -translate-y-8 -translate-x-4">
-                  Optimize Sydney route |
+                  Optimize Melbourne route |
                 </div>
 
                 {/* Deploy Agent Button */}

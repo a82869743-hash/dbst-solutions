@@ -6,8 +6,8 @@ import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 
 const UseCasesPage = () => {
   useDocumentMeta({
-    title: "Engineering Case Studies | D-BST Solutions",
-    description: "Detailed technical case studies showcasing system architecture, ROI metrics, and software deliverables for enterprise clients.",
+    title: "Industry Experiences | D-BST Solutions",
+    description: "Real-world industry experiences showcasing system architecture, measurable outcomes, and software deliverables for enterprise clients.",
   });
 
   return (

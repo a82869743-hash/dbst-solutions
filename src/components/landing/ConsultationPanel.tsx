@@ -15,6 +15,7 @@ export const ConsultationPanel = () => {
     fullName: "",
     email: "",
     company: "",
+    serviceInterest: "",
     notes: "",
   });
 
@@ -79,7 +80,7 @@ export const ConsultationPanel = () => {
         email: formData.email,
         company: formData.company,
         message: formData.notes,
-        serviceInterest: "Executive Architecture Consultation",
+        serviceInterest: formData.serviceInterest || "Not Sure Yet",
         source: "dbst",
       });
 
@@ -87,7 +88,7 @@ export const ConsultationPanel = () => {
         title: "Consultation Request Dispatched",
         description: "Thank you. A D-BST Senior Solutions Architect will reach out within 24 hours.",
       });
-      setFormData({ fullName: "", email: "", company: "", notes: "" });
+      setFormData({ fullName: "", email: "", company: "", serviceInterest: "", notes: "" });
     } catch (err) {
       toast({
         title: "Submission Error",
@@ -199,7 +200,7 @@ export const ConsultationPanel = () => {
                 </div>
 
                 <div className="space-y-1.5 font-mono text-xs text-left">
-                  <label className="font-bold text-fg-default">Company / Organization Name</label>
+                  <label className="font-bold text-fg-default">Company or Organisation</label>
                   <input
                     type="text"
                     placeholder="Apex Logistics Ltd."
@@ -207,6 +208,28 @@ export const ConsultationPanel = () => {
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default placeholder:text-fg-dimmer text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
                   />
+                </div>
+
+                <div className="space-y-1.5 font-mono text-xs text-left">
+                  <label className="font-bold text-fg-default flex items-center justify-between">
+                    <span>How Can We Help?</span>
+                    <span className="text-accent">*</span>
+                  </label>
+                  <select
+                    value={formData.serviceInterest}
+                    onChange={(e) => setFormData({ ...formData, serviceInterest: e.target.value })}
+                    className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-sm font-body focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat appearance-none"
+                  >
+                    <option value="">Select a capability area...</option>
+                    <option value="AI Engineering and Adoption">AI Engineering and Adoption</option>
+                    <option value="Enterprise and Solution Architecture">Enterprise and Solution Architecture</option>
+                    <option value="Digital Transformation and Advisory">Digital Transformation and Advisory</option>
+                    <option value="Custom Software and System Integration">Custom Software and System Integration</option>
+                    <option value="Data Analytics and Business Intelligence">Data Analytics and Business Intelligence</option>
+                    <option value="Transport Technology and TruckMate">Transport Technology and TruckMate</option>
+                    <option value="Growthmates AI">Growthmates AI</option>
+                    <option value="Not Sure Yet">Not Sure Yet</option>
+                  </select>
                 </div>
 
                 <div className="space-y-1.5 font-mono text-xs text-left">
@@ -242,7 +265,7 @@ export const ConsultationPanel = () => {
 
               <div className="text-[10px] font-mono text-fg-dim text-center flex items-center justify-center gap-1.5 pt-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                <span>By submitting, you agree that D-BST Solutions may contact you regarding your enquiry. See our Privacy Policy.</span>
+                <span>By submitting this form, you agree that D-BST Solutions may contact you regarding your enquiry. Please review our <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a> for information about how submitted details are handled.</span>
               </div>
 
             </div>

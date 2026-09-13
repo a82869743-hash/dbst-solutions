@@ -4,11 +4,9 @@ import { CapabilityMatrixHero } from "@/components/landing/CapabilityMatrixHero"
 import { DbstWorkflowSection } from "@/components/landing/DbstWorkflowSection";
 import { DbstTopologySection } from "@/components/landing/DbstTopologySection";
 import { DbstIndustryShowcase } from "@/components/landing/DbstIndustryShowcase";
-import { DbstProductFlowSection } from "@/components/landing/DbstProductFlowSection";
 import { FounderNote } from "@/components/landing/FounderNote";
 import { CapabilityIndex } from "@/components/landing/CapabilityIndex";
 import { SolutionFinder } from "@/components/landing/SolutionFinder";
-import { TechStackExplorer } from "@/components/landing/TechStackExplorer";
 import { InsightsSignup } from "@/components/landing/InsightsSignup";
 import { ConsultationPanel } from "@/components/landing/ConsultationPanel";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
@@ -27,9 +25,7 @@ const Index = () => {
         <DbstWorkflowSection />
         <DbstTopologySection />
         <DbstIndustryShowcase />
-        <DbstProductFlowSection />
         <CapabilityIndex />
-        <TechStackExplorer />
         <SolutionFinder />
         <FounderNote />
         <ConsultationPanel />

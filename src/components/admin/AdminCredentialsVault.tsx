@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
+  Loader2,
 } from "lucide-react";
 import { AdminStore, CredentialsVault } from "@/lib/admin/adminStore";
 import { toast } from "@/hooks/use-toast";
@@ -28,6 +29,7 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
   const [hasChanges, setHasChanges] = useState(false);
   const [testingEmail, setTestingEmail] = useState(false);
   const [testingWebhook, setTestingWebhook] = useState(false);
+  const [testingAi, setTestingAi] = useState(false);
 
   const toggleVisibility = (key: string) => {
     setVisibleKeys((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -67,6 +69,58 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
         description: "Payload delivered with HTTP 200 OK status code.",
       });
     }, 1000);
+  };
+
+  const handleTestAiPing = async () => {
+    const key = (vault.openaiApiKey || import.meta.env.VITE_OPENAI_API_KEY || "").trim();
+    if (!key) {
+      toast({
+        title: "API Key Required",
+        description: "Please enter an OpenAI API key or set VITE_OPENAI_API_KEY in .env before testing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setTestingAi(true);
+    const startTime = Date.now();
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${key}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: "ping" }],
+          max_tokens: 5,
+        }),
+      });
+
+      const elapsed = Date.now() - startTime;
+      if (res.ok) {
+        toast({
+          title: "OpenAI Connection Verified",
+          description: `Successfully connected to OpenAI (${elapsed}ms latency). Ready for live capability discovery.`,
+        });
+      } else {
+        const err = await res.json().catch(() => ({}));
+        toast({
+          title: `OpenAI Error (${res.status})`,
+          description: err.error?.message || "Verification request failed. Check your API key and billing quota.",
+          variant: "destructive",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: "Network Error",
+        description: err.message || "Failed to reach OpenAI API.",
+        variant: "destructive",
+      });
+    } finally {
+      setTestingAi(false);
+    }
   };
 
   const renderSecretInput = (
@@ -272,6 +326,30 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
 
             {renderSecretInput("OpenAI API Key", "openaiApiKey")}
             {renderSecretInput("Anthropic Claude API Key", "anthropicApiKey")}
+
+            <div className="pt-2 flex items-center justify-between border-t border-border-subtle/50 mt-2">
+              <span className="text-[10px] font-mono text-fg-dimmer">
+                {vault.openaiApiKey ? "✓ Custom vault key active" : (import.meta.env.VITE_OPENAI_API_KEY ? "✓ Using environment key (.env)" : "⚠ No key detected")}
+              </span>
+              <button
+                type="button"
+                onClick={handleTestAiPing}
+                disabled={testingAi}
+                className="px-3 py-1.5 rounded-md border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 font-mono text-[11px] font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50"
+              >
+                {testingAi ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    <span>Testing Connection...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3 h-3" />
+                    <span>Test OpenAI Connection</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 

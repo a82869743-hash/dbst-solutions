@@ -14,7 +14,7 @@ const PRESET_PROMPTS: PresetPrompt[] = [
     id: "dispatch-1",
     category: "dispatch",
     label: "Reroute 12-stop freight truck",
-    prompt: "Deploy an autonomous dispatch agent to optimize a 12-stop interstate freight truck route considering live Sydney-Melbourne traffic delays.",
+    prompt: "Deploy an autonomous dispatch agent to optimize a 12-stop interstate freight truck route considering live Melbourne interstate traffic delays.",
   },
   {
     id: "retail-1",

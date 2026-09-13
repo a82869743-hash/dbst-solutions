@@ -109,7 +109,7 @@ const MegaTrans = () => {
                     Proven Methodologies
                   </h3>
                   <p className="text-xs text-white/80 leading-relaxed">
-                    Frameworks for high-volume, mission-critical transport operations with 85% cost reduction.
+                    Frameworks for high-volume, scalable transport operations with measurable operational improvements.
                   </p>
                 </div>
 

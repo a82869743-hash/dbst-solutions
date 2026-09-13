@@ -31,26 +31,30 @@ export const DbstFooter = () => {
           <div className="lg:col-span-2 space-y-6">
             <LogoMark size="default" variant="full" onBackground="dark" />
 
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 pt-1">
+              AI Engineering, Adoption and Digital Transformation
+            </div>
+
             <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-              {contentConfig.tagline || "We bring strategy, architecture and engineering together to solve complex business and operational challenges."}
+              We bring strategy, architecture and engineering together to solve complex business and operational challenges.
             </p>
 
             <div className="space-y-3 pt-2 text-xs font-mono text-zinc-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-ink-accent" />
-                <a href={`tel:${(contentConfig.contactPhone || "+61430981166").replace(/\s+/g, "")}`} className="hover:text-ink-accent transition-colors">
-                  {contentConfig.contactPhone || "+61 430 981 166"}
+                <a href="tel:+61430981166" className="hover:text-ink-accent transition-colors">
+                  +61 430 981 166
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-ink-accent" />
-                <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="hover:text-ink-accent transition-colors">
-                  {contentConfig.contactEmail || "info@dbstsolutions.com"}
+                <a href="mailto:info@dbstsolutions.com" className="hover:text-ink-accent transition-colors">
+                  info@dbstsolutions.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-ink-accent" />
-                <span>{contentConfig.address || "Melbourne, Australia • Serving Asia Pacific and North America"}</span>
+                <span>Melbourne, Australia • Serving Asia Pacific and North America</span>
               </div>
             </div>
           </div>
@@ -107,7 +111,7 @@ export const DbstFooter = () => {
               </li>
               <li>
                 <Link to="/use-cases" className="hover:text-ink-accent transition-colors">
-                  Industry Experience
+                  Industry Experiences
                 </Link>
               </li>
               <li>

@@ -9,20 +9,20 @@ gsap.registerPlugin(ScrollTrigger);
 const coreValues = [
   {
     name: "Integrity",
-    tagline: "Uncompromising technical truth.",
-    detail: "We never over-promise or recommend unnecessary stack bloat. If a simpler architecture solves your problem, that is what we scope.",
+    tagline: "Honest advice and clear trade-offs.",
+    detail: "We communicate risks, constraints and limitations early. We recommend the simplest responsible solution that can deliver the required outcome.",
     icon: ShieldCheck,
   },
   {
     name: "Care",
-    tagline: "Deep ownership of customer outcomes.",
-    detail: "We treat your production environment with the same rigor as our own infrastructure, taking full end-to-end accountability.",
+    tagline: "Understand the people behind the process.",
+    detail: "We listen, co-design and communicate clearly. Usability, adoption and customer outcomes are treated as part of the solution, not activities left until the end.",
     icon: HeartHandshake,
   },
   {
-    name: "GRIT",
-    tagline: "Relentless execution on complex systems.",
-    detail: "When legacy migrations or hard integration bottlenecks emerge, our senior engineers push through until the system is bulletproof.",
+    name: "Grit",
+    tagline: "Stay accountable through complexity.",
+    detail: "Complex change requires persistence. We work through constraints, respond to feedback and keep delivery focused on the agreed business outcome.",
     icon: Flame,
   },
 ];
@@ -92,9 +92,12 @@ export const FounderNote = () => {
               <img
                 src={ceoPhoto}
                 alt="Bimal Thakkar — Founder & Principal Consultant"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-white shadow-floating ring-1 ring-border-subtle"
+                className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover object-center border-2 border-white shadow-floating ring-2 ring-accent/20"
               />
-              <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-accent text-white text-xs font-mono flex items-center justify-center font-bold shadow-flat">
+              <div
+                title="Verified Founder"
+                className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-accent text-white text-xs font-mono flex items-center justify-center font-bold shadow-flat"
+              >
                 ✓
               </div>
             </div>

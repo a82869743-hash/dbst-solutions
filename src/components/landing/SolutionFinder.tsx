@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Sparkles, Terminal, ArrowRight, Loader2, Cpu, Zap, TrendingUp, BookOpen, CheckCircle2 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AdminStore } from "@/lib/admin/adminStore";
+import { useToast } from "@/hooks/use-toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -101,8 +103,10 @@ interface SolutionResult {
 }
 
 export const SolutionFinder = () => {
+  const { toast } = useToast();
   const [challengeInput, setChallengeInput] = useState(presetChallenges[0].text);
   const [loading, setLoading] = useState(false);
+  const [isLiveAi, setIsLiveAi] = useState(false);
   const [result, setResult] = useState<SolutionResult>({
     whatWeHeard: presetChallenges[0].whatWeHeard,
     bestFitCapability: presetChallenges[0].bestFitCapability,
@@ -152,30 +156,87 @@ export const SolutionFinder = () => {
 
     const matchedPreset = presetChallenges.find((p) => p.text.toLowerCase() === textToSubmit.trim().toLowerCase());
 
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    // Try server-side proxy first (production), then fallback to direct API call (local dev)
+    try {
+      let aiResponse: Response | null = null;
 
-    if (apiKey) {
+      // 1. Try server-side endpoint (API key is NOT exposed to client)
       try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        aiResponse = await fetch("/api/capability-advisor", {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              { role: "user", content: textToSubmit },
-            ],
-            response_format: { type: "json_object" },
-            temperature: 0.3,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: textToSubmit }),
         });
+      } catch {
+        // Server endpoint not available (local dev without Vercel)
+        aiResponse = null;
+      }
 
-        if (response.ok) {
-          const json = await response.json();
-          const parsed = JSON.parse(json.choices?.[0]?.message?.content || "{}");
+      // 2. Fallback: direct API call for local development only
+      if (!aiResponse || !aiResponse.ok) {
+        const adminCreds = AdminStore.getCredentials();
+        const apiKey = (adminCreds.openaiApiKey || import.meta.env.VITE_OPENAI_API_KEY || "").trim();
+        const model = adminCreds.activeAiModel?.startsWith("gpt") ? adminCreds.activeAiModel : "gpt-4o-mini";
+
+        if (apiKey) {
+          aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: model,
+              messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: textToSubmit },
+              ],
+              response_format: { type: "json_object" },
+              temperature: 0.3,
+            }),
+          });
+
+          if (aiResponse.ok) {
+            const json = await aiResponse.json();
+            const content = json.choices?.[0]?.message?.content;
+            if (content) {
+              const parsed = JSON.parse(content);
+              if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+                setResult({
+                  whatWeHeard: parsed.whatWeHeard,
+                  bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
+                  supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
+                  howDbstCouldHelp: parsed.howDbstCouldHelp,
+                  suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
+                  whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
+                  assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
+                  fitClassification: parsed.fitClassification || "Strong Fit",
+                });
+                setIsLiveAi(true);
+                setTimeout(() => setLoading(false), 300);
+                return;
+              }
+            }
+          } else {
+            const errorData = await aiResponse.json().catch(() => ({}));
+            console.error("OpenAI API request failed:", aiResponse.status, errorData);
+            if (aiResponse.status === 401) {
+              toast({
+                title: "OpenAI Authentication Failed",
+                description: "API key is invalid (401). Check the key in Admin Vault (/admin) or .env.",
+                variant: "destructive",
+              });
+            } else if (aiResponse.status === 429) {
+              toast({
+                title: "OpenAI Quota Exceeded",
+                description: "OpenAI rate limit or usage quota reached (429). Check your billing at platform.openai.com.",
+                variant: "destructive",
+              });
+            }
+          }
+        } else if (aiResponse && aiResponse.ok) {
+          // Server-side response was OK — parse it directly
+          const parsed = await aiResponse.json();
           if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
             setResult({
               whatWeHeard: parsed.whatWeHeard,
@@ -187,14 +248,35 @@ export const SolutionFinder = () => {
               assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
               fitClassification: parsed.fitClassification || "Strong Fit",
             });
+            setIsLiveAi(true);
             setTimeout(() => setLoading(false), 300);
             return;
           }
         }
-      } catch (err) {
-        console.warn("OpenAI Advisor fallback:", err);
+      } else {
+        // Server-side response was OK — parse it directly
+        const parsed = await aiResponse.json();
+        if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+          setResult({
+            whatWeHeard: parsed.whatWeHeard,
+            bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
+            supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
+            howDbstCouldHelp: parsed.howDbstCouldHelp,
+            suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
+            whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
+            assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
+            fitClassification: parsed.fitClassification || "Strong Fit",
+          });
+          setIsLiveAi(true);
+          setTimeout(() => setLoading(false), 300);
+          return;
+        }
       }
+    } catch (err: any) {
+      console.warn("Capability Advisor fallback:", err);
     }
+
+    setIsLiveAi(false);
 
     // Fallback if API key missing or network error
     if (matchedPreset) {
@@ -226,6 +308,7 @@ export const SolutionFinder = () => {
 
   const handleSelectPreset = (preset: typeof presetChallenges[0]) => {
     setChallengeInput(preset.text);
+    setIsLiveAi(false);
     setResult({
       whatWeHeard: preset.whatWeHeard,
       bestFitCapability: preset.bestFitCapability,
@@ -326,9 +409,21 @@ export const SolutionFinder = () => {
             <div className="pt-8 border-t border-border-subtle space-y-6 animate-in fade-in duration-300">
               {/* Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                <span className="flex items-center gap-2 text-accent font-bold">
-                  <Terminal className="w-4 h-4 text-accent" /> INITIAL CAPABILITY ASSESSMENT
-                </span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="flex items-center gap-2 text-accent font-bold">
+                    <Terminal className="w-4 h-4 text-accent" /> INITIAL CAPABILITY ASSESSMENT
+                  </span>
+                  {isLiveAi ? (
+                    <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-bold shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Live OpenAI Analysis</span>
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200 text-[10px] font-mono font-medium">
+                      <span>Curated Baseline</span>
+                    </span>
+                  )}
+                </div>
                 <span className="px-3 py-1 rounded-full bg-accent-tint text-accent-deep font-bold text-[10px] border border-accent/20">
                   {result.fitClassification || "D-BST CAPABILITY MATCHED"}
                 </span>

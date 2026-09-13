@@ -331,6 +331,19 @@ export const DbstWorkflowSection = () => {
                           <div className="font-bold text-fg-default">Exception Review</div>
                           <div className="text-amber-600 font-bold">1 awaiting</div>
                         </div>
+                        <div className="p-1.5 bg-[#F5F4F0] rounded-lg border border-border-subtle">
+                          <div className="font-bold text-fg-default">Scheduled Workflows</div>
+                          <div className="text-emerald-600 font-bold">Active</div>
+                        </div>
+                        <div className="p-1.5 bg-[#F5F4F0] rounded-lg border border-border-subtle">
+                          <div className="font-bold text-fg-default">System Connection</div>
+                          <div className="text-emerald-600 font-bold">TruckMate connected</div>
+                        </div>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="text-[8px] text-fg-dim font-mono text-center pt-1">
+                        Next scheduled check: 10:30 AM
                       </div>
                     </div>
                   )}

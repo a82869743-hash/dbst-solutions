@@ -75,7 +75,7 @@ export const defaultDbstContent: SiteContentConfig = {
   secondaryCtaText: "EXPLORE CAPABILITIES",
   contactEmail: "info@dbstsolutions.com",
   contactPhone: "+61 430 981 166",
-  address: "Melbourne, Australia • Areas served: Asia Pacific and North America",
+  address: "Melbourne, AU • Areas served: Asia Pacific and North America",
   announcementBadge: "Smart, Secure, Scalable & Sustainable",
   trustMetrics: [
     { label: "Experience", value: "20+ Years" },
@@ -110,7 +110,7 @@ export const defaultGrowthMatesContent: SiteContentConfig = {
   secondaryCtaText: "VIEW AGENT DEMOS",
   contactEmail: "founders@growthmates.ai",
   contactPhone: "+1 (800) 482-9912",
-  address: "San Francisco, CA & Sydney, AU",
+  address: "Melbourne, Australia",
   announcementBadge: "GrowthMates 2.0 Autonomous Engine Live",
   trustMetrics: [
     { label: "Active Agents", value: "10,000+" },
@@ -133,9 +133,9 @@ export const defaultCredentials: CredentialsVault = {
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL || "https://dbst-supabase-prod.supabase.co",
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "",
   supabaseServiceKey: "",
-  openaiApiKey: "",
+  openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
   anthropicApiKey: "",
-  activeAiModel: "gpt-4o",
+  activeAiModel: "gpt-4o-mini",
   slackWebhookUrl: "",
   discordWebhookUrl: "",
   googleAnalyticsId: "G-DBST982XKL",
@@ -145,25 +145,41 @@ export const defaultCredentials: CredentialsVault = {
 // Zero fake data - all inquiries collected live from real user submissions
 export const mockInquiries: InquiryItem[] = [];
 
-const CONTENT_STORAGE_KEY = "dbst_superadmin_content";
+const CONTENT_STORAGE_KEY = "dbst_superadmin_content_v3";
 const CREDENTIALS_STORAGE_KEY = "dbst_superadmin_credentials";
 const INQUIRIES_STORAGE_KEY = "dbst_superadmin_inquiries";
 const AUDIT_STORAGE_KEY = "dbst_superadmin_audit";
 
+// Proactively purge any legacy stale cache keys
+try {
+  if (typeof window !== "undefined" && window.localStorage) {
+    localStorage.removeItem("dbst_superadmin_content_dbst");
+    localStorage.removeItem("dbst_superadmin_content");
+  }
+} catch (_) {}
+
 export class AdminStore {
-  // Get Content from local cache with default baseline fallback
+  // Get Content with canonical baseline
   static getContent(site: SiteTarget): SiteContentConfig {
+    if (site === "dbst") {
+      return { ...defaultDbstContent };
+    }
     try {
       const saved = localStorage.getItem(`${CONTENT_STORAGE_KEY}_${site}`);
       if (saved) return JSON.parse(saved);
     } catch (e) {
       console.error(e);
     }
-    return site === "dbst" ? { ...defaultDbstContent } : { ...defaultGrowthMatesContent };
+    return { ...defaultGrowthMatesContent };
   }
 
-  // Fetch remote content from Supabase cloud database (syncs across all devices & visitors worldwide)
+  // Fetch remote content from Supabase cloud database
   static async fetchRemoteContent(site: SiteTarget): Promise<SiteContentConfig | null> {
+    if (site === "dbst") {
+      // D-BST is a production marketing site with canonical verified client copy.
+      // Do not allow stale or unauthenticated remote DB records to pollute it.
+      return { ...defaultDbstContent };
+    }
     try {
       const { data, error } = await supabase
         .from("ideas_public")
@@ -221,11 +237,23 @@ export class AdminStore {
   static getCredentials(): CredentialsVault {
     try {
       const saved = localStorage.getItem(CREDENTIALS_STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          ...defaultCredentials,
+          ...parsed,
+          openaiApiKey: (parsed.openaiApiKey && parsed.openaiApiKey.trim().length > 0)
+            ? parsed.openaiApiKey.trim()
+            : (import.meta.env.VITE_OPENAI_API_KEY || ""),
+        };
+      }
     } catch (e) {
       console.error(e);
     }
-    return { ...defaultCredentials };
+    return {
+      ...defaultCredentials,
+      openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
+    };
   }
 
   // Save Credentials

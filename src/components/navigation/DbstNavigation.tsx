@@ -47,7 +47,7 @@ const serviceLinks = [
 const mainNavLinks = [
   { label: "Home", href: "/" },
   { label: "Solutions Catalog", href: "/solutions" },
-  { label: "Case Studies", href: "/use-cases" },
+  { label: "Industry Experiences", href: "/use-cases" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -92,9 +92,9 @@ export const DbstNavigation = () => {
           <div className="hidden sm:flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-fg-dimmer">
               <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span>{contentConfig.address || "Melbourne, Australia • Serving Asia Pacific and North America"}</span>
+              <span>Melbourne, AU • Areas served: Asia Pacific and North America</span>
             </span>
-            <span className="text-accent font-semibold">{contentConfig.tagline || "AI Engineering, Adoption & Digital Transformation Partner"}</span>
+            <span className="text-accent font-semibold">AI Engineering, Adoption &amp; Digital Transformation Partner</span>
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@ export const DbstNavigation = () => {
               location.pathname === "/use-cases" ? "text-accent font-semibold" : "text-fg-default"
             )}
           >
-            Case Studies
+            Industry Experiences
           </Link>
 
           <Link

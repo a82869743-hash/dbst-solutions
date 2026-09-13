@@ -32,30 +32,15 @@ const outerAgents = [
 
 export const DbstTopologySection = () => {
   const [activeNode, setActiveNode] = useState<TopologyNode>(innerNodes[0]);
-  const [rotationOffset, setRotationOffset] = useState(0);
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const coreHexRef = useRef<HTMLDivElement>(null);
 
-  // GSAP Smooth Continuous Upright Orbiting Animation
+  // Soft Hexagon Core Pulse
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    let anim: gsap.core.Tween;
     const ctx = gsap.context(() => {
-      // Continuous Orbit Angle Advancement
-      const rotObj = { angle: 0 };
-      anim = gsap.to(rotObj, {
-        angle: 360,
-        duration: 50,
-        repeat: -1,
-        ease: "none",
-        onUpdate: () => {
-          setRotationOffset(rotObj.angle);
-        },
-      });
-
-      // Core Hexagon Soft Pulse
       if (coreHexRef.current) {
         gsap.to(coreHexRef.current, {
           scale: 1.05,
@@ -68,7 +53,6 @@ export const DbstTopologySection = () => {
     }, sectionRef);
 
     return () => {
-      if (anim) anim.kill();
       ctx.revert();
     };
   }, []);
@@ -192,10 +176,44 @@ export const DbstTopologySection = () => {
                 </span>
               </div>
 
+              {/* Smooth GPU Hardware Orbiting Styles */}
+              <style>{`
+                @keyframes dbst-orbit-cw {
+                  from {
+                    transform: rotate(0deg);
+                  }
+                  to {
+                    transform: rotate(360deg);
+                  }
+                }
+                @keyframes dbst-orbit-ccw {
+                  from {
+                    transform: rotate(0deg);
+                  }
+                  to {
+                    transform: rotate(-360deg);
+                  }
+                }
+                .dbst-orbit-ring {
+                  animation: dbst-orbit-cw 55s linear infinite;
+                  will-change: transform;
+                  transform-origin: center center;
+                }
+                .dbst-orbit-ring:hover,
+                .dbst-orbit-ring:hover .dbst-orbit-item {
+                  animation-play-state: paused;
+                }
+                .dbst-orbit-item {
+                  animation: dbst-orbit-ccw 55s linear infinite;
+                  will-change: transform;
+                  transform-origin: center center;
+                }
+              `}</style>
+
               {/* Inner Circle Nodes (Radius: 135px) */}
               {innerNodes.map((node) => {
                 const rad = (node.angle * Math.PI) / 180;
-                const distance = window.innerWidth < 640 ? 110 : 135;
+                const distance = 135;
                 const x = Math.cos(rad) * distance;
                 const y = Math.sin(rad) * distance;
                 const isSelected = activeNode.id === node.id;
@@ -207,51 +225,62 @@ export const DbstTopologySection = () => {
                     style={{
                       transform: `translate(${x}px, ${y}px)`,
                     }}
-                    className={`absolute z-40 px-2.5 py-1.5 rounded-lg border text-[11px] font-mono cursor-pointer transition-all shadow-flat flex items-center gap-1.5 backdrop-blur-md ${
+                    className={`absolute z-40 px-2.5 py-1.5 rounded-lg border text-[11px] font-mono cursor-pointer transition-transform shadow-flat flex items-center gap-1.5 backdrop-blur-md select-none ${
                       isSelected
-                        ? "bg-accent text-white border-accent scale-110 shadow-floating"
+                        ? "bg-accent text-white border-accent scale-110 shadow-floating ring-2 ring-accent/30"
                         : "bg-white/95 border-border-subtle text-fg-default hover:border-accent hover:text-accent hover:scale-105"
                     }`}
                   >
-                    <span className="font-extrabold text-[9px] px-1 py-0.5 rounded bg-accent-tint text-accent-deep">
+                    <span className={`font-extrabold text-[9px] px-1 py-0.5 rounded ${isSelected ? "bg-white text-accent font-bold" : "bg-accent-tint text-accent-deep"}`}>
                       {node.code}
                     </span>
-                    <span className="font-bold text-[10px] hidden sm:inline">{node.label}</span>
+                    <span className="font-bold text-[10px] hidden sm:inline whitespace-nowrap">{node.label}</span>
                   </div>
                 );
               })}
 
-              {/* Outer Orbiting Industry Badges (Radius: 235px - ZERO Overlap with Inner Ring) */}
-              {outerAgents.map((ag, idx) => {
-                const totalAngle = ag.angle + rotationOffset;
-                const rad = (totalAngle * Math.PI) / 180;
-                const distance = window.innerWidth < 640 ? 180 : 235;
-                const x = Math.cos(rad) * distance;
-                const y = Math.sin(rad) * distance;
-                const IconComponent = ag.icon;
+              {/* Outer Orbiting Industry Badges (100% GPU-Accelerated, Zero-Lag Compositor Orbit) */}
+              <div className="dbst-orbit-ring absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center">
+                {outerAgents.map((ag, idx) => {
+                  const rad = (ag.angle * Math.PI) / 180;
+                  const distance = 235;
+                  const x = Math.cos(rad) * distance;
+                  const y = Math.sin(rad) * distance;
+                  const IconComponent = ag.icon;
 
-                return (
-                  <div
-                    key={idx}
-                    style={{
-                      transform: `translate(${x}px, ${y}px)`,
-                    }}
-                    className={`absolute z-50 flex items-center gap-1.5 shadow-flat px-3 py-1.5 rounded-full text-xs font-mono backdrop-blur-md transition-all ${
-                      ag.isPrimary
-                        ? "bg-white border-2 border-accent shadow-raised scale-105 ring-2 ring-accent/15"
-                        : "bg-white/95 border border-border-subtle hover:border-accent"
-                    }`}
-                  >
-                    <IconComponent className={`w-3.5 h-3.5 ${ag.color}`} />
-                    <span className={`font-bold text-[10px] tracking-wider ${ag.isPrimary ? "text-accent-deep" : "text-fg-default"}`}>
-                      {ag.name}
-                    </span>
-                    {ag.isPrimary && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                    )}
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={idx}
+                      className="absolute pointer-events-auto"
+                      style={{
+                        transform: `translate(${x}px, ${y}px)`,
+                      }}
+                    >
+                      <div className="dbst-orbit-item">
+                        <div
+                          className={`flex items-center gap-1.5 shadow-flat px-3 py-1.5 rounded-full text-xs font-mono backdrop-blur-md cursor-pointer transition-transform hover:scale-110 select-none ${
+                            ag.isPrimary
+                              ? "bg-white border-2 border-accent shadow-raised ring-2 ring-accent/15"
+                              : "bg-white/95 border border-border-subtle hover:border-accent"
+                          }`}
+                        >
+                          <IconComponent className={`w-3.5 h-3.5 ${ag.color}`} />
+                          <span
+                            className={`font-bold text-[10px] tracking-wider whitespace-nowrap ${
+                              ag.isPrimary ? "text-accent-deep" : "text-fg-default"
+                            }`}
+                          >
+                            {ag.name}
+                          </span>
+                          {ag.isPrimary && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
             </div>
 
