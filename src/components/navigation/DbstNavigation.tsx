@@ -138,7 +138,7 @@ export const DbstNavigation = () => {
 
             {servicesOpen && (
               <div className="absolute top-full left-0 w-96 p-3 bg-bg-surface border border-border-subtle rounded-md shadow-floating animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="text-[11px] font-mono font-semibold uppercase text-fg-dim px-3 py-1.5 mb-1 border-b border-border-subtle">
+                <div className="text-xs font-mono font-semibold uppercase text-fg-dim px-3 py-1.5 mb-1 border-b border-border-subtle">
                   Our Capabilities
                 </div>
                 <div className="space-y-1">
@@ -158,7 +158,7 @@ export const DbstNavigation = () => {
                           <div className="text-sm font-semibold text-fg-default group-hover:text-accent-deep transition-colors">
                             {service.title}
                           </div>
-                          <div className="text-xs text-fg-dim line-clamp-1 mt-0.5">
+                          <div className="text-[13px] text-fg-dim line-clamp-1 mt-0.5">
                             {service.desc}
                           </div>
                         </div>

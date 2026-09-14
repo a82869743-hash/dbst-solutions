@@ -19,10 +19,10 @@ const PrivacyPage = () => {
             <h1 className="font-display font-bold text-3xl sm:text-4xl text-fg-default">
               Privacy Policy
             </h1>
-            <p className="text-xs font-mono text-fg-dim">Last updated: August 2026</p>
+            <p className="text-[12.5px] font-mono text-fg-dim">Last updated: August 2026</p>
           </div>
 
-          <div className="prose prose-sm text-fg-dim max-w-none space-y-6 leading-relaxed">
+          <div className="prose max-w-none space-y-6 leading-relaxed text-[13.5px] sm:text-[14px] text-fg-dim">
             <section className="space-y-2">
               <h2 className="font-display font-bold text-lg text-fg-default">1. Information Collection</h2>
               <p>

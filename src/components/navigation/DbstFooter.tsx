@@ -31,15 +31,15 @@ export const DbstFooter = () => {
           <div className="lg:col-span-2 space-y-6">
             <LogoMark size="default" variant="full" onBackground="dark" />
 
-            <div className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 pt-1">
+            <div className="text-[13px] font-mono font-bold uppercase tracking-wider text-zinc-300 pt-1">
               AI Engineering, Adoption and Digital Transformation
             </div>
 
-            <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
+            <p className="text-[14.5px] text-zinc-400 leading-relaxed max-w-sm">
               We bring strategy, architecture and engineering together to solve complex business and operational challenges.
             </p>
 
-            <div className="space-y-3 pt-2 text-xs font-mono text-zinc-300">
+            <div className="space-y-3 pt-2 text-[13px] font-mono text-zinc-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-ink-accent" />
                 <a href="tel:+61430981166" className="hover:text-ink-accent transition-colors">
@@ -61,10 +61,10 @@ export const DbstFooter = () => {
 
           {/* Column 3: Services */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+            <h4 className="text-[13px] font-mono font-bold uppercase tracking-wider text-white">
               Our Capabilities
             </h4>
-            <ul className="space-y-2.5 text-sm text-zinc-400">
+            <ul className="space-y-2.5 text-[14.5px] text-zinc-400">
               <li>
                 <Link to="/services/digital-transformation" className="hover:text-ink-accent transition-colors">
                   Digital Transformation & Advisory
@@ -100,10 +100,10 @@ export const DbstFooter = () => {
 
           {/* Column 4: Quick Links */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+            <h4 className="text-[13px] font-mono font-bold uppercase tracking-wider text-white">
               Explore
             </h4>
-            <ul className="space-y-2.5 text-sm text-zinc-400">
+            <ul className="space-y-2.5 text-[14.5px] text-zinc-400">
               <li>
                 <Link to="/solutions" className="hover:text-ink-accent transition-colors">
                   Our Approach
@@ -134,26 +134,26 @@ export const DbstFooter = () => {
 
           {/* Column 5: Ecosystem & Legal */}
           <div className="space-y-4">
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+            <h4 className="text-[13px] font-mono font-bold uppercase tracking-wider text-white">
               Our Agentic AI Platform
             </h4>
             <div className="p-3 bg-zinc-900/80 border border-zinc-800 rounded-md space-y-2">
-              <div className="text-xs font-semibold text-white">Growthmates AI</div>
-              <p className="text-xs text-zinc-400 leading-snug">
+              <div className="text-[13px] font-semibold text-white">Growthmates AI</div>
+              <p className="text-[13px] text-zinc-400 leading-relaxed">
                 Connect business systems with modular AI agents, tools and controlled workflows&mdash;while keeping people informed and in control.
               </p>
               <a
                 href="https://growthmates.ai"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs font-mono text-ink-accent hover:underline pt-1"
+                className="inline-flex items-center gap-1 text-[13px] font-mono text-ink-accent hover:underline pt-1"
               >
                 <span>Explore Growthmates AI</span>
                 <ArrowUpRight className="w-3 h-3" />
               </a>
             </div>
 
-            <div className="pt-2 space-y-1.5 text-xs text-zinc-400">
+            <div className="pt-2 space-y-1.5 text-[13px] text-zinc-400">
               <div>
                 <Link to="/privacy" className="hover:text-ink-accent transition-colors">
                   Privacy Policy
@@ -169,11 +169,11 @@ export const DbstFooter = () => {
         </div>
 
         {/* Bottom Bar */}
-          <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+        <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[13px] font-mono text-zinc-500">
           <div>
             © {new Date().getFullYear()} D-BST Solutions Pty Ltd. All rights reserved.
           </div>
-          <div className="flex items-center gap-2 text-zinc-400 font-bold tracking-widest uppercase text-[10px]">
+          <div className="flex items-center gap-2 text-zinc-400 font-bold tracking-widest uppercase text-xs">
             <span>Smart</span>
             <span>•</span>
             <span>Secure</span>

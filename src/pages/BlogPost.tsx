@@ -4,9 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import ReactMarkdown from "react-markdown";
-import { supabase } from "@/integrations/supabase/client";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import { DbstNavigation } from "@/components/navigation/DbstNavigation";
+import { DbstFooter } from "@/components/navigation/DbstFooter";
 import DecisionEngineArticle from "@/components/blog/articles/DecisionEngineArticle";
 import SecureArchitectureArticle from "@/components/blog/articles/SecureArchitectureArticle";
 import AgentToolsArticle from "@/components/blog/articles/AgentToolsArticle";
@@ -114,12 +113,12 @@ const BlogPost = () => {
 
   if (isLoading && !post) {
     return (
-      <div className="min-h-screen bg-[#FAF9F6] text-[#14171F]">
-        <Navbar />
+      <div className="min-h-screen bg-bg-base text-fg-default font-body">
+        <DbstNavigation />
         <div className="container max-w-[680px] py-20 space-y-4">
-          <div className="h-8 bg-[#E7E5DE] animate-pulse rounded w-3/4" />
-          <div className="h-4 bg-[#E7E5DE] animate-pulse rounded w-1/2" />
-          <div className="h-64 bg-[#E7E5DE] animate-pulse rounded" />
+          <div className="h-8 bg-border-subtle animate-pulse rounded w-3/4" />
+          <div className="h-4 bg-border-subtle animate-pulse rounded w-1/2" />
+          <div className="h-64 bg-border-subtle animate-pulse rounded" />
         </div>
       </div>
     );
@@ -127,28 +126,28 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-[#FAF9F6] text-[#14171F] font-body">
-        <Navbar />
+      <div className="min-h-screen bg-bg-base text-fg-default font-body">
+        <DbstNavigation />
         <div className="container flex flex-col items-center justify-center py-32 text-center">
           <h1 className="text-3xl font-extrabold font-display">Article not found</h1>
-          <p className="mt-2 text-sm text-[#5B616E]">This article may have been removed or updated.</p>
-          <Link to="/blog" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#2E5EFF] px-6 py-2.5 text-xs font-semibold text-white">
+          <p className="mt-2 text-sm text-fg-dim">This article may have been removed or updated.</p>
+          <Link to="/blog" className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2.5 text-xs font-semibold text-white">
             <ArrowLeft className="h-4 w-4" /> Back to Blog
           </Link>
         </div>
-        <Footer />
+        <DbstFooter />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#14171F] font-body relative">
+    <div className="min-h-screen bg-bg-base text-fg-default font-body relative">
       {/* Fixed Top Scroll Progress Rail */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-[#E7E5DE]">
-        <div className="h-full bg-[#2E5EFF] transition-all duration-150" style={{ width: `${scrollPct}%` }} />
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-border-subtle">
+        <div className="h-full bg-accent transition-all duration-150" style={{ width: `${scrollPct}%` }} />
       </div>
 
-      <Navbar />
+      <DbstNavigation />
 
       {/* Header Container */}
       <header className="container max-w-3xl pt-14 pb-8 border-b border-[#E7E5DE] px-4 sm:px-6">
@@ -221,7 +220,7 @@ const BlogPost = () => {
         </div>
       </main>
 
-      <Footer />
+      <DbstFooter />
     </div>
   );
 };

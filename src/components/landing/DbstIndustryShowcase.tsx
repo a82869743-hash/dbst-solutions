@@ -490,39 +490,39 @@ export const DbstIndustryShowcase = () => {
         <div ref={textColumnsRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
           {/* Column 1 */}
           <div className="space-y-3">
-            <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
+            <div className="text-xs font-bold text-accent font-mono uppercase tracking-wider">
               IND.01 &mdash; TRANSPORT &amp; LOGISTICS
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
               Transport &amp; Logistics
             </h3>
-            <p className="text-sm text-fg-dim leading-relaxed font-body">
+            <p className="text-[14.5px] sm:text-[15px] text-fg-dim leading-relaxed font-body">
               Specialist advisory, integration and solution engineering for transport and logistics operations, including TruckMate environments and AI-assisted decision support.
             </p>
           </div>
 
           {/* Column 2 */}
           <div className="space-y-3">
-            <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
+            <div className="text-xs font-bold text-accent font-mono uppercase tracking-wider">
               IND.02 &mdash; RETAIL &amp; SUPPLY CHAIN
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
               Retail &amp; Supply Chain
             </h3>
-            <p className="text-sm text-fg-dim leading-relaxed font-body">
+            <p className="text-[14.5px] sm:text-[15px] text-fg-dim leading-relaxed font-body">
               Connect systems across the supply chain with custom integrations, data analytics and process transformation to support faster, more confident decisions.
             </p>
           </div>
 
           {/* Column 3 */}
           <div className="space-y-3">
-            <div className="text-[11px] font-bold text-accent font-mono uppercase tracking-wider">
+            <div className="text-xs font-bold text-accent font-mono uppercase tracking-wider">
               IND.03 &mdash; ENTERPRISE &amp; BEYOND
             </div>
             <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
               Manufacturing, Construction &amp; Financial Services
             </h3>
-            <p className="text-sm text-fg-dim leading-relaxed font-body">
+            <p className="text-[14.5px] sm:text-[15px] text-fg-dim leading-relaxed font-body">
               Enterprise architecture, AI engineering, data analytics and custom software across manufacturing, construction, financial services and sustainable energy.
             </p>
           </div>
@@ -552,7 +552,7 @@ export const DbstIndustryShowcase = () => {
               <h3 className="font-display font-bold text-2xl text-fg-default">
                 {activeInspection.title}
               </h3>
-              <span className="inline-block px-2.5 py-0.5 rounded bg-accent-tint text-accent-deep text-[10px] font-bold">
+              <span className="inline-block px-2.5 py-0.5 rounded bg-accent-tint text-accent-deep text-xs font-bold">
                 {activeInspection.category} DOMAIN
               </span>
             </div>
@@ -563,19 +563,19 @@ export const DbstIndustryShowcase = () => {
                 <span>GUARANTEED SLA METRIC:</span>
                 <span className="text-accent">{activeInspection.metric}</span>
               </div>
-              <p className="text-fg-dim font-body pt-1 leading-relaxed text-xs">
+              <p className="text-fg-dim font-body pt-1 leading-relaxed text-[13.5px]">
                 {activeInspection.spec}
               </p>
             </div>
 
             {/* Deliverable Details List */}
             <div className="space-y-2">
-              <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
+              <div className="text-xs font-bold text-fg-dimmer uppercase tracking-wider">
                 CORE ARCHITECTURE CAPABILITIES
               </div>
               <div className="space-y-1.5">
                 {activeInspection.details.map((detail, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs font-body text-fg-default">
+                  <div key={idx} className="flex items-center gap-2 text-sm font-body text-fg-default">
                     <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" />
                     <span>{detail}</span>
                   </div>

@@ -19,10 +19,10 @@ const TermsPage = () => {
             <h1 className="font-display font-bold text-3xl sm:text-4xl text-fg-default">
               Terms of Service
             </h1>
-            <p className="text-xs font-mono text-fg-dim">Last updated: August 2026</p>
+            <p className="text-[12.5px] font-mono text-fg-dim">Last updated: August 2026</p>
           </div>
 
-          <div className="prose prose-sm text-fg-dim max-w-none space-y-6 leading-relaxed">
+          <div className="prose max-w-none space-y-6 leading-relaxed text-[13.5px] sm:text-[14px] text-fg-dim">
             <section className="space-y-2">
               <h2 className="font-display font-bold text-lg text-fg-default">1. Engagement Scope</h2>
               <p>

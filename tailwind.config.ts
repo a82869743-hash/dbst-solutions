@@ -23,6 +23,11 @@ export default {
         sans: ["Manrope", "system-ui", "sans-serif"],
         mono: ["'JetBrains Mono'", "monospace"],
       },
+      fontSize: {
+        xs: ["0.8125rem", { lineHeight: "1.25rem" }],
+        sm: ["0.9375rem", { lineHeight: "1.45rem" }],
+        base: ["1.03125rem", { lineHeight: "1.65rem" }],
+      },
       colors: {
         "bg-base": "var(--bg-base)",
         "bg-surface": "var(--bg-surface)",

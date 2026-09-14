@@ -99,15 +99,15 @@ export const DbstTopologySection = () => {
 
             {/* Active Node Detail Card with Tactile Bezel */}
             <div className="p-4 bg-white border border-accent/40 rounded-xl space-y-2 font-mono text-xs shadow-flat card-bezel">
-              <div className="flex items-center justify-between text-[11px] text-fg-dim border-b border-border-subtle pb-1.5">
+              <div className="flex items-center justify-between text-xs text-fg-dim border-b border-border-subtle pb-1.5">
                 <span className="font-bold text-accent flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-accent" /> [{activeNode.code}] CORE CAPABILITY
                 </span>
                 <span className="text-fg-default font-bold">{activeNode.metric}</span>
               </div>
-              <div className="flex items-center justify-between font-bold text-fg-default text-sm pt-1">
+              <div className="flex items-center justify-between font-bold text-fg-default text-[14.5px] pt-1">
                 <span>{activeNode.label}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-accent-tint text-accent-deep font-bold">{activeNode.category}</span>
+                <span className="text-xs px-2.5 py-0.5 rounded bg-accent-tint text-accent-deep font-bold">{activeNode.category}</span>
               </div>
             </div>
 
@@ -225,16 +225,16 @@ export const DbstTopologySection = () => {
                     style={{
                       transform: `translate(${x}px, ${y}px)`,
                     }}
-                    className={`absolute z-40 px-2.5 py-1.5 rounded-lg border text-[11px] font-mono cursor-pointer transition-transform shadow-flat flex items-center gap-1.5 backdrop-blur-md select-none ${
+                    className={`absolute z-40 px-2.5 py-1.5 rounded-lg border text-xs font-mono cursor-pointer transition-transform shadow-flat flex items-center gap-1.5 backdrop-blur-md select-none ${
                       isSelected
                         ? "bg-accent text-white border-accent scale-110 shadow-floating ring-2 ring-accent/30"
                         : "bg-white/95 border-border-subtle text-fg-default hover:border-accent hover:text-accent hover:scale-105"
                     }`}
                   >
-                    <span className={`font-extrabold text-[9px] px-1 py-0.5 rounded ${isSelected ? "bg-white text-accent font-bold" : "bg-accent-tint text-accent-deep"}`}>
+                    <span className={`font-extrabold text-[11px] px-1 py-0.5 rounded ${isSelected ? "bg-white text-accent font-bold" : "bg-accent-tint text-accent-deep"}`}>
                       {node.code}
                     </span>
-                    <span className="font-bold text-[10px] hidden sm:inline whitespace-nowrap">{node.label}</span>
+                    <span className="font-bold text-xs hidden sm:inline whitespace-nowrap">{node.label}</span>
                   </div>
                 );
               })}
@@ -266,7 +266,7 @@ export const DbstTopologySection = () => {
                         >
                           <IconComponent className={`w-3.5 h-3.5 ${ag.color}`} />
                           <span
-                            className={`font-bold text-[10px] tracking-wider whitespace-nowrap ${
+                            className={`font-bold text-[11.5px] tracking-wider whitespace-nowrap ${
                               ag.isPrimary ? "text-accent-deep" : "text-fg-default"
                             }`}
                           >

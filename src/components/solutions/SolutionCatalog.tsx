@@ -358,7 +358,7 @@ export const SolutionCatalog = () => {
                   <div className="font-bold text-accent flex items-center gap-1.5">
                     <Cpu className="w-4 h-4 text-accent" /> D-BST ARCHITECTURE HIGHLIGHT
                   </div>
-                  <p className="text-fg-default font-body text-xs leading-relaxed pt-0.5">
+                  <p className="text-fg-default font-body text-[13.5px] leading-relaxed pt-0.5">
                     {item.architectureHighlight}
                   </p>
                 </div>
@@ -372,7 +372,7 @@ export const SolutionCatalog = () => {
                     {item.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 rounded-full bg-white border border-border-subtle text-xs font-mono text-fg-default font-bold shadow-flat"
+                        className="px-3 py-1 rounded-full bg-white border border-border-subtle text-[13px] font-mono text-fg-default font-bold shadow-flat"
                       >
                         {tech}
                       </span>
@@ -382,7 +382,7 @@ export const SolutionCatalog = () => {
 
                 {/* Full Details Box (Double-Bezel & Structured ROI Rows) */}
                 <div className="p-6 sm:p-7 bg-bg-surface/90 border border-border-subtle/80 rounded-2xl space-y-4 font-mono text-xs shadow-flat card-bezel">
-                  <p className="text-xs text-fg-default font-body leading-relaxed">
+                  <p className="text-[14px] text-fg-default font-body leading-relaxed">
                     {item.fullDescription}
                   </p>
 
@@ -394,7 +394,7 @@ export const SolutionCatalog = () => {
                       {item.benefits.map((b, bIdx) => (
                         <div
                           key={bIdx}
-                          className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-xs text-fg-default font-medium leading-snug"
+                          className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-[13.5px] text-fg-default font-medium leading-snug"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                           <span>{b}</span>

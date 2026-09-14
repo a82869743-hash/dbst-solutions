@@ -526,13 +526,13 @@ const ServiceDetailPage = () => {
 
             {/* Industry Ticker Strip */}
             <div className="pt-6 border-t border-border-subtle/80 flex flex-wrap items-center gap-2 font-mono text-xs">
-              <span className="text-fg-dimmer font-bold uppercase tracking-wider text-[10px] mr-2">
+              <span className="text-fg-dimmer font-bold uppercase tracking-wider text-[11px] mr-2">
                 INDUSTRIES SERVED:
               </span>
               {industriesList.map((ind, i) => (
                 <span
                   key={i}
-                  className="px-3.5 py-1.5 rounded-full bg-white border border-border-subtle text-fg-dim font-semibold shadow-flat"
+                  className="px-3.5 py-1.5 rounded-full bg-white border border-border-subtle text-[13px] text-fg-dim font-semibold shadow-flat"
                 >
                   {ind}
                 </span>
@@ -579,7 +579,7 @@ const ServiceDetailPage = () => {
                     <span className="w-8 h-8 rounded-lg font-mono text-xs font-bold bg-accent-tint text-accent border border-accent/20 flex items-center justify-center">
                       0{idx + 1}
                     </span>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
                       MODULAR DELIVERABLE
                     </span>
                   </div>
@@ -588,19 +588,19 @@ const ServiceDetailPage = () => {
                     {cap.name}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+                  <p className="text-[13.5px] sm:text-[15px] text-fg-dim font-body leading-relaxed">
                     {cap.desc}
                   </p>
 
                   <div className="space-y-2 pt-2">
-                    <div className="text-[10px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
+                    <div className="text-[11px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
                       METHODS &amp; TOOLS
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {cap.stack.map((st) => (
                         <span
                           key={st}
-                          className="px-2.5 py-1 rounded-md bg-bg-muted border border-border-subtle text-[11px] font-mono font-medium text-fg-default"
+                          className="px-2.5 py-1 rounded-md bg-bg-muted border border-border-subtle text-[13px] font-mono font-medium text-fg-default"
                         >
                           {st}
                         </span>
@@ -610,7 +610,7 @@ const ServiceDetailPage = () => {
                 </div>
 
                 <div className="pt-4 border-t border-border-subtle/80">
-                  <div className="p-3 bg-accent-tint/40 border border-accent/15 rounded-xl text-xs font-body text-fg-default flex items-start gap-2.5">
+                  <div className="p-3 bg-accent-tint/40 border border-accent/15 rounded-xl text-[13.5px] font-body text-fg-default flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                     <span className="leading-snug">{cap.benefit}</span>
                   </div>
@@ -656,7 +656,7 @@ const ServiceDetailPage = () => {
                     <span className="text-xs font-mono font-bold text-accent flex items-center gap-1.5">
                       <Terminal className="w-3.5 h-3.5" /> STAGE 0{idx + 1}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[10px] font-mono font-bold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[11px] font-mono font-bold">
                       {node.status}
                     </span>
                   </div>
@@ -665,12 +665,12 @@ const ServiceDetailPage = () => {
                     {node.label}
                   </h3>
 
-                  <p className="text-xs text-fg-dim font-body leading-relaxed">
+                  <p className="text-[13.5px] text-fg-dim font-body leading-relaxed">
                     {node.detail}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-border-subtle/60 flex items-center justify-between text-[11px] font-mono text-fg-dimmer">
+                <div className="pt-4 border-t border-border-subtle/60 flex items-center justify-between text-xs font-mono text-fg-dimmer">
                   <span>PROGRESSION</span>
                   <span className="text-accent font-bold">
                     {idx === 0 ? "Step 1 of 3" : idx === 1 ? "Step 2 of 3" : "Step 3 of 3"}
@@ -695,7 +695,7 @@ const ServiceDetailPage = () => {
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight">
               Methods &amp; Technology Stack
             </h2>
-            <p className="text-sm text-fg-dim font-body">
+            <p className="text-sm sm:text-[15px] text-fg-dim font-body">
               Production tools, enterprise standards and platforms selected specifically for your environment.
             </p>
           </div>
@@ -712,11 +712,11 @@ const ServiceDetailPage = () => {
                     <span className="font-display font-bold text-base text-fg-default">
                       {tech.name}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-accent-tint text-accent-deep text-[10px] font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-accent-tint text-accent-deep text-[11px] font-mono font-bold">
                       {tech.category}
                     </span>
                   </div>
-                  <p className="text-xs text-fg-dim font-body leading-relaxed">
+                  <p className="text-[13.5px] text-fg-dim font-body leading-relaxed">
                     {tech.role}
                   </p>
                 </div>
@@ -732,11 +732,11 @@ const ServiceDetailPage = () => {
                 <h3 className="font-display font-bold text-xl text-fg-default">
                   Technology-Agnostic Commitment
                 </h3>
-                <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+                <p className="text-sm sm:text-[15px] text-fg-dim font-body leading-relaxed">
                   We begin with your business problem, not a preferred vendor. We select the simplest, most responsible tools that solve the operational challenge, respect your constraints, and integrate cleanly with your existing systems.
                 </p>
               </div>
-              <div className="pt-4 border-t border-border-subtle space-y-2 text-xs font-mono text-fg-dim">
+              <div className="pt-4 border-t border-border-subtle space-y-2 text-[13px] font-mono text-fg-dim">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
                   <span>No proprietary vendor lock-in</span>
@@ -769,7 +769,7 @@ const ServiceDetailPage = () => {
               <h2 className="font-display font-bold text-3xl sm:text-4xl text-fg-default tracking-tight">
                 How We Deliver
               </h2>
-              <p className="text-sm text-fg-dim font-body">
+              <p className="text-sm sm:text-[15px] text-fg-dim font-body">
                 A structured, four-step delivery method designed to minimise risk and deliver lasting business value.
               </p>
             </div>
@@ -802,16 +802,16 @@ const ServiceDetailPage = () => {
                       {pillar.title}
                     </h3>
 
-                    <p className="text-xs text-fg-dim font-body leading-relaxed">
+                    <p className="text-[13.5px] text-fg-dim font-body leading-relaxed">
                       {pillar.desc}
                     </p>
                   </div>
 
                   <div className="pt-4 border-t border-border-subtle/80">
-                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer mb-1">
+                    <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-fg-dimmer mb-1">
                       DELIVERY COMMITMENT
                     </div>
-                    <p className="text-xs text-fg-default font-body font-medium leading-snug">
+                    <p className="text-[13.5px] text-fg-default font-body font-medium leading-snug">
                       {pillar.detail}
                     </p>
                   </div>
@@ -834,7 +834,7 @@ const ServiceDetailPage = () => {
               <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default">
                 Ready to Discuss What You&apos;re Trying to Improve?
               </h3>
-              <p className="text-xs sm:text-sm text-fg-dim font-body">
+              <p className="text-sm sm:text-[15px] text-fg-dim font-body">
                 You do not need a finished brief. Speak with a D-BST principal consultant to evaluate fit, scope priorities, and explore practical solutions.
               </p>
             </div>

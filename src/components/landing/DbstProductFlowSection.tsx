@@ -168,7 +168,7 @@ export const DbstProductFlowSection = () => {
 
               {/* Light Grey Ticket Queue Box */}
               <div className="p-4 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-3 font-mono text-xs shadow-flat">
-                <div className="text-[10px] text-fg-dimmer font-bold uppercase tracking-wider">
+                <div className="text-xs text-fg-dimmer font-bold uppercase tracking-wider">
                   LIVE INCIDENT QUEUE
                 </div>
 
@@ -184,7 +184,7 @@ export const DbstProductFlowSection = () => {
                           : "bg-white/80 border-border-subtle text-fg-default hover:border-accent/40"
                       }`}
                     >
-                      <div className="flex items-center justify-between font-bold text-xs">
+                      <div className="flex items-center justify-between font-bold text-[13px]">
                         <span className="truncate pr-2">{tck.id}: {tck.title}</span>
                         {tck.status === "matched" ? (
                           <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
@@ -192,7 +192,7 @@ export const DbstProductFlowSection = () => {
                           <AlertTriangle className="w-4 h-4 text-amber-600 animate-pulse shrink-0" />
                         )}
                       </div>
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[10px] text-fg-dim mt-2 pt-1 border-t border-border-subtle/50 gap-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-fg-dim mt-2 pt-1 border-t border-border-subtle/50 gap-1">
                         <span className="font-bold text-accent">{tck.match}</span>
                         <span className="font-bold text-fg-default truncate">{tck.fix}</span>
                       </div>
@@ -207,7 +207,7 @@ export const DbstProductFlowSection = () => {
               <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
                 D-BST Support &amp; Incident Analyzer
               </h3>
-              <p className="text-xs sm:text-sm text-fg-dim leading-relaxed font-body">
+              <p className="text-sm sm:text-[15px] text-fg-dim leading-relaxed font-body">
                 Automated incident triage, operational similarity matching, and actionable resolution recommendations. Built for operations desks to resolve issues transparently and improve systems continuously.
               </p>
             </div>
@@ -215,7 +215,7 @@ export const DbstProductFlowSection = () => {
           </div>
 
           {/* CENTER FLOW CONNECTING ARROWS (Spread Style Bidirectional Escalation) */}
-          <div className="lg:col-span-2 flex flex-col items-center justify-center space-y-4 py-4 lg:py-0 font-mono text-[10px]">
+          <div className="lg:col-span-2 flex flex-col items-center justify-center space-y-4 py-4 lg:py-0 font-mono text-xs">
             
             {/* Top Dashed Orange Arrow */}
             <div className="w-full flex flex-col items-center space-y-1">
@@ -259,7 +259,7 @@ export const DbstProductFlowSection = () => {
                 <span className="font-bold text-fg-default uppercase tracking-wider">
                   ENGINEERING &bull; DEVOPS
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">
                   ROOT CAUSE TRACE
                 </span>
               </div>
@@ -289,21 +289,21 @@ export const DbstProductFlowSection = () => {
                         >
                           {node.code}
                         </div>
-                        <span className="text-[9px] font-bold text-fg-default">{node.label}</span>
+                        <span className="text-[11px] font-bold text-fg-default">{node.label}</span>
                       </div>
                     );
                   })}
                 </div>
 
                 {/* Dynamic Root Cause Readout */}
-                <div className="w-full p-3 bg-white border border-accent/30 rounded-xl text-left text-[11px] space-y-1 shadow-flat">
+                <div className="w-full p-3 bg-white border border-accent/30 rounded-xl text-left text-xs space-y-1 shadow-flat">
                   <div className="font-bold text-accent-deep flex items-center justify-between border-b border-border-subtle/60 pb-1">
                     <span className="flex items-center gap-1.5">
                       <Cpu className="w-3.5 h-3.5 text-accent" /> [{traceNodes[activeNodeIdx].code}] DIAGNOSIS
                     </span>
-                    <span className="text-[9px] font-bold text-fg-dim">{traceNodes[activeNodeIdx].sub}</span>
+                    <span className="text-[11px] font-bold text-fg-dim">{traceNodes[activeNodeIdx].sub}</span>
                   </div>
-                  <p className="text-fg-default font-body text-xs pt-1 leading-relaxed">
+                  <p className="text-fg-default font-body text-[13.5px] pt-1 leading-relaxed">
                     {traceNodes[activeNodeIdx].diagnosis}
                   </p>
                 </div>
@@ -316,7 +316,7 @@ export const DbstProductFlowSection = () => {
               <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight">
                 D-BST Root Cause Error Inspector
               </h3>
-              <p className="text-xs sm:text-sm text-fg-dim leading-relaxed font-body">
+              <p className="text-sm sm:text-[15px] text-fg-dim leading-relaxed font-body">
                 Deep telemetry cluster tracing through symptom, microservice function, signal anomaly, and root cause. Generates permanent architecture fixes that update your central knowledge vault.
               </p>
             </div>

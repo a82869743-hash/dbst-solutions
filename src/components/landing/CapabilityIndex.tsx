@@ -236,7 +236,7 @@ export const CapabilityIndex = () => {
                           {service.features.map((feat, fIdx) => (
                             <div
                               key={fIdx}
-                              className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-xs text-fg-default font-medium leading-snug"
+                              className="p-2.5 rounded-lg bg-white border border-border-subtle/70 shadow-flat flex items-center gap-2.5 text-[13.5px] text-fg-default font-medium leading-snug"
                             >
                               <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                               <span>{feat}</span>
@@ -254,7 +254,7 @@ export const CapabilityIndex = () => {
                           {service.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="px-3 py-1.5 rounded-lg bg-white border border-border-subtle/80 text-xs font-mono text-fg-default font-bold shadow-flat hover:border-accent/40 transition-colors"
+                              className="px-3 py-1.5 rounded-lg bg-white border border-border-subtle/80 text-[13px] font-mono text-fg-default font-bold shadow-flat hover:border-accent/40 transition-colors"
                             >
                               {tech}
                             </span>

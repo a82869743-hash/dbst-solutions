@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import { DbstNavigation } from "@/components/navigation/DbstNavigation";
+import { DbstFooter } from "@/components/navigation/DbstFooter";
 import ScrollReveal from "@/components/landing/ScrollReveal";
 
 const FEATURED_INFOGRAPHIC_POST = {
@@ -69,15 +69,15 @@ const ArticleList = () => {
   const remainingPosts = DEFAULT_EDITORIAL_POSTS;
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#14171F] font-body">
-      <Navbar />
+    <div className="min-h-screen bg-bg-base text-fg-default font-body">
+      <DbstNavigation />
 
       {/* Hero Header */}
-      <section className="border-b border-[#E7E5DE] bg-white py-16 md:py-24">
+      <section className="border-b border-border-subtle bg-bg-surface py-16 md:py-24">
         <ScrollReveal variant="fade-up">
           <div className="container max-w-4xl text-center px-4 sm:px-6">
-            <span className="inline-block rounded-full bg-[#EEF1FF] border border-[#2E5EFF]/20 px-3.5 py-1 text-xs font-mono font-bold uppercase text-[#2E5EFF] mb-3">
-              GrowthMates Publication
+            <span className="inline-block rounded-full bg-accent-tint border border-accent/20 px-3.5 py-1 text-xs font-mono font-bold uppercase text-accent mb-3">
+              D-BST Perspectives & Insights
             </span>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl font-display text-[#14171F]">
               Perspectives &amp; Insights
@@ -189,7 +189,7 @@ const ArticleList = () => {
         </div>
       </section>
 
-      <Footer />
+      <DbstFooter />
     </div>
   );
 };

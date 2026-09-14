@@ -144,7 +144,7 @@ const ContactPage = () => {
                     <span className="font-bold text-accent uppercase tracking-wider flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-accent" /> DISCOVERY SESSION
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-deep font-bold text-[10px]">
+                    <span className="px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-deep font-bold text-xs">
                       DIRECT CALL
                     </span>
                   </div>
@@ -153,7 +153,7 @@ const ContactPage = () => {
                     <h2 className="font-display font-bold text-2xl text-fg-default font-sans">
                       Book a Discovery Conversation
                     </h2>
-                    <p className="text-xs text-fg-dim font-body leading-relaxed">
+                    <p className="text-sm text-fg-dim font-body leading-relaxed">
                       Speak directly with a D-BST principal consultant to explore your business problem, constraints, and whether D-BST is the right fit.
                     </p>
                   </div>
@@ -162,7 +162,7 @@ const ContactPage = () => {
                     href="https://calendly.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2.5 w-full py-4 rounded-xl bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
+                    className="inline-flex items-center justify-center gap-2.5 w-full py-4 rounded-xl bg-accent text-white font-bold text-[13px] uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
                   >
                     <Calendar className="w-4 h-4" />
                     <span>BOOK A DISCOVERY CONVERSATION</span>
@@ -172,16 +172,16 @@ const ContactPage = () => {
 
                 {/* Office Locations */}
                 <div className="p-8 bg-white border border-border-subtle rounded-3xl shadow-floating space-y-6">
-                  <div className="text-xs font-bold text-fg-dimmer uppercase tracking-wider border-b border-border-subtle pb-3">
+                  <div className="text-[13px] font-bold text-fg-dimmer uppercase tracking-wider border-b border-border-subtle pb-3">
                     OFFICE &amp; COVERAGE
                   </div>
 
-                  <div className="space-y-5 text-xs text-fg-dim font-body">
+                  <div className="space-y-5 text-[13.5px] text-fg-dim font-body">
                     <div className="flex items-start gap-3">
                       <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">Melbourne, Australia</div>
-                        <p className="text-xs text-fg-dim pt-0.5">Serving Asia Pacific and North America</p>
+                        <p className="text-[13.5px] text-fg-dim pt-0.5">Serving Asia Pacific and North America</p>
                       </div>
                     </div>
 
@@ -189,7 +189,7 @@ const ContactPage = () => {
                       <Mail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">Email</div>
-                        <a href="mailto:info@dbstsolutions.com" className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                        <a href="mailto:info@dbstsolutions.com" className="text-[13.5px] text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
                           info@dbstsolutions.com
                         </a>
                       </div>
@@ -199,7 +199,7 @@ const ContactPage = () => {
                       <Phone className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-fg-default font-mono">Direct Phone</div>
-                        <a href="tel:+61430981166" className="text-xs text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
+                        <a href="tel:+61430981166" className="text-[13.5px] text-fg-dim hover:text-accent pt-0.5 font-mono transition-colors block">
                           +61 430 981 166
                         </a>
                       </div>
@@ -212,7 +212,7 @@ const ContactPage = () => {
                   <div className="font-bold text-accent flex items-center gap-2">
                     <Clock className="w-4 h-4 text-accent" /> DIRECT DISCOVERY CONVERSATION
                   </div>
-                  <p className="text-fg-dim font-body text-xs leading-relaxed">
+                  <p className="text-fg-dim font-body text-[13.5px] leading-relaxed">
                     We listen, challenge assumptions, and suggest practical next steps focused on tangible operational outcomes.
                   </p>
                 </div>
@@ -226,12 +226,12 @@ const ContactPage = () => {
                   <h2 className="font-display font-bold text-2xl text-fg-default">
                     Send an Enquiry
                   </h2>
-                  <p className="text-xs text-fg-dim font-body">
+                  <p className="text-sm text-fg-dim font-body">
                     Tell us what is happening today and the outcome you want to achieve.
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5 font-mono text-xs">
+                <form onSubmit={handleSubmit} className="space-y-5 font-mono text-[13px]">
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
@@ -292,7 +292,7 @@ const ContactPage = () => {
                     <select
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-xs font-mono focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
+                      className="w-full p-3.5 rounded-xl bg-white border border-border-subtle text-fg-default text-sm font-mono focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all shadow-flat"
                     >
                       {serviceOptions.map((opt) => (
                         <option key={opt} value={opt}>{opt}</option>
@@ -314,7 +314,7 @@ const ContactPage = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-xl bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating flex items-center justify-center gap-2"
+                    className="w-full py-4 rounded-xl bg-accent text-white font-bold text-[13px] uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <>
@@ -331,7 +331,7 @@ const ContactPage = () => {
 
                 </form>
 
-                <div className="text-[11px] font-body text-fg-dim text-center pt-2 leading-relaxed">
+                <div className="text-[13px] font-body text-fg-dim text-center pt-2 leading-relaxed">
                   By submitting this form, you agree that D-BST Solutions may contact you regarding your enquiry. Please review our Privacy Policy for information about how submitted details are handled.
                 </div>
 

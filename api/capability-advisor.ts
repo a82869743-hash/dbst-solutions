@@ -34,23 +34,36 @@ Return STRICT JSON format:
   "fitClassification": "Strong Fit" or "Potential Fit" or "Outside Scope"
 }`;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export const config = {
   runtime: "edge",
 };
 
 export default async function handler(req: Request) {
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
     });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  const apiKey = (process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || "").trim();
   if (!apiKey) {
     return new Response(
       JSON.stringify({ error: "OpenAI API key not configured on server" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 
@@ -61,7 +74,7 @@ export default async function handler(req: Request) {
     if (!userMessage.trim()) {
       return new Response(
         JSON.stringify({ error: "Message is required" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -89,7 +102,7 @@ export default async function handler(req: Request) {
           error: `OpenAI API error: ${response.status}`,
           details: errorData,
         }),
-        { status: response.status, headers: { "Content-Type": "application/json" } }
+        { status: response.status, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -99,18 +112,18 @@ export default async function handler(req: Request) {
     if (!content) {
       return new Response(
         JSON.stringify({ error: "No content returned from OpenAI" }),
-        { status: 502, headers: { "Content-Type": "application/json" } }
+        { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
     return new Response(content, {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (err: any) {
     return new Response(
       JSON.stringify({ error: "Server error", message: err.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 }

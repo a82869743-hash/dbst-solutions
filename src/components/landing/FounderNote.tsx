@@ -162,12 +162,12 @@ export const FounderNote = () => {
                       />
                     </div>
                     
-                    <p className="text-xs text-fg-dim font-medium leading-relaxed font-body">
+                    <p className="text-sm text-fg-dim font-medium leading-relaxed font-body">
                       {val.tagline}
                     </p>
 
                     {isExpanded && (
-                      <div className="text-xs text-fg-default mt-3 pt-3 border-t border-accent/20 leading-relaxed font-body animate-in fade-in duration-200 space-y-1">
+                      <div className="text-sm text-fg-default mt-3 pt-3 border-t border-accent/20 leading-relaxed font-body animate-in fade-in duration-200 space-y-1">
                         <p>{val.detail}</p>
                       </div>
                     )}

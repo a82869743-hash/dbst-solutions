@@ -8,40 +8,35 @@ import { useToast } from "@/hooks/use-toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SYSTEM_PROMPT = `You are the D-BST Capability Advisor.
-Your purpose is to help prospective clients clarify a business, operational, data, AI or technology challenge and understand whether it fits D-BST Solutions' capabilities.
-You provide an initial capability assessment. You do not provide a final architecture, formal proposal, quotation, guaranteed business case or implementation commitment.
+const SYSTEM_PROMPT = `You are the D-BST Capability Advisor for D-BST Solutions (dbstsolutions.com).
+Your purpose is to help prospective enterprise clients clarify a business, operational, data, AI or technology challenge and understand how D-BST can solve it.
 
-Expert Behaviour:
-Approach enquiries through the appropriate professional lens: Enterprise Architect, Solution Architect, AI Engineer, Digital Transformation Consultant, Senior Business Analyst, Data/BI Consultant, or Transport Technology Consultant.
-Think critically and consultatively. Understand the underlying business problem, users, workflows, and constraints.
+You think and consult like an elite Enterprise Architect, Solution Architect, and AI Operations Director.
+Analyze the user's specific enquiry with precision: extract their industry, specific systems or platforms mentioned (e.g. Trimble TruckMate, SAP, Salesforce, Shopify, NetSuite, Excel, legacy databases), operational bottlenecks, and stakeholders.
 
-D-BST Services Knowledge:
-1. Digital Transformation & Advisory: Discovery workshops, process mapping, opportunity prioritisation, transformation roadmaps.
-2. Enterprise & Solution Architecture: Current/target-state assessment, API/data/security design, architecture standards, transition roadmaps.
-3. AI Engineering & Adoption: AI opportunity assessment, agent & workflow architecture, MCP/system integration, human oversight & adoption planning. Growthmates AI is D-BST's modular agentic AI platform.
-4. Custom Software & System Integration: Web/mobile/operational applications, APIs/connectors, workflow orchestration, legacy modernisation.
-5. Data Analytics & Business Intelligence: Data discovery, KPI/information models, data pipelines, Power BI & Microsoft Fabric.
-6. Transport Technology & TruckMate: Specialist Trimble TruckMate advisory, DB2/API integrations, Command Center, reporting, AI-assisted decision support.
+Choose the primary capability from D-BST's core service matrix:
+1. "AI Engineering & Adoption" - Autonomous workflow agents, custom LLM fine-tuning, Model Context Protocol (MCP) integrations, human oversight architecture, Growthmates AI platform.
+2. "Enterprise & Solution Architecture" - Current/target-state blueprints, secure API/data architecture, integration standards, cloud modernization transition roadmaps.
+3. "Transport Technology & TruckMate" - Specialist Trimble TruckMate advisory, multi-depot fleet dispatch optimization, DB2 & REST API integrations, custom Command Centers, real-time telematics.
+4. "Custom Software & System Integration" - Mission-critical web/mobile applications, legacy ERP modernisation, custom middleware & event-driven data sync.
+5. "Data Analytics & Business Intelligence" - Enterprise data warehouses, unified KPI/information models, automated ETL pipelines, Power BI & Microsoft Fabric reporting suites.
+6. "Digital Transformation & Advisory" - Operational journey mapping, executive discovery workshops, change management, prioritisation roadmaps.
 
-D-BST Delivery Method:
-Discover and Define -> Design and De-risk -> Deliver and Learn -> Support and Improve.
-
-Honesty Rules:
-- Never invent or guarantee ROI percentages, delivery timeframes, project costs, client names, case studies, or SLAs.
-- Describe potential outcomes qualitatively and realistically as things to validate during discovery.
-- Keep people in control (AI assists workflows, humans supervise).
-
-Return STRICT JSON format:
+Rules:
+- Be consultative, deeply relevant to the exact user prompt, and realistic.
+- Do NOT generate generic copy. Explicitly address the specific systems, teams, or operational challenges from the prompt.
+- Keep humans in control (AI assists workflows, humans supervise).
+- Never guarantee fictional ROI percentages, delivery timeframes, or formal quotes.
+- Return ONLY a valid JSON object matching this structure (all property values must be strings, not nested objects or arrays):
 {
-  "whatWeHeard": "Concise summary of the challenge and context",
-  "bestFitCapability": "Primary D-BST service capability",
-  "supportingCapabilities": "1-2 supporting D-BST capabilities",
-  "howDbstCouldHelp": "Practical explanation of how D-BST would approach this problem",
-  "suggestedStartingPoint": "The first practical step (e.g. Discover & Define workshop or focused assessment)",
-  "whatSuccessCouldLookLike": "Qualitative operational outcomes and business value to validate during discovery",
-  "assumptionsOrQuestions": "Key questions or operational details to clarify in a discovery conversation",
-  "fitClassification": "Strong Fit" or "Potential Fit" or "Outside Scope"
+  "whatWeHeard": "Concise, perceptive summary of their specific challenge, acknowledging their systems, scale, and operational pain points.",
+  "bestFitCapability": "Exact name of the primary D-BST service capability from the list of 6 above.",
+  "supportingCapabilities": "1 or 2 supporting D-BST service capabilities from the list above.",
+  "howDbstCouldHelp": "Practical, step-by-step architectural and operational approach D-BST would implement to resolve this challenge.",
+  "suggestedStartingPoint": "The exact first practical milestone (e.g. 'Discover & Define: 2-week technical discovery & system mapping workshop').",
+  "whatSuccessCouldLookLike": "Tangible operational outcomes, process acceleration, and workflow visibility to validate during discovery.",
+  "assumptionsOrQuestions": "2-3 sharp operational or technical questions to clarify during discovery.",
+  "fitClassification": "Strong Fit"
 }`;
 
 const presetChallenges = [
@@ -50,7 +45,7 @@ const presetChallenges = [
     text: "We want to use AI but are unsure where to start.",
     whatWeHeard: "Desire to adopt AI but seeking clarity on where to begin and how to create tangible operational value without disruption.",
     bestFitCapability: "AI Engineering & Adoption",
-    supportingCapabilities: "Enterprise & Solution Architecture, Digital Transformation",
+    supportingCapabilities: "Enterprise & Solution Architecture, Digital Transformation & Advisory",
     howDbstCouldHelp: "D-BST can conduct an AI opportunity and value assessment to identify practical use cases aligned with your business priorities and operational workflows, establishing agent architecture and human oversight.",
     suggestedStartingPoint: "Discover & Define: An initial discovery conversation and opportunity mapping session.",
     whatSuccessCouldLookLike: "Moving from AI experimentation to a controlled operational capability with clear purpose and teams in control.",
@@ -107,6 +102,7 @@ export const SolutionFinder = () => {
   const [challengeInput, setChallengeInput] = useState(presetChallenges[0].text);
   const [loading, setLoading] = useState(false);
   const [isLiveAi, setIsLiveAi] = useState(false);
+  const [activeModelName, setActiveModelName] = useState("GPT-4o");
   const [result, setResult] = useState<SolutionResult>({
     whatWeHeard: presetChallenges[0].whatWeHeard,
     bestFitCapability: presetChallenges[0].bestFitCapability,
@@ -120,6 +116,7 @@ export const SolutionFinder = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const finderCardRef = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // GSAP Entrance with clearProps: "all"
   useEffect(() => {
@@ -149,136 +146,137 @@ export const SolutionFinder = () => {
   }, []);
 
   const handleGenerate = async (customText?: string) => {
-    const textToSubmit = customText || challengeInput;
-    if (!textToSubmit.trim() || loading) return;
+    const textToSubmit = (customText !== undefined ? customText : challengeInput).trim();
+    if (!textToSubmit || loading) return;
 
     setLoading(true);
 
-    const matchedPreset = presetChallenges.find((p) => p.text.toLowerCase() === textToSubmit.trim().toLowerCase());
+    const adminCreds = AdminStore.getCredentials();
+    const effectiveApiKey = AdminStore.getEffectiveOpenAiKey();
+    const model = (adminCreds.activeAiModel && adminCreds.activeAiModel.startsWith("gpt"))
+      ? adminCreds.activeAiModel
+      : "gpt-4o-mini";
+    const displayModel = model === "gpt-4o" ? "GPT-4o" : "GPT-4o Mini";
+    setActiveModelName(displayModel);
 
-    // Try server-side proxy first (production), then fallback to direct API call (local dev)
-    try {
-      let aiResponse: Response | null = null;
+    let liveResult: SolutionResult | null = null;
 
-      // 1. Try server-side endpoint (API key is NOT exposed to client)
+    // 1. Direct OpenAI API execution (local dev and client-side with key)
+    if (effectiveApiKey) {
       try {
-        aiResponse = await fetch("/api/capability-advisor", {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: textToSubmit }),
+          headers: {
+            "Authorization": `Bearer ${effectiveApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              { role: "user", content: textToSubmit },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.3,
+          }),
         });
-      } catch {
-        // Server endpoint not available (local dev without Vercel)
-        aiResponse = null;
-      }
 
-      // 2. Fallback: direct API call for local development only
-      if (!aiResponse || !aiResponse.ok) {
-        const adminCreds = AdminStore.getCredentials();
-        const apiKey = (adminCreds.openaiApiKey || import.meta.env.VITE_OPENAI_API_KEY || "").trim();
-        const model = adminCreds.activeAiModel?.startsWith("gpt") ? adminCreds.activeAiModel : "gpt-4o-mini";
-
-        if (apiKey) {
-          aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: model,
-              messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: textToSubmit },
-              ],
-              response_format: { type: "json_object" },
-              temperature: 0.3,
-            }),
-          });
-
-          if (aiResponse.ok) {
-            const json = await aiResponse.json();
-            const content = json.choices?.[0]?.message?.content;
-            if (content) {
-              const parsed = JSON.parse(content);
-              if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
-                setResult({
-                  whatWeHeard: parsed.whatWeHeard,
-                  bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
-                  supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
-                  howDbstCouldHelp: parsed.howDbstCouldHelp,
-                  suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
-                  whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
-                  assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
-                  fitClassification: parsed.fitClassification || "Strong Fit",
-                });
-                setIsLiveAi(true);
-                setTimeout(() => setLoading(false), 300);
-                return;
-              }
-            }
-          } else {
-            const errorData = await aiResponse.json().catch(() => ({}));
-            console.error("OpenAI API request failed:", aiResponse.status, errorData);
-            if (aiResponse.status === 401) {
-              toast({
-                title: "OpenAI Authentication Failed",
-                description: "API key is invalid (401). Check the key in Admin Vault (/admin) or .env.",
-                variant: "destructive",
-              });
-            } else if (aiResponse.status === 429) {
-              toast({
-                title: "OpenAI Quota Exceeded",
-                description: "OpenAI rate limit or usage quota reached (429). Check your billing at platform.openai.com.",
-                variant: "destructive",
-              });
+        if (response.ok) {
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content;
+          if (content) {
+            const parsed = JSON.parse(content);
+            if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+              liveResult = {
+                whatWeHeard: String(parsed.whatWeHeard),
+                bestFitCapability: String(parsed.bestFitCapability || "AI Engineering & Adoption"),
+                supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
+                  ? parsed.supportingCapabilities.join(", ")
+                  : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
+                howDbstCouldHelp: String(parsed.howDbstCouldHelp),
+                suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
+                whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
+                assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
+                  ? parsed.assumptionsOrQuestions.join(" ")
+                  : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
+                fitClassification: String(parsed.fitClassification || "Strong Fit"),
+              };
             }
           }
-        } else if (aiResponse && aiResponse.ok) {
-          // Server-side response was OK — parse it directly
-          const parsed = await aiResponse.json();
-          if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
-            setResult({
-              whatWeHeard: parsed.whatWeHeard,
-              bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
-              supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
-              howDbstCouldHelp: parsed.howDbstCouldHelp,
-              suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
-              whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
-              assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
-              fitClassification: parsed.fitClassification || "Strong Fit",
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.error("OpenAI API direct call error:", response.status, errorData);
+          if (response.status === 401) {
+            toast({
+              title: "OpenAI Authentication Failed",
+              description: "API key is invalid or expired (401). Check the key in Admin Vault (/admin) or .env.",
+              variant: "destructive",
             });
-            setIsLiveAi(true);
-            setTimeout(() => setLoading(false), 300);
-            return;
+          } else if (response.status === 429) {
+            toast({
+              title: "OpenAI Quota Exceeded",
+              description: "OpenAI rate limit or usage quota reached (429). Check your billing at platform.openai.com.",
+              variant: "destructive",
+            });
           }
         }
-      } else {
-        // Server-side response was OK — parse it directly
-        const parsed = await aiResponse.json();
-        if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
-          setResult({
-            whatWeHeard: parsed.whatWeHeard,
-            bestFitCapability: parsed.bestFitCapability || "AI Engineering & Adoption",
-            supportingCapabilities: parsed.supportingCapabilities || "Enterprise & Solution Architecture",
-            howDbstCouldHelp: parsed.howDbstCouldHelp,
-            suggestedStartingPoint: parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation",
-            whatSuccessCouldLookLike: parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control.",
-            assumptionsOrQuestions: parsed.assumptionsOrQuestions || "Current system landscape and operational priorities.",
-            fitClassification: parsed.fitClassification || "Strong Fit",
-          });
-          setIsLiveAi(true);
-          setTimeout(() => setLoading(false), 300);
-          return;
-        }
+      } catch (directErr: any) {
+        console.warn("Direct OpenAI API request error:", directErr);
       }
-    } catch (err: any) {
-      console.warn("Capability Advisor fallback:", err);
     }
 
-    setIsLiveAi(false);
+    // 2. Fallback to server endpoint if direct call did not succeed
+    if (!liveResult) {
+      try {
+        const srvResponse = await fetch("/api/capability-advisor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: textToSubmit, model }),
+        });
 
-    // Fallback if API key missing or network error
+        const contentType = srvResponse.headers.get("content-type") || "";
+        if (srvResponse.ok && contentType.includes("application/json")) {
+          const parsed = await srvResponse.json();
+          if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+            liveResult = {
+              whatWeHeard: String(parsed.whatWeHeard),
+              bestFitCapability: String(parsed.bestFitCapability || "AI Engineering & Adoption"),
+              supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
+                ? parsed.supportingCapabilities.join(", ")
+                : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
+              howDbstCouldHelp: String(parsed.howDbstCouldHelp),
+              suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
+              whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
+              assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
+                ? parsed.assumptionsOrQuestions.join(" ")
+                : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
+              fitClassification: String(parsed.fitClassification || "Strong Fit"),
+            };
+          }
+        }
+      } catch (srvErr) {
+        // Server endpoint not reachable or offline
+      }
+    }
+
+    // 3. If AI response obtained, present it
+    if (liveResult) {
+      setResult(liveResult);
+      setIsLiveAi(true);
+      setLoading(false);
+      toast({
+        title: "AI Assessment Generated",
+        description: `Bespoke capability analysis completed using ${displayModel}.`,
+      });
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 150);
+      return;
+    }
+
+    // 4. Fallback only if no AI response could be generated
+    setIsLiveAi(false);
+    const matchedPreset = presetChallenges.find((p) => p.text.toLowerCase() === textToSubmit.toLowerCase());
     if (matchedPreset) {
       setResult({
         whatWeHeard: matchedPreset.whatWeHeard,
@@ -303,22 +301,15 @@ export const SolutionFinder = () => {
       });
     }
 
-    setTimeout(() => setLoading(false), 300);
+    setLoading(false);
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 150);
   };
 
   const handleSelectPreset = (preset: typeof presetChallenges[0]) => {
     setChallengeInput(preset.text);
-    setIsLiveAi(false);
-    setResult({
-      whatWeHeard: preset.whatWeHeard,
-      bestFitCapability: preset.bestFitCapability,
-      supportingCapabilities: preset.supportingCapabilities,
-      howDbstCouldHelp: preset.howDbstCouldHelp,
-      suggestedStartingPoint: preset.suggestedStartingPoint,
-      whatSuccessCouldLookLike: preset.whatSuccessCouldLookLike,
-      assumptionsOrQuestions: preset.assumptionsOrQuestions,
-      fitClassification: "Strong Fit",
-    });
+    handleGenerate(preset.text);
   };
 
   return (
@@ -353,7 +344,7 @@ export const SolutionFinder = () => {
                   <button
                     key={idx}
                     onClick={() => handleSelectPreset(preset)}
-                    className={`p-3 rounded-xl border text-xs font-mono text-left transition-all flex items-center justify-between ${
+                    className={`p-3 rounded-xl border text-[13px] font-mono text-left transition-all flex items-center justify-between ${
                       isSelected
                         ? "bg-accent-tint/70 border-accent text-accent-deep font-bold shadow-flat ring-1 ring-accent/20"
                         : "bg-[#F5F4F0] border-border-subtle text-fg-dim hover:text-fg-default hover:border-accent/40"
@@ -372,12 +363,19 @@ export const SolutionFinder = () => {
             <textarea
               value={challengeInput}
               onChange={(e) => setChallengeInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  handleGenerate();
+                }
+              }}
               placeholder="Tell us what is happening today, who it affects, the systems involved and what a better outcome would look like."
-              className="w-full p-4 rounded-xl bg-white border border-border-subtle text-fg-default placeholder:text-fg-dimmer text-sm font-body focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none h-28 shadow-flat"
+              className="w-full p-4 rounded-xl bg-white border border-border-subtle text-fg-default placeholder:text-fg-dimmer text-[15px] font-body focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none h-28 shadow-flat leading-relaxed"
             />
 
-            <div className="text-xs text-fg-dimmer font-mono mb-2">
-              Please do not enter passwords, personal information or confidential customer data.
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-fg-dimmer font-mono mb-2">
+              <span>Please do not enter passwords, personal information or confidential customer data.</span>
+              <span className="text-[10px] text-accent/80 font-semibold">Tip: Press Ctrl+Enter to assess</span>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -387,7 +385,7 @@ export const SolutionFinder = () => {
               <button
                 onClick={() => handleGenerate()}
                 disabled={loading || !challengeInput.trim()}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-accent text-white font-bold text-[13px] uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised disabled:opacity-50"
               >
                 {loading ? (
                   <>
@@ -406,7 +404,7 @@ export const SolutionFinder = () => {
 
           {/* Generated Result Display */}
           {result && (
-            <div className="pt-8 border-t border-border-subtle space-y-6 animate-in fade-in duration-300">
+            <div ref={resultRef} className="pt-8 border-t border-border-subtle space-y-6 animate-in fade-in duration-300">
               {/* Header */}
               <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
                 <div className="flex flex-wrap items-center gap-2.5">
@@ -416,7 +414,7 @@ export const SolutionFinder = () => {
                   {isLiveAi ? (
                     <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-bold shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>Live OpenAI Analysis</span>
+                      <span>Live OpenAI Analysis ({activeModelName})</span>
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200 text-[10px] font-mono font-medium">
@@ -434,7 +432,7 @@ export const SolutionFinder = () => {
                 <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
                   WHAT WE HEARD
                 </div>
-                <p className="text-fg-default font-body text-sm leading-relaxed">
+                <p className="text-fg-default font-body text-[15px] leading-relaxed">
                   {result.whatWeHeard}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-[11px]">
@@ -449,23 +447,23 @@ export const SolutionFinder = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-sm">
                 {/* How D-BST Could Help */}
                 <div className="p-5 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 text-left shadow-flat">
-                  <div className="font-bold text-fg-default flex items-center gap-2">
+                  <div className="font-bold text-fg-default flex items-center gap-2 text-xs">
                     <Zap className="w-4 h-4 text-accent" /> HOW D-BST COULD HELP
                   </div>
-                  <p className="text-fg-dim leading-relaxed font-body text-xs pt-1">
+                  <p className="text-fg-dim leading-relaxed font-body text-sm pt-1">
                     {result.howDbstCouldHelp}
                   </p>
                 </div>
 
                 {/* What Success Could Look Like */}
                 <div className="p-5 bg-[#F5F4F0] border border-border-subtle rounded-2xl space-y-2 text-left shadow-flat">
-                  <div className="font-bold text-fg-default flex items-center gap-2">
+                  <div className="font-bold text-fg-default flex items-center gap-2 text-xs">
                     <TrendingUp className="w-4 h-4 text-emerald-600" /> WHAT SUCCESS COULD LOOK LIKE
                   </div>
-                  <p className="text-fg-dim leading-relaxed font-body text-xs pt-1">
+                  <p className="text-fg-dim leading-relaxed font-body text-sm pt-1">
                     {result.whatSuccessCouldLookLike}
                   </p>
                 </div>
@@ -473,21 +471,21 @@ export const SolutionFinder = () => {
 
               {/* Suggested Starting Point & Questions */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 font-mono text-xs">
-                <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1 text-left shadow-flat">
+                <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1.5 text-left shadow-flat">
                   <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
                     SUGGESTED STARTING POINT
                   </div>
-                  <p className="text-fg-default font-body text-xs leading-snug">
+                  <p className="text-fg-default font-body text-[13.5px] leading-normal">
                     {result.suggestedStartingPoint}
                   </p>
                 </div>
 
                 {result.assumptionsOrQuestions && (
-                  <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1 text-left shadow-flat">
+                  <div className="p-4 bg-white border border-border-subtle rounded-xl space-y-1.5 text-left shadow-flat">
                     <div className="text-[10px] font-bold text-fg-dimmer uppercase tracking-wider">
                       QUESTIONS TO EXPLORE
                     </div>
-                    <p className="text-fg-dim font-body text-xs leading-snug">
+                    <p className="text-fg-dim font-body text-[13.5px] leading-normal">
                       {result.assumptionsOrQuestions}
                     </p>
                   </div>
@@ -500,13 +498,13 @@ export const SolutionFinder = () => {
                   <div className="font-bold text-accent-deep flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-accent" /> SUGGESTED NEXT STEP
                   </div>
-                  <p className="text-fg-default font-body text-xs">
+                  <p className="text-fg-default font-body text-sm">
                     Based on this initial assessment, the next practical step would be a focused discovery conversation with D-BST Solutions.
                   </p>
                 </div>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white font-bold text-xs shrink-0 hover:bg-accent-deep transition-all shadow-flat"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white font-bold text-[13px] shrink-0 hover:bg-accent-deep transition-all shadow-flat"
                 >
                   <span>Book a Discovery Conversation</span>
                   <ArrowRight className="w-3.5 h-3.5" />

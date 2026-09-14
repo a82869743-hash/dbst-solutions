@@ -134,7 +134,7 @@ export const ConsultationPanel = () => {
                   href="https://calendly.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-accent text-white font-bold text-[13px] uppercase tracking-wider hover:bg-accent-deep transition-all shadow-flat hover:shadow-floating"
                 >
                   <Calendar className="w-4 h-4" />
                   <span>BOOK A DISCOVERY CONVERSATION</span>
@@ -143,7 +143,7 @@ export const ConsultationPanel = () => {
               </div>
 
               {/* Direct Support Details */}
-              <div className="pt-6 border-t border-border-subtle space-y-3 font-mono text-xs text-fg-dim">
+              <div className="pt-6 border-t border-border-subtle space-y-3 font-mono text-[13px] text-fg-dim">
                 <div className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-accent shrink-0" />
                   <a href={`mailto:${contentConfig.contactEmail || "info@dbstsolutions.com"}`} className="font-bold text-fg-default hover:text-accent transition-colors">
@@ -170,7 +170,7 @@ export const ConsultationPanel = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5 font-mono text-xs text-left">
+                  <div className="space-y-1.5 font-mono text-[13px] text-left">
                     <label className="font-bold text-fg-default flex items-center justify-between">
                       <span>Full Name</span>
                       <span className="text-accent">*</span>
@@ -184,7 +184,7 @@ export const ConsultationPanel = () => {
                     />
                   </div>
 
-                  <div className="space-y-1.5 font-mono text-xs text-left">
+                  <div className="space-y-1.5 font-mono text-[13px] text-left">
                     <label className="font-bold text-fg-default flex items-center justify-between">
                       <span>Work Email</span>
                       <span className="text-accent">*</span>
@@ -199,7 +199,7 @@ export const ConsultationPanel = () => {
                   </div>
                 </div>
 
-                <div className="space-y-1.5 font-mono text-xs text-left">
+                <div className="space-y-1.5 font-mono text-[13px] text-left">
                   <label className="font-bold text-fg-default">Company or Organisation</label>
                   <input
                     type="text"
@@ -210,7 +210,7 @@ export const ConsultationPanel = () => {
                   />
                 </div>
 
-                <div className="space-y-1.5 font-mono text-xs text-left">
+                <div className="space-y-1.5 font-mono text-[13px] text-left">
                   <label className="font-bold text-fg-default flex items-center justify-between">
                     <span>How Can We Help?</span>
                     <span className="text-accent">*</span>
@@ -232,7 +232,7 @@ export const ConsultationPanel = () => {
                   </select>
                 </div>
 
-                <div className="space-y-1.5 font-mono text-xs text-left">
+                <div className="space-y-1.5 font-mono text-[13px] text-left">
                   <label className="font-bold text-fg-default">Tell Us About Your Challenge *</label>
                   <textarea
                     rows={3}
@@ -246,7 +246,7 @@ export const ConsultationPanel = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-xl bg-accent text-white font-bold text-xs uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-xl bg-accent text-white font-bold text-[13px] uppercase tracking-wider hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>
@@ -263,8 +263,8 @@ export const ConsultationPanel = () => {
 
               </form>
 
-              <div className="text-[10px] font-mono text-fg-dim text-center flex items-center justify-center gap-1.5 pt-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+              <div className="text-xs font-mono text-fg-dim text-center flex items-center justify-center gap-1.5 pt-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent shrink-0" />
                 <span>By submitting this form, you agree that D-BST Solutions may contact you regarding your enquiry. Please review our <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a> for information about how submitted details are handled.</span>
               </div>
 

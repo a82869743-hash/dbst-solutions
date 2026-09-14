@@ -242,7 +242,7 @@ export const CaseFileExplorer = () => {
                         <div className="font-bold text-fg-default uppercase tracking-wider flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-fg-dim" /> 1. OPERATIONAL CHALLENGE
                         </div>
-                        <p className="text-xs text-fg-dim font-body leading-relaxed pt-1">
+                        <p className="text-[14px] text-fg-dim font-body leading-relaxed pt-1">
                           {item.challenge}
                         </p>
                       </div>
@@ -251,7 +251,7 @@ export const CaseFileExplorer = () => {
                         <div className="font-bold text-accent uppercase tracking-wider flex items-center gap-1.5">
                           <Sparkles className="w-4 h-4 text-accent" /> 2. D-BST ARCHITECTURE &amp; DELIVERY
                         </div>
-                        <p className="text-xs text-fg-default font-body leading-relaxed pt-1">
+                        <p className="text-[14px] text-fg-default font-body leading-relaxed pt-1">
                           {item.solution}
                         </p>
                       </div>
@@ -270,7 +270,7 @@ export const CaseFileExplorer = () => {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         {item.resultsChecklist.map((res, idx) => (
-                          <div key={idx} className="p-3.5 bg-white border border-border-subtle/80 rounded-xl text-xs text-fg-default font-body flex items-start gap-2.5 shadow-flat card-bezel">
+                          <div key={idx} className="p-3.5 bg-white border border-border-subtle/80 rounded-xl text-[13.5px] text-fg-default font-body flex items-start gap-2.5 shadow-flat card-bezel">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
                             <span className="font-medium">{res}</span>
                           </div>

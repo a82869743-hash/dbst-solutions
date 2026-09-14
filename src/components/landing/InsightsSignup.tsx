@@ -92,7 +92,7 @@ export const InsightsSignup = () => {
           <h3 className="font-display font-bold text-2xl sm:text-3xl text-fg-default tracking-tight">
             Engineering &amp; AI Insights Briefing
           </h3>
-          <p className="text-sm text-fg-dim leading-relaxed">
+          <p className="text-[14.5px] text-fg-dim leading-relaxed">
             Bi-weekly technical teardowns on enterprise microservices, AI automation agents, and system architecture case studies. Zero spam.
           </p>
         </div>
@@ -123,12 +123,12 @@ export const InsightsSignup = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your work email..."
-                  className="w-full px-4 py-3 rounded-full bg-bg-base border border-border-subtle text-xs text-fg-default placeholder:text-fg-dimmer font-body focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  className="w-full px-4 py-3 rounded-full bg-bg-base border border-border-subtle text-sm text-fg-default placeholder:text-fg-dimmer font-body focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-wider shrink-0 hover:bg-accent-deep transition-all shadow-raised disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-accent text-white font-bold text-[13px] uppercase tracking-wider shrink-0 hover:bg-accent-deep transition-all shadow-raised disabled:opacity-50 flex items-center justify-center gap-1.5"
                 >
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

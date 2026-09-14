@@ -256,6 +256,21 @@ export class AdminStore {
     };
   }
 
+  // Get Effective OpenAI Key (prefers valid sk- key from vault, falls back to .env)
+  static getEffectiveOpenAiKey(): string {
+    const creds = this.getCredentials();
+    const vaultKey = (creds.openaiApiKey || "").trim();
+    const envKey = (import.meta.env.VITE_OPENAI_API_KEY || "").trim();
+
+    if (vaultKey.startsWith("sk-") && vaultKey.length > 20) {
+      return vaultKey;
+    }
+    if (envKey.startsWith("sk-") && envKey.length > 20) {
+      return envKey;
+    }
+    return vaultKey || envKey;
+  }
+
   // Save Credentials
   static saveCredentials(creds: CredentialsVault, userEmail = "admin"): void {
     try {

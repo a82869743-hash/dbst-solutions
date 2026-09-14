@@ -431,7 +431,7 @@ export const DbstWorkflowSection = () => {
                     {step.title}
                   </h3>
 
-                  <p className="text-sm text-fg-dim leading-relaxed font-body mb-5">
+                  <p className="text-[15px] text-fg-dim leading-relaxed font-body mb-5">
                     {step.description}
                   </p>
 
@@ -444,7 +444,7 @@ export const DbstWorkflowSection = () => {
                       {step.features.map((feat, fIdx) => (
                         <span
                           key={fIdx}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-2 transition-all ${
+                          className={`px-3 py-1.5 rounded-lg text-[13px] font-mono flex items-center gap-2 transition-all ${
                             isActive
                               ? "bg-accent-tint text-accent-deep border border-accent/30 font-bold shadow-flat"
                               : "bg-bg-muted/70 text-fg-dim border border-border-subtle/70"

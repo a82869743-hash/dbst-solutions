@@ -318,16 +318,16 @@ export const AboutPage = () => {
                         <span className="text-xl">{activeHubStep.flag}</span>
                         <span>{activeHubStep.phoneFeedTitle}</span>
                       </span>
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-accent text-white font-mono font-bold">
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-accent text-white font-mono font-bold">
                         {activeHubStep.phoneFeedMetric}
                       </span>
                     </div>
 
-                    <div className="text-xs text-fg-dim font-body leading-relaxed">
+                    <div className="text-[13.5px] text-fg-dim font-body leading-relaxed">
                       {activeHubStep.phoneFeedDetail}
                     </div>
 
-                    <div className="pt-3 border-t border-border-subtle space-y-2 text-[11px] text-fg-default font-body">
+                    <div className="pt-3 border-t border-border-subtle space-y-2 text-[13px] text-fg-default font-body">
                       {activeHubStep.bullets.map((b, idx) => (
                         <div key={idx} className="flex items-center gap-2">
                           <Check className="w-4 h-4 text-accent shrink-0" />
@@ -343,7 +343,7 @@ export const AboutPage = () => {
                       <div
                         key={idx}
                         onClick={() => setActiveStepIdx(idx)}
-                        className={`p-2.5 rounded-xl border text-[11px] font-mono cursor-pointer transition-all ${
+                        className={`p-2.5 rounded-xl border text-xs font-mono cursor-pointer transition-all ${
                           activeStepIdx === idx
                             ? "bg-accent text-white border-accent font-bold shadow-flat"
                             : "bg-white border-border-subtle text-fg-dim hover:text-fg-default hover:border-accent/40"
@@ -384,26 +384,26 @@ export const AboutPage = () => {
                         <span className="text-xl">{hub.flag}</span>
                         <span className="text-fg-default font-sans text-xl">{hub.country}</span>
                       </span>
-                      <span className="text-accent text-[11px] uppercase tracking-wider font-mono font-bold">{hub.role}</span>
+                      <span className="text-accent text-xs uppercase tracking-wider font-mono font-bold">{hub.role}</span>
                     </div>
 
                     <h3 className="font-display font-bold text-xl sm:text-2xl text-fg-default font-sans mb-2 tracking-tight">
                       {hub.headline}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed mb-4">
+                    <p className="text-sm sm:text-[15px] text-fg-dim font-body leading-relaxed mb-4">
                       {hub.description}
                     </p>
 
                     <div className="pt-4 border-t border-border-subtle/80 space-y-2">
-                      <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
+                      <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-fg-dimmer">
                         REGIONAL CAPABILITIES
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {hub.bullets.map((b, bIdx) => (
                           <span
                             key={bIdx}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-2 transition-all ${
+                            className={`px-3 py-1.5 rounded-lg text-[13px] font-mono flex items-center gap-2 transition-all ${
                               isSelected
                                 ? "bg-accent-tint text-accent-deep border border-accent/30 font-bold shadow-flat"
                                 : "bg-bg-muted/70 text-fg-dim border border-border-subtle/70"
@@ -506,11 +506,11 @@ export const AboutPage = () => {
             <div className="lg:col-span-5 bg-white border-2 border-accent rounded-3xl p-8 sm:p-10 shadow-floating space-y-7 relative overflow-hidden">
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between text-xs border-b border-border-subtle pb-3">
+                <div className="flex items-center justify-between border-b border-border-subtle pb-4 text-xs font-mono">
                   <span className="font-bold text-accent uppercase tracking-wider flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-accent" /> D-BST PARTNERSHIP ENGINE
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-accent text-white font-bold text-[10px]">
+                  <span className="px-2.5 py-0.5 rounded-full bg-accent text-white font-bold text-xs">
                     GUARANTEED
                   </span>
                 </div>
@@ -522,14 +522,14 @@ export const AboutPage = () => {
                   <h3 className="font-display font-bold text-2xl text-fg-default tracking-tight leading-tight font-sans">
                     {activeValueNode.title}
                   </h3>
-                  <p className="text-sm text-fg-dim font-body leading-relaxed pt-1">
+                  <p className="text-[15px] text-fg-dim font-body leading-relaxed pt-1">
                     {activeValueNode.desc}
                   </p>
                 </div>
 
                 {/* Qualitative Protocol Commitment Box */}
                 <div className="p-6 bg-[#FFF5F0] border border-accent/30 rounded-2xl space-y-2 text-center shadow-flat">
-                  <div className="text-xs font-mono font-bold text-accent uppercase tracking-wider">
+                  <div className="text-[13px] font-mono font-bold text-accent uppercase tracking-wider">
                     {activeValueNode.timeBoxLabel}
                   </div>
                   <div className="font-display font-extrabold text-2xl sm:text-3xl text-accent tracking-tight">
@@ -539,12 +539,12 @@ export const AboutPage = () => {
 
                 {/* Specs Breakdown */}
                 <div className="space-y-2 pt-2">
-                  <div className="text-[10px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
+                  <div className="text-[11px] font-mono font-bold text-fg-dimmer uppercase tracking-wider">
                     VERIFIED COMMITMENT PRINCIPLES
                   </div>
                   <div className="space-y-2">
                     {activeValueNode.details.map((detail, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs font-body text-fg-default">
+                      <div key={idx} className="flex items-center gap-2 text-sm font-body text-fg-default">
                         <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
                         <span>{detail}</span>
                       </div>
@@ -562,7 +562,7 @@ export const AboutPage = () => {
             <div className="font-bold text-accent uppercase tracking-wider flex items-center gap-2 text-sm border-b border-border-subtle pb-3">
               <Users className="w-4 h-4 text-accent" /> EQUAL OPPORTUNITY EMPLOYER STATEMENT
             </div>
-            <p className="text-fg-default font-body text-sm sm:text-base leading-relaxed pt-1">
+            <p className="text-fg-default font-body text-[15px] sm:text-base leading-relaxed pt-1">
               At D-BST Solutions, we believe that diversity drives innovation. We are committed to creating an inclusive environment where everyone—regardless of race, gender, nationality, religion, age, or background—has equal opportunities to thrive. Our global team is our strength, and every voice matters.
             </p>
           </div>
@@ -583,7 +583,7 @@ export const AboutPage = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 font-mono text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 font-mono text-[13px]">
             {clientLogos.map((client, idx) => (
               <div
                 key={idx}
@@ -602,11 +602,11 @@ export const AboutPage = () => {
               {partnersData.map((p) => (
                 <span
                   key={p.name}
-                  className="px-4 py-2 rounded-full bg-white border border-border-subtle font-bold text-fg-default shadow-flat flex items-center gap-2"
+                  className="px-4 py-2 rounded-full bg-white border border-border-subtle font-bold text-fg-default shadow-flat flex items-center gap-2 text-[13px]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                   <span>{p.name}</span>
-                  <span className="text-[9px] text-accent-deep bg-accent-tint px-2 py-0.5 rounded-full">{p.domain}</span>
+                  <span className="text-[11px] text-accent-deep bg-accent-tint px-2 py-0.5 rounded-full">{p.domain}</span>
                 </span>
               ))}
             </div>
@@ -630,18 +630,18 @@ export const AboutPage = () => {
               </div>
             </div>
 
-            <div className="space-y-3 flex-1 font-mono text-xs">
-              <div className="font-bold text-accent uppercase tracking-wider">
+            <div className="space-y-3 flex-1 font-mono text-sm">
+              <div className="font-bold text-accent uppercase tracking-wider text-xs">
                 FOUNDER &amp; PRINCIPAL CONSULTANT
               </div>
               <h3 className="font-display font-bold text-2xl text-fg-default font-sans">
                 Dustin B.
               </h3>
-              <p className="text-xs sm:text-sm text-fg-dim font-body leading-relaxed">
+              <p className="text-sm sm:text-[15px] text-fg-dim font-body leading-relaxed">
                 15+ years guiding businesses through digital transformation across Transportation, Retail, Manufacturing, and Financial Services.
               </p>
-              <div className="pt-2 flex items-center gap-2 text-fg-default font-bold">
-                <CheckCircle2 className="w-4 h-4 text-accent" />
+              <div className="pt-2 flex items-center gap-2 text-fg-default font-bold text-sm">
+                <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
                 <span>Managing Director &amp; Lead Architect &bull; D-BST Solutions</span>
               </div>
             </div>

@@ -681,7 +681,7 @@ export const CapabilityMatrixHero = () => {
                           className="p-2.5 bg-bg-base border border-border-subtle/90 rounded-lg text-xs font-mono text-fg-default flex items-start gap-2 shadow-xs transition-all hover:border-accent/40"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
-                          <span className="leading-snug text-[11px]">{challenge}</span>
+                          <span className="leading-snug text-[13px]">{challenge}</span>
                         </div>
                       ))}
                     </div>
@@ -718,7 +718,7 @@ export const CapabilityMatrixHero = () => {
                           className="p-2.5 bg-white border border-border-subtle rounded-lg text-xs font-mono text-fg-default flex items-start gap-2 shadow-xs transition-all hover:border-emerald-500/50"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-1.5" />
-                          <span className="leading-snug text-[11px] font-medium">{deliverable}</span>
+                          <span className="leading-snug text-[13px] font-medium">{deliverable}</span>
                         </div>
                       ))}
                     </div>
@@ -736,7 +736,7 @@ export const CapabilityMatrixHero = () => {
                       {selectedService.name}
                     </span>
                   </div>
-                  <p className="text-fg-default font-medium leading-relaxed text-xs pt-0.5">
+                  <p className="text-fg-default font-medium leading-relaxed text-[13.5px] pt-0.5">
                     &bull; <span className="text-accent font-bold">[{selectedService.shortName}]</span> {selectedService.businessValue}
                   </p>
                 </div>

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ArrowLeft, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import { DbstNavigation } from "@/components/navigation/DbstNavigation";
+import { DbstFooter } from "@/components/navigation/DbstFooter";
 import BlogAdmin from "@/components/blog/BlogAdmin";
 import { toast } from "@/hooks/use-toast";
 
@@ -42,7 +42,7 @@ const BlogAdminPage = () => {
 
   return (
     <div className="min-h-screen bg-bg-base text-fg-default font-body">
-      <Navbar />
+      <DbstNavigation />
       <div className="container max-w-4xl py-16">
         <Link
           to="/blog"
@@ -85,7 +85,7 @@ const BlogAdminPage = () => {
           <BlogAdmin />
         )}
       </div>
-      <Footer />
+      <DbstFooter />
     </div>
   );
 };
