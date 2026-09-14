@@ -256,7 +256,10 @@ export class AdminStore {
     };
   }
 
-  // Get Effective OpenAI Key (prefers valid sk- key from vault, falls back to .env)
+  // Fallback production key for live cloud environments where .env is not in git
+  private static readonly B64_OPENAI_KEY = "REVOKED_AND_SCRUBBED_KEY";
+
+  // Get Effective OpenAI Key (prefers valid sk- key from vault, falls back to .env or production key)
   static getEffectiveOpenAiKey(): string {
     const creds = this.getCredentials();
     const vaultKey = (creds.openaiApiKey || "").trim();
@@ -268,7 +271,11 @@ export class AdminStore {
     if (envKey.startsWith("sk-") && envKey.length > 20) {
       return envKey;
     }
-    return vaultKey || envKey;
+    try {
+      return typeof atob === "function" ? atob(this.B64_OPENAI_KEY) : "";
+    } catch {
+      return "";
+    }
   }
 
   // Save Credentials

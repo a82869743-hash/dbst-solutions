@@ -183,24 +183,31 @@ export const SolutionFinder = () => {
 
         if (response.ok) {
           const data = await response.json();
-          const content = data.choices?.[0]?.message?.content;
-          if (content) {
-            const parsed = JSON.parse(content);
-            if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
-              liveResult = {
-                whatWeHeard: String(parsed.whatWeHeard),
-                bestFitCapability: String(parsed.bestFitCapability || "AI Engineering & Adoption"),
-                supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
-                  ? parsed.supportingCapabilities.join(", ")
-                  : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
-                howDbstCouldHelp: String(parsed.howDbstCouldHelp),
-                suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
-                whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
-                assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
-                  ? parsed.assumptionsOrQuestions.join(" ")
-                  : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
-                fitClassification: String(parsed.fitClassification || "Strong Fit"),
-              };
+          const rawContent = data.choices?.[0]?.message?.content;
+          if (rawContent) {
+            try {
+              const cleanContent = rawContent.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+              const parsed = JSON.parse(cleanContent);
+              const whatWeHeard = parsed.whatWeHeard || parsed.summary || parsed.understanding || textToSubmit;
+              const howDbstCouldHelp = parsed.howDbstCouldHelp || parsed.recommendation || parsed.solution || parsed.approach;
+              if (whatWeHeard && howDbstCouldHelp) {
+                liveResult = {
+                  whatWeHeard: String(whatWeHeard),
+                  bestFitCapability: String(parsed.bestFitCapability || parsed.capability || "AI Engineering & Adoption"),
+                  supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
+                    ? parsed.supportingCapabilities.join(", ")
+                    : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
+                  howDbstCouldHelp: String(howDbstCouldHelp),
+                  suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
+                  whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
+                  assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
+                    ? parsed.assumptionsOrQuestions.join(" ")
+                    : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
+                  fitClassification: String(parsed.fitClassification || "Strong Fit"),
+                };
+              }
+            } catch (jsonErr) {
+              console.error("Failed to parse OpenAI JSON output:", jsonErr, rawContent);
             }
           }
         } else {
@@ -237,14 +244,16 @@ export const SolutionFinder = () => {
         const contentType = srvResponse.headers.get("content-type") || "";
         if (srvResponse.ok && contentType.includes("application/json")) {
           const parsed = await srvResponse.json();
-          if (parsed.whatWeHeard && parsed.howDbstCouldHelp) {
+          const whatWeHeard = parsed.whatWeHeard || parsed.summary || parsed.understanding || textToSubmit;
+          const howDbstCouldHelp = parsed.howDbstCouldHelp || parsed.recommendation || parsed.solution || parsed.approach;
+          if (whatWeHeard && howDbstCouldHelp) {
             liveResult = {
-              whatWeHeard: String(parsed.whatWeHeard),
-              bestFitCapability: String(parsed.bestFitCapability || "AI Engineering & Adoption"),
+              whatWeHeard: String(whatWeHeard),
+              bestFitCapability: String(parsed.bestFitCapability || parsed.capability || "AI Engineering & Adoption"),
               supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
                 ? parsed.supportingCapabilities.join(", ")
                 : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
-              howDbstCouldHelp: String(parsed.howDbstCouldHelp),
+              howDbstCouldHelp: String(howDbstCouldHelp),
               suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
               whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
               assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
