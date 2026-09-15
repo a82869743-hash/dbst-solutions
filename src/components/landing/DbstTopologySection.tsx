@@ -114,7 +114,7 @@ export const DbstTopologySection = () => {
             {/* Action CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
-                to="/contact"
+                to="/use-cases"
                 className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-white font-bold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02] active:scale-[0.98] group"
               >
                 <span>EXPLORE INDUSTRY SOLUTIONS</span>

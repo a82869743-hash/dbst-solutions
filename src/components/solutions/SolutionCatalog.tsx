@@ -44,14 +44,14 @@ const catalogData: SolutionCatalogItem[] = [
     summary: "24/7 intelligent chatbot handling customer inquiries with natural language understanding.",
     timeline: "4–6 WEEKS",
     priceRange: "$15,000 – $30,000",
-    techStack: ["OpenAI", "Python", "React", "WebSocket"],
+    techStack: ["Enterprise AI", "Python", "React", "WebSocket"],
     benefits: [
       "70% reduction in customer response time",
       "24/7 availability across web, mobile, and messaging",
       "Multi-language natural language support",
     ],
     fullDescription: "Conversational AI customer support agent tailored to your company's product catalog, order tracking APIs, and support ticket workflows.",
-    architectureHighlight: "Context-aware LLM retrieval with bi-directional CRM integration.",
+    architectureHighlight: "Context-aware AI retrieval with bi-directional CRM integration.",
   },
   {
     id: "predictive-maintenance-platform",

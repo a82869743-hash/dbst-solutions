@@ -234,7 +234,7 @@ const serviceMap: Record<string, ServiceData> = {
     techStackNodes: [
       { name: "Agentic AI", role: "Modular Autonomous Task Coordination", category: "AI Core" },
       { name: "Model Context Protocol", role: "Standardized Tool & System Connectors", category: "Protocol" },
-      { name: "OpenAI Models", role: "Advanced Reasoning & Transformation", category: "Foundation" },
+      { name: "Foundation AI Models", role: "Advanced Reasoning & Transformation", category: "Foundation" },
       { name: "Azure AI", role: "Enterprise-Grade Isolated AI Infrastructure", category: "Cloud AI" },
       { name: "Python", role: "Agent Logic, Pipelines & Evaluation", category: "Language" },
       { name: "TypeScript", role: "Type-Safe Client Interfaces & Integration", category: "Runtime" },

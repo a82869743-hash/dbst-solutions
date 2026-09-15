@@ -102,7 +102,6 @@ export const SolutionFinder = () => {
   const [challengeInput, setChallengeInput] = useState(presetChallenges[0].text);
   const [loading, setLoading] = useState(false);
   const [isLiveAi, setIsLiveAi] = useState(false);
-  const [activeModelName, setActiveModelName] = useState("GPT-4o");
   const [result, setResult] = useState<SolutionResult>({
     whatWeHeard: presetChallenges[0].whatWeHeard,
     bestFitCapability: presetChallenges[0].bestFitCapability,
@@ -156,8 +155,6 @@ export const SolutionFinder = () => {
     const model = (adminCreds.activeAiModel && adminCreds.activeAiModel.startsWith("gpt"))
       ? adminCreds.activeAiModel
       : "gpt-4o-mini";
-    const displayModel = model === "gpt-4o" ? "GPT-4o" : "GPT-4o Mini";
-    setActiveModelName(displayModel);
 
     let liveResult: SolutionResult | null = null;
 
@@ -212,18 +209,18 @@ export const SolutionFinder = () => {
           }
         } else {
           const errorData = await response.json().catch(() => ({}));
-          console.error("OpenAI API direct call error:", response.status, errorData);
+          console.error("AI API direct call error:", response.status, errorData);
           if (response.status === 401) {
             toast({
-              title: "OpenAI Authentication Failed",
-              description: "API key is invalid or expired (401). Check the key in Admin Vault (/admin) or .env.",
-              variant: "destructive",
+              title: "AI Analysis Notice",
+              description: "Service is temporarily operating in curated baseline mode.",
+              variant: "default",
             });
           } else if (response.status === 429) {
             toast({
-              title: "OpenAI Quota Exceeded",
-              description: "OpenAI rate limit or usage quota reached (429). Check your billing at platform.openai.com.",
-              variant: "destructive",
+              title: "High Demand Notice",
+              description: "AI analysis is in high demand. Displaying domain capability assessment.",
+              variant: "default",
             });
           }
         }
@@ -423,7 +420,7 @@ export const SolutionFinder = () => {
                   {isLiveAi ? (
                     <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-bold shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>Live OpenAI Analysis ({activeModelName})</span>
+                      <span>Live AI Analysis</span>
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200 text-[10px] font-mono font-medium">

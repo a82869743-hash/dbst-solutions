@@ -55,7 +55,7 @@ const caseFiles: CaseFile[] = [
     topResult: "70% Support Time Reduction • 24/7 Multi-Channel Coverage",
     challenge: "Fast-growing e-commerce retailer overwhelmed with 2,000+ daily customer queries regarding order tracking, returns, and inventory stock.",
     solution: "Implemented an intelligent conversational AI agent integrated with Shopify, order management, and customer support ticketing.",
-    technicalReadout: "STACK: OpenAI API • Python • React • WebSockets • Shopify API • Zendesk Connector",
+    technicalReadout: "STACK: Enterprise AI Engine • Python • React • WebSockets • Shopify API • Zendesk Connector",
     resultsChecklist: [
       "70% reduction in customer response and resolution times",
       "82% of tier-1 support queries resolved without human agent involvement",

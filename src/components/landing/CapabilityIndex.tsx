@@ -44,7 +44,7 @@ const servicesIndex = [
       "MCP, data and system integration",
       "Human oversight, security and adoption planning",
     ],
-    techStack: ["Agentic AI", "MCP", "OpenAI", "Azure AI", "Python", "TypeScript"],
+    techStack: ["Agentic AI", "MCP", "Enterprise AI", "Azure AI", "Python", "TypeScript"],
     externalPlatformUrl: "https://growthmates.ai",
     externalPlatformLabel: "Explore Growthmates AI ↗",
   },

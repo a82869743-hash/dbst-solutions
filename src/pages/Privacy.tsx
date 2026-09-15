@@ -40,7 +40,7 @@ const PrivacyPage = () => {
             <section className="space-y-2">
               <h2 className="font-display font-bold text-lg text-fg-default">3. AI & Data Isolation</h2>
               <p>
-                Inputs processed through our AI Solution Finder or custom client AI agents are never used to train public foundation LLMs. All data vectors are stored in isolated, encrypted cloud infrastructure.
+                Inputs processed through our AI Solution Finder or custom client AI agents are never used to train public foundation AI models. All data vectors are stored in isolated, encrypted cloud infrastructure.
               </p>
             </section>
 
