@@ -622,7 +622,7 @@ export const AboutPage = () => {
             <div className="relative shrink-0">
               <img
                 src={ceoPhoto}
-                alt="Founder & Principal Consultant"
+                alt="Bimal Thakkar — Founder & Principal Consultant"
                 className="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl object-cover border-2 border-white shadow-floating ring-1 ring-border-subtle"
               />
               <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-accent text-white text-xs font-mono flex items-center justify-center font-bold shadow-flat">
@@ -635,14 +635,14 @@ export const AboutPage = () => {
                 FOUNDER &amp; PRINCIPAL CONSULTANT
               </div>
               <h3 className="font-display font-bold text-2xl text-fg-default font-sans">
-                Dustin B.
+                Bimal Thakkar
               </h3>
               <p className="text-sm sm:text-[15px] text-fg-dim font-body leading-relaxed">
-                15+ years guiding businesses through digital transformation across Transportation, Retail, Manufacturing, and Financial Services.
+                20+ years guiding businesses through digital transformation, enterprise architecture, and operational modernization across transport, retail, and enterprise sectors.
               </p>
               <div className="pt-2 flex items-center gap-2 text-fg-default font-bold text-sm">
                 <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
-                <span>Managing Director &amp; Lead Architect &bull; D-BST Solutions</span>
+                <span>Founder &amp; Principal Consultant &bull; D-BST Solutions</span>
               </div>
             </div>
           </div>

@@ -380,7 +380,7 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
                               item.name
                             )},\n\nThank you for reaching out to us regarding: "${encodeURIComponent(
                               item.message || ""
-                            )}".\n\nBest regards,\nDustin B. & Team`}
+                            )}".\n\nBest regards,\nBimal Thakkar & Team`}
                             className="p-1.5 rounded-md hover:bg-zinc-200 text-fg-dim hover:text-accent transition-colors"
                             title="Reply via Email"
                           >
@@ -550,7 +550,7 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Dustin Becker"
+                    placeholder="e.g. Bimal Thakkar"
                     value={newLead.name}
                     onChange={(e) => setNewLead({ ...newLead, name: e.target.value })}
                     className="w-full px-3 py-2 rounded-lg border border-border-subtle text-xs focus:outline-none focus:ring-2 focus:ring-accent/20"
