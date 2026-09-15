@@ -427,24 +427,37 @@ export const CapabilityMatrixHero = () => {
             Turning complex business challenges into practical, future-ready AI and digital solutions.
           </p>
 
-          {/* CTAs */}
-          <div ref={ctaContainerRef} className="flex flex-wrap items-center justify-center gap-4 pt-3">
+          {/* CTAs - 3 Buttons in One Row */}
+          <div ref={ctaContainerRef} className="flex flex-wrap md:flex-nowrap items-center justify-center gap-3 sm:gap-3.5 pt-3 max-w-3xl mx-auto px-2">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02] active:scale-[0.98] group"
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-accent text-white font-semibold text-xs sm:text-sm hover:bg-accent-deep transition-all shadow-raised hover:shadow-floating hover:scale-[1.02] active:scale-[0.98] group shrink-0"
             >
-              <span>BOOK A DISCOVERY CONVERSATION</span>
-              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
-                <ArrowRight className="w-3.5 h-3.5" />
+              <span>{contentConfig.primaryCtaText || "BOOK A CONSULTATION"}</span>
+              <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:translate-x-0.5">
+                <ArrowRight className="w-3 h-3" />
               </span>
             </Link>
+
             <Link
               to="/solutions"
-              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-white border border-border-subtle text-fg-default font-semibold text-sm hover:border-accent hover:text-accent transition-all shadow-flat hover:shadow-raised hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-white border border-border-subtle text-fg-default font-semibold text-xs sm:text-sm hover:border-accent hover:text-accent transition-all shadow-flat hover:shadow-raised hover:scale-[1.02] active:scale-[0.98] shrink-0"
             >
               <Layers className="w-4 h-4 text-accent" />
-              <span>EXPLORE CAPABILITIES</span>
+              <span>{contentConfig.secondaryCtaText || "EXPLORE CAPABILITIES"}</span>
             </Link>
+
+            <a
+              href="https://growthmates.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-white border border-accent/40 text-fg-default hover:text-accent hover:border-accent font-semibold text-xs sm:text-sm transition-all shadow-flat hover:shadow-raised hover:scale-[1.02] active:scale-[0.98] shrink-0 group"
+              title="Explore Growthmates AI Platform"
+            >
+              <Cpu className="w-4 h-4 text-accent" />
+              <span>GROWTHMATES AI</span>
+              <span className="text-accent text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 font-bold">↗</span>
+            </a>
           </div>
 
           {/* Compact Trust Strip */}

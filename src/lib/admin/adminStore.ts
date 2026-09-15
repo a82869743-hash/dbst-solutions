@@ -71,11 +71,11 @@ export const defaultDbstContent: SiteContentConfig = {
   ],
   heroSubhead:
     "Turning complex business challenges into practical, future-ready AI and digital solutions.",
-  primaryCtaText: "BOOK A DISCOVERY CONVERSATION",
+  primaryCtaText: "BOOK A CONSULTATION",
   secondaryCtaText: "EXPLORE CAPABILITIES",
   contactEmail: "info@dbstsolutions.com",
   contactPhone: "+61 430 981 166",
-  address: "Melbourne, AU • Areas served: Asia Pacific and North America",
+  address: "Melbourne, AU",
   announcementBadge: "Smart, Secure, Scalable & Sustainable",
   trustMetrics: [
     { label: "Experience", value: "20+ Years" },
