@@ -18,7 +18,7 @@ import {
   Globe,
   Sparkles,
 } from "lucide-react";
-import { AdminStore, InquiryItem, SiteTarget } from "@/lib/admin/adminStore";
+import { AdminStore, InquiryItem, SiteTarget, isFakeDemoInquiry } from "@/lib/admin/adminStore";
 import { toast } from "@/hooks/use-toast";
 
 interface AdminInquiriesInboxProps {
@@ -50,8 +50,18 @@ export const AdminInquiriesInbox: React.FC<AdminInquiriesInboxProps> = ({
 
   const loadData = async () => {
     setLoading(true);
+    // Purge any legacy fake/demo data from browser cache immediately
+    try {
+      const local = localStorage.getItem("dbst_superadmin_inquiries");
+      if (local) {
+        const parsed: InquiryItem[] = JSON.parse(local);
+        const filteredLocal = parsed.filter((i) => !isFakeDemoInquiry(i));
+        localStorage.setItem("dbst_superadmin_inquiries", JSON.stringify(filteredLocal));
+      }
+    } catch {}
+
     const data = await AdminStore.getInquiries();
-    setInquiries(data);
+    setInquiries(data.filter((i) => !isFakeDemoInquiry(i)));
     setLoading(false);
   };
 

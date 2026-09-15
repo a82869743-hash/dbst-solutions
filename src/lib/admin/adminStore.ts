@@ -145,10 +145,64 @@ export const defaultCredentials: CredentialsVault = {
 // Zero fake data - all inquiries collected live from real user submissions
 export const mockInquiries: InquiryItem[] = [];
 
+export const FAKE_DEMO_EMAILS = new Set([
+  "elena@novafreight.com",
+  "sarah.m@pacificlogistics.com.au",
+  "m.chang@apexsupply.com",
+  "client@enterprise.com",
+]);
+
+export const isFakeDemoInquiry = (item: Partial<InquiryItem> | null | undefined): boolean => {
+  if (!item) return true;
+  if (
+    item.id &&
+    (["inq-1", "inq-2", "inq-3", "inq-4", "inq-5", "lead-1788529630059"].includes(item.id) ||
+      item.id.startsWith("lead-test-") ||
+      item.id.startsWith("inq-"))
+  ) {
+    return true;
+  }
+  const email = (item.email || "").toLowerCase().trim();
+  if (
+    FAKE_DEMO_EMAILS.has(email) ||
+    email.endsWith("@novafreight.com") ||
+    email.endsWith("@pacificlogistics.com.au") ||
+    email.endsWith("@apexsupply.com") ||
+    email.endsWith("@enterprise.com")
+  ) {
+    return true;
+  }
+  const name = (item.name || "").toLowerCase().trim();
+  if (["elena rostova", "sarah mitchell", "michael chang", "real visitor test"].includes(name)) {
+    return true;
+  }
+  return false;
+};
+
 const CONTENT_STORAGE_KEY = "dbst_superadmin_content_v3";
 const CREDENTIALS_STORAGE_KEY = "dbst_superadmin_credentials";
 const INQUIRIES_STORAGE_KEY = "dbst_superadmin_inquiries";
+const DELETED_INQUIRIES_STORAGE_KEY = "dbst_superadmin_deleted_inquiries";
 const AUDIT_STORAGE_KEY = "dbst_superadmin_audit";
+
+export function getDeletedInquiryIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DELETED_INQUIRIES_STORAGE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+export function recordDeletedInquiryId(id: string) {
+  try {
+    const set = getDeletedInquiryIds();
+    set.add(id);
+    localStorage.setItem(DELETED_INQUIRIES_STORAGE_KEY, JSON.stringify(Array.from(set)));
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 // Proactively purge any legacy stale cache keys
 try {
@@ -383,6 +437,7 @@ export class AdminStore {
   // Get Inquiries (Only authentic customer submissions - synced from cloud + database)
   static async getInquiries(): Promise<InquiryItem[]> {
     let list: InquiryItem[] = [];
+    const deletedIds = getDeletedInquiryIds();
 
     // 1. Fetch from cloud database stream (accessible to admin on ANY device without secret keys)
     try {
@@ -397,8 +452,14 @@ export class AdminStore {
           try {
             if (row.description) {
               const item: InquiryItem = JSON.parse(row.description);
-              if (!["inq-1", "inq-2", "inq-3", "inq-4", "inq-5"].includes(item.id)) {
-                if (!list.some((existing) => existing.id === item.id || (existing.email === item.email && existing.created_at === item.created_at))) {
+              if (item && !isFakeDemoInquiry(item) && !deletedIds.has(item.id) && !deletedIds.has(row.id)) {
+                if (
+                  !list.some(
+                    (existing) =>
+                      existing.id === item.id ||
+                      (existing.email === item.email && existing.created_at === item.created_at)
+                  )
+                ) {
                   list.push(item);
                 }
               }
@@ -430,7 +491,15 @@ export class AdminStore {
             created_at: item.created_at,
             phone: item.phone || undefined,
           };
-          if (!list.some((existing) => existing.email === mapped.email && Math.abs(new Date(existing.created_at).getTime() - new Date(mapped.created_at).getTime()) < 5000)) {
+          if (
+            !isFakeDemoInquiry(mapped) &&
+            !deletedIds.has(mapped.id) &&
+            !list.some(
+              (existing) =>
+                existing.email === mapped.email &&
+                Math.abs(new Date(existing.created_at).getTime() - new Date(mapped.created_at).getTime()) < 5000
+            )
+          ) {
             list.push(mapped);
           }
         });
@@ -445,13 +514,19 @@ export class AdminStore {
       if (local) {
         const parsedLocal: InquiryItem[] = JSON.parse(local);
         const cleanLocal = parsedLocal.filter(
-          (i) => !["inq-1", "inq-2", "inq-3", "inq-4", "inq-5"].includes(i.id)
+          (i) => !isFakeDemoInquiry(i) && !deletedIds.has(i.id)
         );
         if (cleanLocal.length !== parsedLocal.length) {
           localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(cleanLocal));
         }
         cleanLocal.forEach((item) => {
-          if (!list.some((existing) => existing.id === item.id || (existing.email === item.email && existing.created_at === item.created_at))) {
+          if (
+            !list.some(
+              (existing) =>
+                existing.id === item.id ||
+                (existing.email === item.email && existing.created_at === item.created_at)
+            )
+          ) {
             list.push(item);
           }
         });
@@ -459,6 +534,9 @@ export class AdminStore {
     } catch (e) {
       console.error(e);
     }
+
+    // Filter once more to ensure zero fake or deleted inquiries slip through
+    list = list.filter((i) => !isFakeDemoInquiry(i) && !deletedIds.has(i.id));
 
     // Sort newest first
     list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -469,7 +547,7 @@ export class AdminStore {
   static updateInquiryStatus(id: string, newStatus: InquiryItem["status"], userEmail = "admin"): void {
     try {
       const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
-      let items: InquiryItem[] = local ? JSON.parse(local) : [...mockInquiries];
+      let items: InquiryItem[] = local ? JSON.parse(local) : [];
       items = items.map((i) => (i.id === id ? { ...i, status: newStatus } : i));
       localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(items));
       this.logAction(userEmail, `Updated status of lead #${id} to ${newStatus}`, "global");
@@ -481,8 +559,9 @@ export class AdminStore {
   // Delete Inquiry
   static deleteInquiry(id: string, userEmail = "admin"): void {
     try {
+      recordDeletedInquiryId(id);
       const local = localStorage.getItem(INQUIRIES_STORAGE_KEY);
-      let items: InquiryItem[] = local ? JSON.parse(local) : [...mockInquiries];
+      let items: InquiryItem[] = local ? JSON.parse(local) : [];
       items = items.filter((i) => i.id !== id);
       localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(items));
       this.logAction(userEmail, `Deleted lead record #${id}`, "global");
