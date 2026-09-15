@@ -59,6 +59,18 @@ export const SuperAdminPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      const trimmedEmail = adminEmail.trim().toLowerCase();
+      // Primary Super Admin credential verification (shared with GrowthMates)
+      if (
+        (trimmedEmail === "bimal.swaroop@gmail.com" || trimmedEmail === "owner@dbstsolutions.com") &&
+        password === "Bimal123@"
+      ) {
+        setAuthed(true);
+        sessionStorage.setItem("dbst_superadmin_session", JSON.stringify({ email: "bimal.swaroop@gmail.com" }));
+        toast({ title: "Welcome Super Admin", description: "Super Admin privileges confirmed for DBST and GrowthMates." });
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: adminEmail,
         password,
@@ -77,7 +89,12 @@ export const SuperAdminPage: React.FC = () => {
 
       if (!roleData) {
         // Fallback: If owner logged in with their email, allow master access
-        if (adminEmail.includes("aryan") || adminEmail.includes("dbst") || adminEmail.includes("growth")) {
+        if (
+          trimmedEmail.includes("bimal") ||
+          trimmedEmail.includes("aryan") ||
+          trimmedEmail.includes("dbst") ||
+          trimmedEmail.includes("growth")
+        ) {
           setAuthed(true);
           sessionStorage.setItem("dbst_superadmin_session", JSON.stringify({ email: adminEmail }));
           toast({ title: "Welcome Owner", description: "Super Admin privileges confirmed." });
@@ -100,8 +117,8 @@ export const SuperAdminPage: React.FC = () => {
   const handlePasskeyLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const stored = localStorage.getItem("dbst_superadmin_master_passkey") || DEFAULT_MASTER_PASSKEY;
-    if (passkeyInput === stored || passkeyInput === "dbst-admin-2026") {
-      const email = "owner@dbstsolutions.com";
+    if (passkeyInput === stored || passkeyInput === "dbst-admin-2026" || passkeyInput === "Bimal123@") {
+      const email = "bimal.swaroop@gmail.com";
       setAdminEmail(email);
       setAuthed(true);
       sessionStorage.setItem("dbst_superadmin_session", JSON.stringify({ email }));
@@ -155,7 +172,7 @@ export const SuperAdminPage: React.FC = () => {
                 <input
                   type="email"
                   required
-                  placeholder="owner@dbstsolutions.com"
+                  placeholder="bimal.swaroop@gmail.com"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-lg border border-zinc-700 bg-zinc-900/90 text-white font-mono focus:outline-none focus:border-accent"
