@@ -151,118 +151,43 @@ export const SolutionFinder = () => {
     setLoading(true);
 
     const adminCreds = AdminStore.getCredentials();
-    const effectiveApiKey = AdminStore.getEffectiveOpenAiKey();
     const model = (adminCreds.activeAiModel && adminCreds.activeAiModel.startsWith("gpt"))
       ? adminCreds.activeAiModel
       : "gpt-4o-mini";
 
     let liveResult: SolutionResult | null = null;
 
-    // 1. Direct OpenAI API execution (local dev and client-side with key)
-    if (effectiveApiKey) {
-      try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${effectiveApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              { role: "user", content: textToSubmit },
-            ],
-            response_format: { type: "json_object" },
-            temperature: 0.3,
-          }),
-        });
+    try {
+      const srvResponse = await fetch("/api/capability-advisor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: textToSubmit, model }),
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          const rawContent = data.choices?.[0]?.message?.content;
-          if (rawContent) {
-            try {
-              const cleanContent = rawContent.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
-              const parsed = JSON.parse(cleanContent);
-              const whatWeHeard = parsed.whatWeHeard || parsed.summary || parsed.understanding || textToSubmit;
-              const howDbstCouldHelp = parsed.howDbstCouldHelp || parsed.recommendation || parsed.solution || parsed.approach;
-              if (whatWeHeard && howDbstCouldHelp) {
-                liveResult = {
-                  whatWeHeard: String(whatWeHeard),
-                  bestFitCapability: String(parsed.bestFitCapability || parsed.capability || "AI Engineering & Adoption"),
-                  supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
-                    ? parsed.supportingCapabilities.join(", ")
-                    : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
-                  howDbstCouldHelp: String(howDbstCouldHelp),
-                  suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
-                  whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
-                  assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
-                    ? parsed.assumptionsOrQuestions.join(" ")
-                    : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
-                  fitClassification: String(parsed.fitClassification || "Strong Fit"),
-                };
-              }
-            } catch (jsonErr) {
-              console.error("Failed to parse OpenAI JSON output:", jsonErr, rawContent);
-            }
-          }
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          console.error("AI API direct call error:", response.status, errorData);
-          if (response.status === 401) {
-            toast({
-              title: "AI Analysis Notice",
-              description: "Service is temporarily operating in curated baseline mode.",
-              variant: "default",
-            });
-          } else if (response.status === 429) {
-            toast({
-              title: "High Demand Notice",
-              description: "AI analysis is in high demand. Displaying domain capability assessment.",
-              variant: "default",
-            });
-          }
+      const contentType = srvResponse.headers.get("content-type") || "";
+      if (srvResponse.ok && contentType.includes("application/json")) {
+        const parsed = await srvResponse.json();
+        const whatWeHeard = parsed.whatWeHeard || parsed.summary || parsed.understanding || textToSubmit;
+        const howDbstCouldHelp = parsed.howDbstCouldHelp || parsed.recommendation || parsed.solution || parsed.approach;
+        if (whatWeHeard && howDbstCouldHelp) {
+          liveResult = {
+            whatWeHeard: String(whatWeHeard),
+            bestFitCapability: String(parsed.bestFitCapability || parsed.capability || "AI Engineering & Adoption"),
+            supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
+              ? parsed.supportingCapabilities.join(", ")
+              : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
+            howDbstCouldHelp: String(howDbstCouldHelp),
+            suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
+            whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
+            assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
+              ? parsed.assumptionsOrQuestions.join(" ")
+              : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
+            fitClassification: String(parsed.fitClassification || "Strong Fit"),
+          };
         }
-      } catch (directErr: any) {
-        console.warn("Direct OpenAI API request error:", directErr);
       }
-    }
-
-    // 2. Fallback to server endpoint if direct call did not succeed
-    if (!liveResult) {
-      try {
-        const srvResponse = await fetch("/api/capability-advisor", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: textToSubmit, model }),
-        });
-
-        const contentType = srvResponse.headers.get("content-type") || "";
-        if (srvResponse.ok && contentType.includes("application/json")) {
-          const parsed = await srvResponse.json();
-          const whatWeHeard = parsed.whatWeHeard || parsed.summary || parsed.understanding || textToSubmit;
-          const howDbstCouldHelp = parsed.howDbstCouldHelp || parsed.recommendation || parsed.solution || parsed.approach;
-          if (whatWeHeard && howDbstCouldHelp) {
-            liveResult = {
-              whatWeHeard: String(whatWeHeard),
-              bestFitCapability: String(parsed.bestFitCapability || parsed.capability || "AI Engineering & Adoption"),
-              supportingCapabilities: Array.isArray(parsed.supportingCapabilities)
-                ? parsed.supportingCapabilities.join(", ")
-                : String(parsed.supportingCapabilities || "Enterprise & Solution Architecture"),
-              howDbstCouldHelp: String(howDbstCouldHelp),
-              suggestedStartingPoint: String(parsed.suggestedStartingPoint || "Discover & Define: Initial discovery conversation"),
-              whatSuccessCouldLookLike: String(parsed.whatSuccessCouldLookLike || "Validated operational workflow improvements with teams in control."),
-              assumptionsOrQuestions: Array.isArray(parsed.assumptionsOrQuestions)
-                ? parsed.assumptionsOrQuestions.join(" ")
-                : String(parsed.assumptionsOrQuestions || "Current system landscape and operational priorities."),
-              fitClassification: String(parsed.fitClassification || "Strong Fit"),
-            };
-          }
-        }
-      } catch (srvErr) {
-        // Server endpoint not reachable or offline
-      }
+    } catch (srvErr) {
+      console.warn("Capability advisor server endpoint unavailable:", srvErr);
     }
 
     // 3. If AI response obtained, present it

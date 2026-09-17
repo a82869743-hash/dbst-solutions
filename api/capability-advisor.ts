@@ -59,9 +59,7 @@ export default async function handler(req: Request) {
     });
   }
 
-  const B64_KEY = "REVOKED_AND_SCRUBBED_KEY";
-  const decodedFallback = typeof atob === "function" ? atob(B64_KEY) : Buffer.from(B64_KEY, "base64").toString("utf-8");
-  const apiKey = (process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || decodedFallback).trim();
+  const apiKey = (process.env.OPENAI_API_KEY || "").trim();
   if (!apiKey) {
     return new Response(
       JSON.stringify({ error: "OpenAI API key not configured on server" }),

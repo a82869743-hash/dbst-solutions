@@ -133,7 +133,7 @@ export const defaultCredentials: CredentialsVault = {
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL || "https://dbst-supabase-prod.supabase.co",
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "",
   supabaseServiceKey: "",
-  openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
+  openaiApiKey: "",
   anthropicApiKey: "",
   activeAiModel: "gpt-4o-mini",
   slackWebhookUrl: "",
@@ -180,7 +180,6 @@ export const isFakeDemoInquiry = (item: Partial<InquiryItem> | null | undefined)
 };
 
 const CONTENT_STORAGE_KEY = "dbst_superadmin_content_v3";
-const CREDENTIALS_STORAGE_KEY = "dbst_superadmin_credentials";
 const INQUIRIES_STORAGE_KEY = "dbst_superadmin_inquiries";
 const DELETED_INQUIRIES_STORAGE_KEY = "dbst_superadmin_deleted_inquiries";
 const AUDIT_STORAGE_KEY = "dbst_superadmin_audit";
@@ -287,59 +286,37 @@ export class AdminStore {
     }
   }
 
-  // Get Credentials
+  // Get Credentials metadata (never reads plaintext secrets from browser localStorage)
   static getCredentials(): CredentialsVault {
+    return { ...defaultCredentials };
+  }
+
+  // Save Credentials (delegates to server-side configuration, never writes to localStorage)
+  static async saveCredentials(
+    creds: Partial<CredentialsVault>,
+    userEmail = "admin"
+  ): Promise<{ success: boolean; persisted?: boolean; requiresManualConfig?: boolean; message?: string }> {
     try {
-      const saved = localStorage.getItem(CREDENTIALS_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return {
-          ...defaultCredentials,
-          ...parsed,
-          openaiApiKey: (parsed.openaiApiKey && parsed.openaiApiKey.trim().length > 0)
-            ? parsed.openaiApiKey.trim()
-            : (import.meta.env.VITE_OPENAI_API_KEY || ""),
-        };
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (token) {
+        const res = await fetch("/api/admin-credentials", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(creds),
+        });
+        const json = await res.json();
+        await this.logAction(userEmail, "Submitted credentials update to server", "dbst");
+        return json;
       }
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.error("Save credentials error:", e);
+      return { success: false, message: e?.message || "Failed to contact server" };
     }
-    return {
-      ...defaultCredentials,
-      openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
-    };
-  }
-
-  // Fallback production key for live cloud environments where .env is not in git
-  private static readonly B64_OPENAI_KEY = "REVOKED_AND_SCRUBBED_KEY";
-
-  // Get Effective OpenAI Key (prefers valid sk- key from vault, falls back to .env or production key)
-  static getEffectiveOpenAiKey(): string {
-    const creds = this.getCredentials();
-    const vaultKey = (creds.openaiApiKey || "").trim();
-    const envKey = (import.meta.env.VITE_OPENAI_API_KEY || "").trim();
-
-    if (vaultKey.startsWith("sk-") && vaultKey.length > 20) {
-      return vaultKey;
-    }
-    if (envKey.startsWith("sk-") && envKey.length > 20) {
-      return envKey;
-    }
-    try {
-      return typeof atob === "function" ? atob(this.B64_OPENAI_KEY) : "";
-    } catch {
-      return "";
-    }
-  }
-
-  // Save Credentials
-  static saveCredentials(creds: CredentialsVault, userEmail = "admin"): void {
-    try {
-      localStorage.setItem(CREDENTIALS_STORAGE_KEY, JSON.stringify(creds));
-      this.logAction(userEmail, "Updated global credentials and API keys vault", "global");
-    } catch (e) {
-      console.error(e);
-    }
+    return { success: false, message: "No active session" };
   }
 
   // Record a real customer inquiry submitted from website
@@ -609,7 +586,7 @@ export class AdminStore {
       {
         id: "log-1",
         timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        adminEmail: "owner@dbstsolutions.com",
+        adminEmail: "admin@dbstsolutions.com",
         action: "Exported 5 client leads to CSV",
         targetSite: "global",
         details: "Export requested from Leads CRM module",
@@ -617,7 +594,7 @@ export class AdminStore {
       {
         id: "log-2",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-        adminEmail: "owner@dbstsolutions.com",
+        adminEmail: "admin@dbstsolutions.com",
         action: "Updated D-BST hero rotating pillars",
         targetSite: "dbst",
         details: "Synced animated coming-and-going text sequence",
@@ -625,7 +602,28 @@ export class AdminStore {
     ];
   }
 
-  static logAction(adminEmail: string, action: string, targetSite: SiteTarget | "global", details = ""): void {
+  static async logAction(
+    adminEmail: string,
+    action: string,
+    targetSite: SiteTarget | "global" = "dbst",
+    details = ""
+  ): Promise<void> {
+    const site = targetSite === "global" ? "dbst" : targetSite;
+    try {
+      await supabase.from("audit_log").insert({
+        action,
+        entity_type: "admin_action",
+        admin_email: adminEmail || "admin",
+        details: {
+          target_site: site,
+          details,
+          client_timestamp: new Date().toISOString(),
+        },
+      });
+    } catch (e) {
+      console.error("Failed to insert into audit_log:", e);
+    }
+
     try {
       const logs = this.getAuditLogs();
       const newEntry: AuditLogEntry = {
@@ -633,7 +631,7 @@ export class AdminStore {
         timestamp: new Date().toISOString(),
         adminEmail,
         action,
-        targetSite,
+        targetSite: site,
         details,
       };
       logs.unshift(newEntry);
@@ -641,5 +639,44 @@ export class AdminStore {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  // Fetch real cross-site audit logs from Supabase cloud database
+  static async fetchAuditLogs(): Promise<AuditLogEntry[]> {
+    try {
+      const { data, error } = await supabase
+        .from("audit_log")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (!error && data && data.length > 0) {
+        return data.map((item: any) => {
+          const detailsObj =
+            typeof item.details === "object" && item.details !== null
+              ? item.details
+              : {};
+          const targetSite =
+            detailsObj.target_site ||
+            (item.entity_type === "auth" ? "dbst" : "global");
+          const note =
+            typeof detailsObj.details === "string"
+              ? detailsObj.details
+              : detailsObj.reason || detailsObj.note || "";
+
+          return {
+            id: item.id,
+            timestamp: item.created_at,
+            adminEmail: item.admin_email,
+            action: item.action,
+            targetSite,
+            details: note,
+          };
+        });
+      }
+    } catch (e) {
+      console.warn("Could not fetch remote audit logs:", e);
+    }
+    return this.getAuditLogs();
   }
 }

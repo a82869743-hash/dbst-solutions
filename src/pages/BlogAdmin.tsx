@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { DbstNavigation } from "@/components/navigation/DbstNavigation";
 import { DbstFooter } from "@/components/navigation/DbstFooter";
 import BlogAdmin from "@/components/blog/BlogAdmin";
+import { checkAdminUser, verifyAdminRole, purgeResidualClientSecrets } from "@/lib/admin/auth";
 import { toast } from "@/hooks/use-toast";
 
 const BlogAdminPage = () => {
@@ -13,46 +14,36 @@ const BlogAdminPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    purgeResidualClientSecrets();
+    (async () => {
+      const { user, isAdmin } = await checkAdminUser();
+      if (user && isAdmin) {
+        setAuthed(true);
+      }
+    })();
+  }, []);
+
   const handleLogin = async () => {
     setLoading(true);
     try {
       const trimmedEmail = email.trim().toLowerCase();
-      if (
-        (trimmedEmail === "bimal.swaroop@gmail.com" || trimmedEmail === "owner@dbstsolutions.com") &&
-        password === "Bimal123@"
-      ) {
-        setAuthed(true);
-        sessionStorage.setItem("dbst_superadmin_session", JSON.stringify({ email: "bimal.swaroop@gmail.com" }));
-        toast({ title: "Welcome Super Admin", description: "Blog admin privileges confirmed." });
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
       if (error) throw error;
 
       const userId = data.user?.id;
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "admin")
-        .maybeSingle();
+      const isAdmin = userId ? await verifyAdminRole(userId) : false;
 
-      if (!roleData) {
-        if (
-          trimmedEmail.includes("bimal") ||
-          trimmedEmail.includes("aryan") ||
-          trimmedEmail.includes("dbst")
-        ) {
-          setAuthed(true);
-          sessionStorage.setItem("dbst_superadmin_session", JSON.stringify({ email: trimmedEmail }));
-          return;
-        }
+      if (!isAdmin) {
         await supabase.auth.signOut();
-        throw new Error("Access denied: admin role required.");
+        throw new Error("Access denied: admin role required in user_roles.");
       }
 
       setAuthed(true);
+      toast({ title: "Welcome", description: "Blog admin privileges verified." });
     } catch (e: any) {
       toast({ title: "Login failed", description: e.message, variant: "destructive" });
     } finally {
@@ -80,6 +71,7 @@ const BlogAdminPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
+                placeholder="admin@dbstsolutions.com"
                 className="w-full rounded-md border border-border-subtle bg-bg-base px-3.5 py-2 text-xs text-fg-default focus:border-accent"
               />
             </div>

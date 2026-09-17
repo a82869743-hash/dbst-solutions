@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   KeyRound,
   Eye,
@@ -14,13 +14,25 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
+  ExternalLink,
+  Clock,
+  ShieldAlert,
   Loader2,
 } from "lucide-react";
 import { AdminStore, CredentialsVault } from "@/lib/admin/adminStore";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
 interface AdminCredentialsVaultProps {
   adminEmail: string;
+}
+
+interface RotationLog {
+  id: string;
+  action: string;
+  admin_email: string;
+  created_at: string;
+  details: any;
 }
 
 export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ adminEmail }) => {
@@ -30,6 +42,29 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
   const [testingEmail, setTestingEmail] = useState(false);
   const [testingWebhook, setTestingWebhook] = useState(false);
   const [testingAi, setTestingAi] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [rotationHistory, setRotationHistory] = useState<RotationLog[]>([]);
+
+  const loadRotationHistory = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("audit_log")
+        .select("*")
+        .eq("entity_type", "security")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (!error && data) {
+        setRotationHistory(data);
+      }
+    } catch (err) {
+      console.warn("Could not load rotation history:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRotationHistory();
+  }, [loadRotationHistory]);
 
   const toggleVisibility = (key: string) => {
     setVisibleKeys((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -40,13 +75,39 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
     setHasChanges(true);
   };
 
-  const handleSave = () => {
-    AdminStore.saveCredentials(vault, adminEmail);
-    setHasChanges(false);
-    toast({
-      title: "Credentials Vault Secured",
-      description: "API keys and integration tokens updated successfully.",
-    });
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const result = await AdminStore.saveCredentials(vault, adminEmail);
+      setHasChanges(false);
+
+      if (result.persisted) {
+        toast({
+          title: "Vercel Environment Updated",
+          description: result.message || "Environment variables persisted to Vercel.",
+        });
+      } else if (result.requiresManualConfig) {
+        toast({
+          title: "Serverless Environment Notice",
+          description: result.message,
+        });
+      } else {
+        toast({
+          title: "Configuration Submitted",
+          description: result.message || "Credential updates recorded.",
+        });
+      }
+
+      await loadRotationHistory();
+    } catch (e: any) {
+      toast({
+        title: "Update Failed",
+        description: e?.message || "Failed to submit credentials to server.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleTestEmailPing = () => {
@@ -72,50 +133,32 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
   };
 
   const handleTestAiPing = async () => {
-    const key = (vault.openaiApiKey || import.meta.env.VITE_OPENAI_API_KEY || "").trim();
-    if (!key) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter an OpenAI API key or set VITE_OPENAI_API_KEY in .env before testing.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setTestingAi(true);
     const startTime = Date.now();
     try {
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      const res = await fetch("/api/capability-advisor", {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${key}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [{ role: "user", content: "ping" }],
-          max_tokens: 5,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "ping connection test" }),
       });
-
       const elapsed = Date.now() - startTime;
       if (res.ok) {
         toast({
-          title: "OpenAI Connection Verified",
-          description: `Successfully connected to OpenAI (${elapsed}ms latency). Ready for live capability discovery.`,
+          title: "AI Service Connection Verified",
+          description: `Successfully reached server capability advisor (${elapsed}ms latency).`,
         });
       } else {
         const err = await res.json().catch(() => ({}));
         toast({
-          title: `OpenAI Error (${res.status})`,
-          description: err.error?.message || "Verification request failed. Check your API key and billing quota.",
+          title: `Connection Warning (${res.status})`,
+          description: err.error || "Server endpoint returned an error. Verify server OPENAI_API_KEY.",
           variant: "destructive",
         });
       }
     } catch (err: any) {
       toast({
-        title: "Network Error",
-        description: err.message || "Failed to reach OpenAI API.",
+        title: "Connection Failed",
+        description: err.message || "Failed to reach capability advisor endpoint.",
         variant: "destructive",
       });
     } finally {
@@ -126,27 +169,38 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
   const renderSecretInput = (
     label: string,
     field: keyof CredentialsVault,
-    placeholder = "Enter private API key or secret token..."
+    placeholder = "••••••••••••••••••••••••••••••••"
   ) => {
-    const isVisible = !!visibleKeys[field];
+    const isVisible = visibleKeys[field];
+    const val = (vault[field] as string) || "";
+    const isSet = Boolean(val && val.length > 0);
+
     return (
       <div>
-        <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">{label}</label>
+        <div className="flex items-center justify-between mb-1">
+          <label className="block text-[11px] font-mono font-semibold text-fg-dim">
+            {label}
+          </label>
+          {isSet && (
+            <span className="text-[10px] font-mono text-emerald-600 flex items-center gap-1 font-bold">
+              <CheckCircle2 className="w-3 h-3" /> Configured
+            </span>
+          )}
+        </div>
         <div className="relative">
           <input
             type={isVisible ? "text" : "password"}
-            value={vault[field] as string}
-            onChange={(e) => handleChange(field, e.target.value)}
             placeholder={placeholder}
-            className="w-full pl-3 pr-10 py-2 rounded-lg border border-border-subtle bg-white font-mono text-xs focus:outline-none focus:ring-2 focus:ring-accent/20"
+            value={val}
+            onChange={(e) => handleChange(field, e.target.value)}
+            className="w-full pl-3 pr-10 py-2 rounded-lg border border-border-subtle font-mono text-xs focus:outline-none focus:border-accent bg-white text-fg-default"
           />
           <button
             type="button"
             onClick={() => toggleVisibility(field)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-dimmer hover:text-fg-default transition-colors"
-            title={isVisible ? "Mask credential" : "Show credential"}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-dim hover:text-fg-default"
           >
-            {isVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+            {isVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
       </div>
@@ -154,75 +208,84 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-xs">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-border-subtle">
         <div>
           <h2 className="text-xl font-bold font-display text-fg-default flex items-center gap-2">
             <KeyRound className="w-5 h-5 text-accent" />
-            <span>Central Credentials &amp; Integrations Vault</span>
+            <span>Encrypted Credentials Vault</span>
           </h2>
           <p className="text-xs text-fg-dim">
-            Securely configure third-party API keys, SMTP relays, AI providers, and monitoring webhooks.
+            Manage production API keys, service connections, and outbound notifications for D-BST Solutions.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {hasChanges && (
-            <span className="text-[11px] font-mono text-amber-600 font-bold bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
-              Unsaved modifications
+            <span className="text-[11px] font-mono text-amber-600 font-semibold flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded border border-amber-200 animate-pulse">
+              <AlertTriangle className="w-3.5 h-3.5" />
+              Unsaved Secret Changes
             </span>
           )}
           <button
             onClick={handleSave}
-            disabled={!hasChanges}
-            className={`px-5 py-2 text-xs font-medium rounded-md flex items-center gap-1.5 shadow-sm transition-all ${
-              hasChanges
-                ? "bg-accent text-white hover:bg-accent-deep animate-pulse"
-                : "bg-zinc-200 text-zinc-500 cursor-not-allowed"
-            }`}
+            disabled={saving}
+            className="px-4 py-2 rounded-lg bg-accent text-white font-mono text-xs uppercase tracking-wider font-semibold hover:bg-accent-deep transition-all shadow-sm flex items-center gap-2 disabled:opacity-50"
           >
-            <Save className="w-3.5 h-3.5" />
-            <span>Save Vault Credentials</span>
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <span>{saving ? "Persisting..." : "Save Credentials"}</span>
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
-        {/* CARD 1: EMAIL DISPATCH & NOTIFICATIONS */}
+      {/* Security Architecture Notice */}
+      <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+        <div className="space-y-1 text-xs">
+          <div className="font-bold text-emerald-950 font-display">
+            Zero Client-Side Secret Exposure
+          </div>
+          <p className="text-emerald-900 leading-relaxed text-[11px]">
+            Secrets saved here are transmitted exclusively to server-side endpoints with role verification (<code className="px-1 py-0.5 bg-emerald-100 rounded font-mono text-[10px]">role = 'admin'</code>). Sensitive tokens are never persisted in plain-text client browser storage (<code className="px-1 py-0.5 bg-emerald-100 rounded font-mono text-[10px]">localStorage</code>) or echoed in browser network payloads.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* CARD 1: EMAIL & NOTIFICATIONS */}
         <div className="p-6 bg-white rounded-xl border border-border-subtle shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-border-subtle pb-3">
             <h3 className="font-bold font-display text-sm text-fg-default flex items-center gap-2">
               <Mail className="w-4 h-4 text-accent" />
-              <span>Email Service &amp; Inbound Dispatch</span>
+              <span>Transactional Email Gateway</span>
             </h3>
-            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-              CONNECTED
+            <span className="text-[10px] font-mono font-bold text-accent bg-accent-tint px-2 py-0.5 rounded-full">
+              OUTBOUND
             </span>
           </div>
 
           <div className="space-y-3">
-            <div>
-              <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
-                Email Dispatch Provider
-              </label>
-              <select
-                value={vault.emailProvider}
-                onChange={(e) => handleChange("emailProvider", e.target.value as any)}
-                className="w-full px-3 py-2 rounded-lg border border-border-subtle text-xs font-mono bg-white focus:outline-none"
-              >
-                <option value="resend">Resend (Recommended for Vercel)</option>
-                <option value="sendgrid">SendGrid / Twilio</option>
-                <option value="smtp">Custom Enterprise SMTP</option>
-              </select>
-            </div>
-
-            {renderSecretInput("Email API Key / Secret Token", "emailApiKey")}
-
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
-                  Verified Sender Address
+                  Email Provider
+                </label>
+                <select
+                  value={vault.emailProvider}
+                  onChange={(e) => handleChange("emailProvider", e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-border-subtle text-xs font-mono bg-white focus:outline-none"
+                >
+                  <option value="resend">Resend (Recommended)</option>
+                  <option value="sendgrid">Twilio SendGrid</option>
+                  <option value="postmark">Postmark</option>
+                  <option value="aws_ses">AWS SES</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
+                  Sender Address
                 </label>
                 <input
                   type="email"
@@ -231,18 +294,20 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
                   className="w-full px-3 py-2 rounded-lg border border-border-subtle font-mono text-xs"
                 />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
-                  Owner Notification Inbox
-                </label>
-                <input
-                  type="email"
-                  value={vault.notificationEmail}
-                  onChange={(e) => handleChange("notificationEmail", e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-border-subtle font-mono text-xs"
-                />
-              </div>
+            {renderSecretInput("Email Provider API Key", "emailApiKey")}
+
+            <div>
+              <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
+                Notification Recipient (Enquiry Ingestion)
+              </label>
+              <input
+                type="email"
+                value={vault.notificationEmail}
+                onChange={(e) => handleChange("notificationEmail", e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border-subtle font-mono text-xs"
+              />
             </div>
 
             <div className="pt-2 flex justify-end">
@@ -253,50 +318,49 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
                 className="px-3 py-1.5 rounded-md border border-border-subtle bg-zinc-50 hover:bg-zinc-100 font-mono text-[11px] flex items-center gap-1.5 transition-colors"
               >
                 <Zap className={`w-3.5 h-3.5 text-accent ${testingEmail ? "animate-spin" : ""}`} />
-                <span>{testingEmail ? "Sending Ping..." : "Send Test Notification"}</span>
+                <span>{testingEmail ? "Sending..." : "Dispatch Test Ping"}</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* CARD 2: SUPABASE DATABASE & AUTH */}
+        {/* CARD 2: SUPABASE DATABASE */}
         <div className="p-6 bg-white rounded-xl border border-border-subtle shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-border-subtle pb-3">
             <h3 className="font-bold font-display text-sm text-fg-default flex items-center gap-2">
-              <Database className="w-4 h-4 text-blue-600" />
-              <span>Supabase Database &amp; Auth</span>
+              <Database className="w-4 h-4 text-emerald-600" />
+              <span>Supabase Production Project</span>
             </h3>
             <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-              ACTIVE
+              DATABASE
             </span>
           </div>
 
           <div className="space-y-3">
             <div>
               <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
-                Supabase Project URL
+                Supabase URL (Project ID: pmfyqcmoqrgxfplugqid)
               </label>
               <input
                 type="text"
+                readOnly
                 value={vault.supabaseUrl}
-                onChange={(e) => handleChange("supabaseUrl", e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border-subtle font-mono text-xs"
+                className="w-full px-3 py-2 rounded-lg border border-border-subtle font-mono text-xs bg-zinc-50 text-zinc-600 cursor-not-allowed"
               />
             </div>
 
-            {renderSecretInput("Supabase Publishable Anon Key", "supabaseAnonKey")}
-            {renderSecretInput("Supabase Service Role Secret Key", "supabaseServiceKey")}
+            {renderSecretInput("Supabase Publishable Key", "supabaseAnonKey")}
 
-            <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-800 flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>
-                Service role key bypasses Row Level Security (RLS). Kept in encrypted memory and never passed to client-side bundles.
-              </span>
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
+              <ShieldAlert className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+              <div className="text-[11px] text-amber-900 leading-relaxed">
+                <strong>Service Role Key Notice:</strong> The <code className="font-mono text-[10px]">service_role</code> secret bypasses all Row Level Security and is restricted exclusively to server-side Edge Functions / Vercel Functions. It is permanently omitted from browser bundles.
+              </div>
             </div>
           </div>
         </div>
 
-        {/* CARD 3: AI ENGINE & LLM PROVIDERS */}
+        {/* CARD 3: AI INTELLIGENCE & LLM ORCHESTRATION */}
         <div className="p-6 bg-white rounded-xl border border-border-subtle shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-border-subtle pb-3">
             <h3 className="font-bold font-display text-sm text-fg-default flex items-center gap-2">
@@ -329,7 +393,7 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
 
             <div className="pt-2 flex items-center justify-between border-t border-border-subtle/50 mt-2">
               <span className="text-[10px] font-mono text-fg-dimmer">
-                {vault.openaiApiKey ? "✓ Custom vault key active" : (import.meta.env.VITE_OPENAI_API_KEY ? "✓ Using environment key (.env)" : "⚠ No key detected")}
+                {vault.openaiApiKey ? "✓ Key update staged for server persistence" : "Server-side environment key active"}
               </span>
               <button
                 type="button"
@@ -345,7 +409,7 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
                 ) : (
                   <>
                     <Zap className="w-3 h-3" />
-                    <span>Test OpenAI Connection</span>
+                    <span>Test AI Service Connection</span>
                   </>
                 )}
               </button>
@@ -410,6 +474,64 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Module 5: Hosting & Environment Variables Guidance */}
+      <div className="p-5 bg-white rounded-xl border border-border-subtle shadow-xs space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ExternalLink className="w-4 h-4 text-accent" />
+            <h3 className="font-bold text-sm text-fg-default">Managing Production Environment Variables</h3>
+          </div>
+          <span className="text-[10px] font-mono text-zinc-500">Vercel &amp; Supabase Cloud</span>
+        </div>
+
+        <p className="text-xs text-fg-dim leading-relaxed">
+          In production on Vercel, environment variables must be configured in the project settings. Once set, variables automatically inject into serverless functions (<code className="px-1 py-0.5 bg-zinc-100 rounded font-mono text-[10px]">api/*</code>) without being bundled into client JavaScript.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-[11px] font-mono">
+          <div className="p-3 rounded-lg border border-zinc-200 bg-zinc-50 space-y-1">
+            <span className="font-bold text-fg-default">Vercel Automation Setup:</span>
+            <p className="text-zinc-500 text-[10px]">
+              Set <code className="text-accent font-bold">VERCEL_API_TOKEN</code> and <code className="text-accent font-bold">VERCEL_PROJECT_ID</code> in Vercel settings to allow this portal to update environment variables automatically via REST API.
+            </p>
+          </div>
+          <div className="p-3 rounded-lg border border-zinc-200 bg-zinc-50 space-y-1">
+            <span className="font-bold text-fg-default">Manual Rotation in Vercel:</span>
+            <p className="text-zinc-500 text-[10px]">
+              Navigate to <strong>Vercel Dashboard → Project Settings → Environment Variables</strong> to update or rotate keys directly with instant redeploy.
+            </p>
+          </div>
+        </div>
+
+        {/* Rotation History */}
+        {rotationHistory.length > 0 && (
+          <div className="pt-3 border-t border-border-subtle">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-fg-dim mb-2">
+              <Clock className="w-3.5 h-3.5" />
+              <span>Recent Credentials Rotation Events (from Audit Log)</span>
+            </div>
+            <div className="space-y-1 font-mono text-[10px]">
+              {rotationHistory.map((entry) => (
+                <div key={entry.id} className="flex items-center justify-between p-2 rounded bg-zinc-50 border border-zinc-100">
+                  <div>
+                    <span className="font-semibold text-fg-default">{entry.action}</span>
+                    <span className="text-zinc-400 ml-2">by {entry.admin_email}</span>
+                  </div>
+                  <span className="text-zinc-500">
+                    {new Date(entry.created_at).toLocaleString("en-AU", {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
