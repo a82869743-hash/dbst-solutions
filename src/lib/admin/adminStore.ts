@@ -130,7 +130,7 @@ export const defaultCredentials: CredentialsVault = {
   emailApiKey: "",
   senderEmail: "notifications@dbstsolutions.com",
   notificationEmail: "aryan@dbstsolutions.com",
-  supabaseUrl: import.meta.env.VITE_SUPABASE_URL || "https://dbst-supabase-prod.supabase.co",
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL || "",
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "",
   supabaseServiceKey: "",
   openaiApiKey: "",

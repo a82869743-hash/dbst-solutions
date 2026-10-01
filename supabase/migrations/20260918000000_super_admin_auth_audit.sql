@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- Super Admin Auth, Durable Rate Limiting & Audit Log Optimization Migration
--- Project: pmfyqcmoqrgxfplugqid (Shared between GrowthMates and D-BST)
+-- Project: qffesrikwlzsmgprrczq (Shared between GrowthMates and D-BST)
 -- ==============================================================================
 
 -- 1. Ensure app_role type exists without failing on databases where it was created earlier
@@ -89,7 +89,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON public.audit_log (created
 CREATE INDEX IF NOT EXISTS idx_audit_log_target_site ON public.audit_log (((details->>'target_site')));
 
 -- 6. Canonical Super Admin Assignment template
--- Run in Supabase SQL Editor for project pmfyqcmoqrgxfplugqid to assign your canonical admin email:
+-- Run in Supabase SQL Editor for project qffesrikwlzsmgprrczq to assign your canonical admin email:
 -- INSERT INTO public.user_roles (user_id, role)
 -- SELECT id, 'admin'::public.app_role
 -- FROM auth.users

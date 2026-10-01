@@ -72,14 +72,21 @@ export async function handleCredentialsUpdate(
   const token = authHeader.replace("Bearer ", "").trim();
   const supabaseUrl =
     process.env.SUPABASE_URL ||
-    process.env.VITE_SUPABASE_URL ||
-    "https://pmfyqcmoqrgxfplugqid.supabase.co";
-  const anonKey =
+    process.env.VITE_SUPABASE_URL;
+  const authKey =
     process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtZnlxY21vcXJneGZwbHVncWlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NzcyNjksImV4cCI6MjA4NjE1MzI2OX0.M5Nr7P_ahOX2NB1TzPpRkbxa9zZRoHfPQif9Eq6ZUps";
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !authKey) {
+    throw new Error(
+      "Missing Supabase configuration: SUPABASE_URL / VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY / SUPABASE_SECRET_KEY must be set."
+    );
+  }
 
   // Create client with the caller's JWT
-  const supabase = createClient(supabaseUrl, anonKey, {
+  const supabase = createClient(supabaseUrl, authKey, {
     global: { headers: { Authorization: `Bearer ${token}` } },
   });
 

@@ -24,13 +24,18 @@ function getClientKey(ip: string, email: string): string {
 function getSupabaseServiceClient() {
   const supabaseUrl =
     process.env.SUPABASE_URL ||
-    process.env.VITE_SUPABASE_URL ||
-    "https://pmfyqcmoqrgxfplugqid.supabase.co";
+    process.env.VITE_SUPABASE_URL;
   const serviceKey =
+    process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY;
 
   if (serviceKey) {
+    if (!supabaseUrl) {
+      throw new Error(
+        "Missing SUPABASE_URL or VITE_SUPABASE_URL environment variable."
+      );
+    }
     return createClient(supabaseUrl, serviceKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });

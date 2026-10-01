@@ -339,7 +339,7 @@ export const AdminCredentialsVault: React.FC<AdminCredentialsVaultProps> = ({ ad
           <div className="space-y-3">
             <div>
               <label className="block text-[11px] font-mono font-semibold text-fg-dim mb-1">
-                Supabase URL (Project ID: pmfyqcmoqrgxfplugqid)
+                Supabase URL
               </label>
               <input
                 type="text"
