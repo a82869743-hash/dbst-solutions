@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getAdminAuthHeaders } from "./auth";
 
 export type SiteTarget = "dbst" | "growthmates";
 
@@ -297,15 +298,11 @@ export class AdminStore {
     userEmail = "admin"
   ): Promise<{ success: boolean; persisted?: boolean; requiresManualConfig?: boolean; message?: string }> {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (token) {
+      const headers = await getAdminAuthHeaders();
+      if (headers) {
         const res = await fetch("/api/admin-credentials", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          headers,
           body: JSON.stringify(creds),
         });
         const json = await res.json();

@@ -1,6 +1,5 @@
-// Server-side handler for Super Admin Credentials Vault updates
-// Compatible with Vercel Serverless Functions and Vite dev server middleware
 import { createClient } from "@supabase/supabase-js";
+import { verifyAdminAuth } from "./admin-auth";
 
 function parseBody(req: any): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -63,52 +62,25 @@ async function updateVercelEnvVar(
 
 export async function handleCredentialsUpdate(
   authHeader: string | undefined,
-  updates: Record<string, any>
+  updates: Record<string, any>,
+  sessionId?: string
 ) {
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new Error("Unauthorized: missing Bearer token");
-  }
+  // Enforce token, ban check, admin role, and active session verification
+  const user = await verifyAdminAuth(authHeader, sessionId, true);
 
-  const token = authHeader.replace("Bearer ", "").trim();
   const supabaseUrl =
     process.env.SUPABASE_URL ||
-    process.env.VITE_SUPABASE_URL;
-  const authKey =
-    process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.VITE_SUPABASE_URL ||
+    "https://qffesrikwlzsmgprrczq.supabase.co";
+  const serviceKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SECRET_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !authKey) {
-    throw new Error(
-      "Missing Supabase configuration: SUPABASE_URL / VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY / SUPABASE_SECRET_KEY must be set."
-    );
-  }
-
-  // Create client with the caller's JWT
-  const supabase = createClient(supabaseUrl, authKey, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
-  });
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError || !user) {
-    throw new Error("Unauthorized: invalid session");
-  }
-
-  // Verify role = 'admin'
-  const { data: roleRow, error: roleError } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .eq("role", "admin")
-    .maybeSingle();
-
-  if (roleError || !roleRow) {
-    throw new Error("Forbidden: admin role required");
-  }
+    process.env.SUPABASE_SERVICE_KEY;
+  const supabase = serviceKey
+    ? createClient(supabaseUrl, serviceKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+    : null;
 
   const vercelApiToken = process.env.VERCEL_API_TOKEN;
   const vercelProjectId = process.env.VERCEL_PROJECT_ID;
@@ -138,21 +110,23 @@ export async function handleCredentialsUpdate(
     const allSuccess = results.every((r) => r.success);
 
     // Record audit log entry
-    try {
-      await supabase.from("audit_log").insert({
-        action: "credentials_vault_persisted_vercel",
-        entity_type: "security",
-        admin_email: user.email || "unknown",
-        details: {
-          target_site: "dbst",
-          provider: "vercel_api",
-          updated_keys: results.map((r) => r.key),
-          success: allSuccess,
-          timestamp: new Date().toISOString(),
-        },
-      });
-    } catch (err) {
-      console.error("Audit log error on credentials persistence:", err);
+    if (supabase) {
+      try {
+        await supabase.from("audit_log").insert({
+          action: "credentials_vault_persisted_vercel",
+          entity_type: "security",
+          admin_email: user.email || "unknown",
+          details: {
+            target_site: "dbst",
+            provider: "vercel_api",
+            updated_keys: results.map((r) => r.key),
+            success: allSuccess,
+            timestamp: new Date().toISOString(),
+          },
+        });
+      } catch (err) {
+        console.error("Audit log error on credentials persistence:", err);
+      }
     }
 
     if (allSuccess) {
@@ -171,20 +145,22 @@ export async function handleCredentialsUpdate(
     }
   }
 
-  // If Vercel API credentials are not set on the server, be completely honest and guide the admin
-  try {
-    await supabase.from("audit_log").insert({
-      action: "credentials_vault_update_attempted_manual_required",
-      entity_type: "security",
-      admin_email: user.email || "unknown",
-      details: {
-        target_site: "dbst",
-        attempted_fields: validUpdatedEntries.map(([k]) => FIELD_TO_ENV_KEY_MAP[k] || k),
-        note: "VERCEL_API_TOKEN not set on server. Manual update in dashboard required.",
-        timestamp: new Date().toISOString(),
-      },
-    });
-  } catch {}
+  // If Vercel API credentials are not set on the server, record audit and return manual instruction
+  if (supabase) {
+    try {
+      await supabase.from("audit_log").insert({
+        action: "credentials_vault_update_attempted_manual_required",
+        entity_type: "security",
+        admin_email: user.email || "unknown",
+        details: {
+          target_site: "dbst",
+          attempted_fields: validUpdatedEntries.map(([k]) => FIELD_TO_ENV_KEY_MAP[k] || k),
+          note: "VERCEL_API_TOKEN not set on server. Manual update in dashboard required.",
+          timestamp: new Date().toISOString(),
+        },
+      });
+    } catch {}
+  }
 
   return {
     success: false,
@@ -202,8 +178,12 @@ export default async function handler(req: any, res: any) {
 
   try {
     const authHeader = req.headers["authorization"] || req.headers["Authorization"];
+    const rawSessionId =
+      req.headers["x-admin-session-id"] ||
+      req.headers["x-admin-session-id".toLowerCase()];
+    const sessionId = typeof rawSessionId === "string" ? rawSessionId.trim() : undefined;
     const body = await parseBody(req);
-    const result = await handleCredentialsUpdate(authHeader, body || {});
+    const result = await handleCredentialsUpdate(authHeader, body || {}, sessionId);
     const status = result.success ? 200 : result.requiresManualConfig ? 200 : 400;
     return res.status(status).json(result);
   } catch (err: any) {

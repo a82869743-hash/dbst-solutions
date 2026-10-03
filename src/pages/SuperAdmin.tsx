@@ -15,12 +15,12 @@ import {
   Activity,
   Layers,
   ArrowLeft,
-  Smartphone,
-  Copy,
-  Check,
+  Mail,
   RefreshCw,
   AlertCircle,
-  Loader2,
+  CheckCircle2,
+  Clock,
+  Send,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import LogoMark from "@/components/landing/LogoMark";
@@ -32,14 +32,14 @@ import { SiteTarget } from "@/lib/admin/adminStore";
 import {
   checkAdminUser,
   verifyAdminRole,
-  getMfaStatus,
-  enrollTotpFactor,
-  verifyTotpCode,
+  requestEmailOtp,
+  verifyEmailOtp,
+  sendSessionHeartbeat,
   checkLoginRateLimit,
   recordLoginAttempt,
   logAdminAudit,
   purgeResidualClientSecrets,
-  TotpEnrollmentData,
+  revokeActiveSession,
 } from "@/lib/admin/auth";
 import {
   InputOTP,
@@ -48,21 +48,21 @@ import {
 } from "@/components/ui/input-otp";
 import { toast } from "@/hooks/use-toast";
 
-type AuthStep = "login" | "totp-challenge" | "totp-enroll";
+type AuthStep = "login" | "otp-approval";
 
 export const SuperAdminPage: React.FC = () => {
   const [authed, setAuthed] = useState(false);
   const [authStep, setAuthStep] = useState<AuthStep>("login");
   const [adminEmail, setAdminEmail] = useState("");
+  const [tempUserId, setTempUserId] = useState("");
   const [password, setPassword] = useState("");
-  const [totpCode, setTotpCode] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [recipientHint, setRecipientHint] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [attemptsRemaining, setAttemptsRemaining] = useState<number | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
-
-  // MFA State
-  const [enrolledFactorId, setEnrolledFactorId] = useState<string>("");
-  const [enrollmentData, setEnrollmentData] = useState<TotpEnrollmentData | null>(null);
-  const [secretCopied, setSecretCopied] = useState(false);
 
   // Active Multi-Site Selection
   const [selectedSite, setSelectedSite] = useState<SiteTarget | "all">("all");
@@ -70,12 +70,34 @@ export const SuperAdminPage: React.FC = () => {
   // Active Admin Module Tab
   const [activeTab, setActiveTab] = useState<"inbox" | "content" | "credentials" | "security">("inbox");
 
-  // Initial session verification
+  // Resend cooldown timer countdown
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const t = setInterval(() => {
+      setResendCooldown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(t);
+  }, [resendCooldown]);
+
+  // Initial session verification on page load
   const verifyCurrentSession = useCallback(async () => {
     setCheckingSession(true);
     purgeResidualClientSecrets();
     try {
-      const { user, isAdmin } = await checkAdminUser();
+      const { user, isAdmin, isBanned } = await checkAdminUser();
+
+      if (isBanned) {
+        toast({
+          title: "Account Disabled",
+          description: "This administrator account has been banned.",
+          variant: "destructive",
+        });
+        await supabase.auth.signOut();
+        setAuthed(false);
+        setAuthStep("login");
+        return;
+      }
+
       if (!user || !isAdmin) {
         setAuthed(false);
         setAuthStep("login");
@@ -83,32 +105,43 @@ export const SuperAdminPage: React.FC = () => {
       }
 
       setAdminEmail(user.email || "");
+      setTempUserId(user.id);
 
-      // Check MFA Status
-      const mfa = await getMfaStatus();
-      if (mfa.currentLevel === "aal2") {
-        setAuthed(true);
-        return;
-      }
+      // Check if this browser already has a verified active session ID in storage
+      const storedSessionId = sessionStorage.getItem("dbst_admin_session_id");
+      if (storedSessionId) {
+        const heartbeat = await sendSessionHeartbeat({
+          sessionId: storedSessionId,
+          userId: user.id,
+          email: user.email || "",
+        });
 
-      // If user has verified TOTP factor, prompt for challenge
-      if (mfa.hasVerifiedFactor && mfa.factors.length > 0) {
-        const verifiedFactor = mfa.factors.find((f) => f.status === "verified");
-        if (verifiedFactor) {
-          setEnrolledFactorId(verifiedFactor.id);
-          setAuthStep("totp-challenge");
-          setAuthed(false);
+        if (heartbeat.active && !heartbeat.revoked && !heartbeat.banned) {
+          setAuthed(true);
           return;
         }
       }
 
-      // Otherwise, require enrollment
-      setAuthStep("totp-enroll");
+      // If no valid active session in storage, prompt for email OTP approval
       setAuthed(false);
-      const enrollRes = await enrollTotpFactor("D-BST Admin");
-      if (enrollRes.data) {
-        setEnrollmentData(enrollRes.data);
+      setAuthStep("otp-approval");
+      const res = await requestEmailOtp({
+        userId: user.id,
+        email: user.email || "",
+        targetSite: "dbst",
+      });
+
+      if (res.banned) {
+        toast({ title: "Access Denied", description: res.error, variant: "destructive" });
+        await supabase.auth.signOut();
+        setAuthStep("login");
+        return;
       }
+
+      if (res.recipientHint) {
+        setRecipientHint(res.recipientHint);
+      }
+      setResendCooldown(30);
     } catch (err) {
       console.error("Session verification error:", err);
       setAuthed(false);
@@ -122,6 +155,38 @@ export const SuperAdminPage: React.FC = () => {
     verifyCurrentSession();
   }, [verifyCurrentSession]);
 
+  // Periodic session heartbeat while active in /super-admin (every 2 minutes)
+  useEffect(() => {
+    if (!authed) return;
+
+    const interval = setInterval(async () => {
+      const storedSessionId = sessionStorage.getItem("dbst_admin_session_id") || "";
+      try {
+        const { user } = await checkAdminUser();
+        const res = await sendSessionHeartbeat({
+          sessionId: storedSessionId,
+          userId: user?.id,
+          email: adminEmail,
+        });
+
+        if (res.revoked || res.banned) {
+          toast({
+            title: res.banned ? "Account Disabled" : "Session Terminated",
+            description: res.banned
+              ? "Your account has been banned by an administrator."
+              : "Your session was remotely logged out by an administrator.",
+            variant: "destructive",
+          });
+          await handleLogout();
+        }
+      } catch (err) {
+        console.warn("Heartbeat error:", err);
+      }
+    }, 2 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [authed, adminEmail]);
+
   // Handle Initial Password Sign-In
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,11 +197,12 @@ export const SuperAdminPage: React.FC = () => {
     }
 
     setLoading(true);
+    setAttemptsRemaining(null);
     try {
       // 1. Check rate limit
       const rateLimit = await checkLoginRateLimit(trimmedEmail);
       if (!rateLimit.allowed) {
-        await recordLoginAttempt(trimmedEmail, "blocked", "Rate limit lockout triggered");
+        await recordLoginAttempt(trimmedEmail, "blocked", "Rate limit lockout triggered", "dbst");
         toast({
           title: "Account Temporarily Locked",
           description: `Too many failed attempts. Please wait ${rateLimit.lockoutSeconds || 900} seconds before retrying.`,
@@ -152,53 +218,52 @@ export const SuperAdminPage: React.FC = () => {
       });
 
       if (error) {
-        await recordLoginAttempt(trimmedEmail, "failure", error.message);
+        await recordLoginAttempt(trimmedEmail, "failure", error.message, "dbst");
         throw error;
       }
 
-      // 3. Verify user has 'admin' role in user_roles table
       const userId = data.user?.id;
-      const isAdmin = userId ? await verifyAdminRole(userId) : false;
+      if (!userId) throw new Error("Authentication failed: user ID missing");
 
+      // 3. Verify user has 'admin' role in user_roles table
+      const isAdmin = await verifyAdminRole(userId);
       if (!isAdmin) {
-        await recordLoginAttempt(trimmedEmail, "failure", "Non-admin account attempted access to /super-admin");
+        await recordLoginAttempt(trimmedEmail, "failure", "Non-admin account attempted access to /super-admin", "dbst");
         await supabase.auth.signOut();
         throw new Error("Access denied: super admin role required in user_roles.");
       }
 
-      await recordLoginAttempt(trimmedEmail, "success");
+      setTempUserId(userId);
 
-      // 4. Check MFA Assurance Level
-      const mfa = await getMfaStatus();
+      // 4. Request 6-digit email approval code (dispatched to ADMIN_OTP_NOTIFY_EMAIL)
+      const otpRes = await requestEmailOtp({
+        userId,
+        email: trimmedEmail,
+        targetSite: "dbst",
+      });
 
-      if (mfa.currentLevel === "aal2") {
-        setAuthed(true);
-        toast({ title: "Authenticated", description: "Welcome to the Unified Super Admin Control Center." });
-        return;
+      if (otpRes.banned) {
+        await recordLoginAttempt(trimmedEmail, "blocked", "Banned account attempted login", "dbst");
+        await supabase.auth.signOut();
+        throw new Error("This administrator account has been disabled. Login rejected.");
       }
 
-      if (mfa.hasVerifiedFactor && mfa.factors.length > 0) {
-        const verifiedFactor = mfa.factors.find((f) => f.status === "verified");
-        if (verifiedFactor) {
-          setEnrolledFactorId(verifiedFactor.id);
-          setAuthStep("totp-challenge");
-          toast({
-            title: "2FA Verification Required",
-            description: "Please enter the 6-digit code from your authenticator app.",
-          });
-          return;
-        }
+      if (!otpRes.success) {
+        throw new Error(otpRes.error || "Failed to generate approval code.");
       }
 
-      // Route to enrollment if no TOTP factor enrolled yet
-      setAuthStep("totp-enroll");
-      const enrollRes = await enrollTotpFactor("D-BST Admin");
-      if (enrollRes.data) {
-        setEnrollmentData(enrollRes.data);
+      await recordLoginAttempt(trimmedEmail, "success", "Password verified. Awaiting email approval code.", "dbst");
+
+      if (otpRes.recipientHint) {
+        setRecipientHint(otpRes.recipientHint);
       }
+      setResendCooldown(30);
+      setAuthStep("otp-approval");
+      setOtpCode("");
+
       toast({
-        title: "2FA Enrollment Required",
-        description: "Please configure your authenticator app to secure super admin access.",
+        title: "Approval Code Dispatched",
+        description: `A 6-digit approval code was sent to ${otpRes.recipientHint || "the authorized administrator"}.`,
       });
     } catch (err: any) {
       toast({ title: "Authentication Failed", description: err.message, variant: "destructive" });
@@ -207,90 +272,118 @@ export const SuperAdminPage: React.FC = () => {
     }
   };
 
-  // Handle TOTP 2FA Verification Challenge
-  const handleVerifyChallenge = async (e: React.FormEvent) => {
+  // Handle 6-Digit Email Approval Code Verification
+  const handleVerifyApprovalCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!totpCode || totpCode.trim().length !== 6) {
-      toast({ title: "Invalid Code", description: "Please enter a valid 6-digit TOTP code.", variant: "destructive" });
+    if (!otpCode || otpCode.trim().length !== 6) {
+      toast({ title: "Invalid Code", description: "Please enter a valid 6-digit approval code.", variant: "destructive" });
       return;
     }
 
     setLoading(true);
     try {
-      const { success, error } = await verifyTotpCode(enrolledFactorId, totpCode);
-      if (!success) {
-        await recordLoginAttempt(adminEmail, "failure", `Invalid TOTP code: ${error || "verification failed"}`);
-        throw new Error(error || "Invalid verification code. Please check your authenticator app.");
+      const { data: { session } } = await supabase.auth.getSession();
+      const refreshToken = session?.refresh_token;
+
+      const verifyRes = await verifyEmailOtp({
+        userId: tempUserId,
+        email: adminEmail,
+        code: otpCode.trim(),
+        refreshToken,
+        targetSite: "dbst",
+      });
+
+      if (verifyRes.banned) {
+        await supabase.auth.signOut();
+        setAuthed(false);
+        setAuthStep("login");
+        throw new Error("Account has been banned. Access denied.");
+      }
+
+      if (!verifyRes.success) {
+        if (typeof verifyRes.remainingAttempts === "number") {
+          setAttemptsRemaining(verifyRes.remainingAttempts);
+        }
+        throw new Error(verifyRes.error || "Verification failed. Check the approval code and retry.");
+      }
+
+      // Successful verification
+      if (verifyRes.sessionId) {
+        sessionStorage.setItem("dbst_admin_session_id", verifyRes.sessionId);
       }
 
       await logAdminAudit(adminEmail, "admin_login_success", {
-        mfa: "totp_aal2",
+        auth_method: "email_approval_otp",
         target_site: "dbst",
       });
 
       setAuthed(true);
-      setTotpCode("");
-      toast({ title: "Access Granted", description: "Two-factor authentication confirmed (AAL2)." });
+      setAuthStep("login");
+      setOtpCode("");
+      setPassword("");
+      setAttemptsRemaining(null);
+
+      toast({
+        title: "Access Granted",
+        description: "Email approval confirmed. Welcome to the Super Admin Control Center.",
+      });
     } catch (err: any) {
-      toast({ title: "2FA Verification Failed", description: err.message, variant: "destructive" });
+      toast({ title: "Approval Verification Failed", description: err.message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle Initial TOTP 2FA Enrollment Confirmation
-  const handleVerifyEnrollment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!enrollmentData || !totpCode || totpCode.trim().length !== 6) {
-      toast({ title: "Invalid Code", description: "Please enter the 6-digit code from your authenticator app.", variant: "destructive" });
-      return;
-    }
-
-    setLoading(true);
+  // Resend 6-Digit Approval Code
+  const handleResendCode = async () => {
+    if (resendCooldown > 0 || resending) return;
+    setResending(true);
     try {
-      const { success, error } = await verifyTotpCode(enrollmentData.factorId, totpCode);
-      if (!success) {
-        throw new Error(error || "Invalid code. Make sure your device clock is synchronized.");
+      const res = await requestEmailOtp({
+        userId: tempUserId,
+        email: adminEmail,
+        targetSite: "dbst",
+      });
+
+      if (!res.success) {
+        throw new Error(res.error || "Could not resend approval code");
       }
 
-      await logAdminAudit(adminEmail, "totp_mfa_enrolled", {
-        factor_id: enrollmentData.factorId,
-        target_site: "dbst",
-      });
+      if (res.recipientHint) {
+        setRecipientHint(res.recipientHint);
+      }
+      setResendCooldown(45);
+      setAttemptsRemaining(null);
+      setOtpCode("");
 
-      setAuthed(true);
-      setTotpCode("");
       toast({
-        title: "2FA Successfully Enrolled",
-        description: "Your authenticator is now configured. Super admin privileges unlocked.",
+        title: "New Approval Code Sent",
+        description: `Dispatched to ${res.recipientHint || "the authorized administrator"}. Valid for 5 minutes.`,
       });
     } catch (err: any) {
-      toast({ title: "Enrollment Failed", description: err.message, variant: "destructive" });
+      toast({ title: "Resend Failed", description: err.message, variant: "destructive" });
     } finally {
-      setLoading(false);
+      setResending(false);
     }
   };
 
-  const handleCopySecret = () => {
-    if (!enrollmentData?.secret) return;
-    navigator.clipboard.writeText(enrollmentData.secret);
-    setSecretCopied(true);
-    toast({ title: "Secret Copied", description: "Manual entry key copied to clipboard." });
-    setTimeout(() => setSecretCopied(false), 2500);
-  };
-
+  // Clean Logout
   const handleLogout = async () => {
     try {
+      const currentSessionId = sessionStorage.getItem("dbst_admin_session_id");
+      if (currentSessionId) {
+        await revokeActiveSession(currentSessionId).catch(() => {});
+      }
       await supabase.auth.signOut();
     } finally {
       purgeResidualClientSecrets();
       setAuthed(false);
       setAuthStep("login");
       setAdminEmail("");
+      setTempUserId("");
       setPassword("");
-      setTotpCode("");
-      setEnrollmentData(null);
-      setEnrolledFactorId("");
+      setOtpCode("");
+      setAttemptsRemaining(null);
       toast({ title: "Logged Out", description: "Super admin session securely terminated." });
     }
   };
@@ -299,15 +392,15 @@ export const SuperAdminPage: React.FC = () => {
   if (checkingSession) {
     return (
       <div className="min-h-screen bg-[#0E131F] text-white flex items-center justify-center p-4">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 text-accent animate-spin" />
-          <span className="text-xs font-mono text-zinc-400">Verifying security credentials...</span>
+        <div className="text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="font-mono text-xs text-zinc-400">Verifying secure admin session...</p>
         </div>
       </div>
     );
   }
 
-  // 1. AUTHENTICATION GATES
+  // 1. AUTHENTICATION GATE
   if (!authed) {
     return (
       <div className="min-h-screen bg-[#0E131F] text-white flex flex-col justify-between p-4 selection:bg-accent selection:text-white">
@@ -316,7 +409,7 @@ export const SuperAdminPage: React.FC = () => {
             to="/"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Return to D-BST Solutions
+            <ArrowLeft className="w-3.5 h-3.5" /> Return to Home
           </Link>
         </div>
 
@@ -335,11 +428,11 @@ export const SuperAdminPage: React.FC = () => {
             </p>
           </div>
 
-          {/* STEP 1: Supabase Password Auth */}
+          {/* STEP 1: Email & Password */}
           {authStep === "login" && (
             <form onSubmit={handlePasswordLogin} className="space-y-4 text-xs">
               <div>
-                <label className="block text-[11px] font-mono text-zinc-400 mb-1">Super Admin Email</label>
+                <label className="block text-[11px] font-mono text-zinc-400 mb-1">Owner Email</label>
                 <input
                   type="email"
                   required
@@ -365,188 +458,106 @@ export const SuperAdminPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-lg bg-accent text-white font-medium text-xs font-mono uppercase tracking-wider hover:bg-accent-deep transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3 rounded-lg bg-accent text-white font-medium text-xs font-mono uppercase tracking-wider hover:bg-accent-deep transition-all shadow-md flex items-center justify-center gap-2"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Verifying Credentials...</span>
-                  </>
-                ) : (
-                  <span>Authenticate via Supabase</span>
-                )}
+                {loading ? "Verifying Credentials..." : "Authenticate via Supabase"}
               </button>
-
-              <p className="text-[10px] text-zinc-500 text-center font-mono pt-1">
-                Role verified via <code className="text-zinc-400">user_roles</code> table. 2FA required on all sessions.
-              </p>
             </form>
           )}
 
-          {/* STEP 2: TOTP 2FA Verification Challenge */}
-          {authStep === "totp-challenge" && (
-            <form onSubmit={handleVerifyChallenge} className="space-y-5 text-xs">
-              <div className="p-3 bg-zinc-900/60 border border-zinc-800 rounded-lg flex items-center gap-3">
-                <Smartphone className="w-5 h-5 text-accent shrink-0" />
-                <div className="text-[11px] font-mono">
-                  <div className="text-zinc-300 font-semibold">Two-Factor Authentication</div>
-                  <div className="text-zinc-500">Signing in as <span className="text-zinc-300">{adminEmail}</span></div>
+          {/* STEP 2: 6-Digit Email Approval Code Verification */}
+          {authStep === "otp-approval" && (
+            <form onSubmit={handleVerifyApprovalCode} className="space-y-4 text-xs">
+              <div className="p-3 bg-zinc-900/80 border border-zinc-800 rounded-lg text-center space-y-1.5">
+                <div className="flex items-center justify-center gap-1.5 text-accent font-mono text-[11px] font-semibold">
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Email Approval Code Required</span>
                 </div>
+                <p className="text-[11px] text-zinc-300">
+                  A 6-digit approval code was sent to the designated admin address:
+                </p>
+                <div className="inline-block px-2.5 py-1 bg-accent/10 border border-accent/20 rounded font-mono text-xs text-accent font-bold">
+                  {recipientHint || "Authorized Admin Email"}
+                </div>
+                <p className="text-[10px] text-zinc-400">
+                  Account attempting login: <span className="text-white font-semibold">{adminEmail}</span>
+                </p>
               </div>
 
-              <div className="space-y-2 text-center">
-                <label className="block text-[11px] font-mono text-zinc-400">
-                  Enter 6-digit Authenticator Code
-                </label>
-                <div className="flex justify-center py-2">
-                  <InputOTP
-                    maxLength={6}
-                    value={totpCode}
-                    onChange={(val) => setTotpCode(val)}
-                  >
-                    <InputOTPGroup className="gap-2">
-                      <InputOTPSlot index={0} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                      <InputOTPSlot index={1} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                      <InputOTPSlot index={2} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                      <InputOTPSlot index={3} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                      <InputOTPSlot index={4} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                      <InputOTPSlot index={5} className="w-10 h-12 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                    </InputOTPGroup>
-                  </InputOTP>
+              {attemptsRemaining !== null && attemptsRemaining < 5 && (
+                <div className="p-2.5 bg-red-950/40 border border-red-800 rounded-lg flex items-center gap-2 text-[11px] text-red-300">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>
+                    Incorrect code entered. <strong>{attemptsRemaining}</strong> attempt(s) remaining before code lockout.
+                  </span>
                 </div>
+              )}
+
+              <div className="flex justify-center py-2">
+                <InputOTP
+                  maxLength={6}
+                  value={otpCode}
+                  onChange={(val) => setOtpCode(val)}
+                  autoFocus
+                >
+                  <InputOTPGroup className="gap-2">
+                    <InputOTPSlot index={0} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                    <InputOTPSlot index={1} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                    <InputOTPSlot index={2} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                    <InputOTPSlot index={3} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                    <InputOTPSlot index={4} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                    <InputOTPSlot index={5} className="w-10 h-12 text-lg border-zinc-700 bg-zinc-900 text-white font-mono" />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 px-1">
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-zinc-500" />
+                  <span>Expires in 5 mins</span>
+                </span>
+                <button
+                  type="button"
+                  disabled={resendCooldown > 0 || resending}
+                  onClick={handleResendCode}
+                  className="text-accent hover:underline disabled:text-zinc-600 disabled:no-underline"
+                >
+                  {resending
+                    ? "Sending..."
+                    : resendCooldown > 0
+                    ? `Resend Code (${resendCooldown}s)`
+                    : "Resend Code"}
+                </button>
               </div>
 
               <button
                 type="submit"
-                disabled={loading || totpCode.length !== 6}
+                disabled={loading || otpCode.length !== 6}
                 className="w-full py-3 rounded-lg bg-accent text-white font-medium text-xs font-mono uppercase tracking-wider hover:bg-accent-deep transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Verifying Code...</span>
-                  </>
-                ) : (
-                  <span>Verify &amp; Unlock (AAL2)</span>
-                )}
+                {loading ? "Verifying Approval Code..." : "Confirm & Unlock Control Center"}
               </button>
 
-              <div className="text-center pt-2">
+              <div className="pt-2 text-center">
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="text-[11px] font-mono text-zinc-400 hover:text-white underline"
+                  className="text-[11px] text-zinc-400 hover:text-white underline font-mono"
                 >
-                  Sign in with a different account
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* STEP 3: TOTP 2FA Initial Enrollment */}
-          {authStep === "totp-enroll" && (
-            <form onSubmit={handleVerifyEnrollment} className="space-y-4 text-xs">
-              <div className="text-center space-y-1">
-                <div className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-accent">
-                  <Smartphone className="w-3.5 h-3.5" />
-                  <span>Enforce Two-Factor Authentication</span>
-                </div>
-                <p className="text-[11px] text-zinc-400">
-                  Scan this QR code using Google Authenticator, Authy, or 1Password.
-                </p>
-              </div>
-
-              {enrollmentData ? (
-                <div className="space-y-3">
-                  <div className="p-3 bg-white rounded-xl flex justify-center w-fit mx-auto shadow-md">
-                    <img
-                      src={enrollmentData.qrCode}
-                      alt="TOTP 2FA QR Code"
-                      className="w-44 h-44"
-                    />
-                  </div>
-
-                  <div className="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 space-y-1">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                      <span>Manual Secret Key:</span>
-                      <button
-                        type="button"
-                        onClick={handleCopySecret}
-                        className="text-accent hover:text-white flex items-center gap-1"
-                      >
-                        {secretCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                        <span>{secretCopied ? "Copied" : "Copy"}</span>
-                      </button>
-                    </div>
-                    <div className="font-mono text-[11px] text-zinc-300 break-all select-all">
-                      {enrollmentData.secret}
-                    </div>
-                  </div>
-
-                  <div className="space-y-1 text-center pt-1">
-                    <label className="block text-[11px] font-mono text-zinc-400">
-                      Enter first 6-digit code to confirm enrollment:
-                    </label>
-                    <div className="flex justify-center py-1">
-                      <InputOTP
-                        maxLength={6}
-                        value={totpCode}
-                        onChange={(val) => setTotpCode(val)}
-                      >
-                        <InputOTPGroup className="gap-2">
-                          <InputOTPSlot index={0} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                          <InputOTPSlot index={1} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                          <InputOTPSlot index={2} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                          <InputOTPSlot index={3} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                          <InputOTPSlot index={4} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                          <InputOTPSlot index={5} className="w-9 h-11 text-base font-mono border-zinc-700 bg-zinc-900 text-white" />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading || totpCode.length !== 6}
-                    className="w-full py-3 rounded-lg bg-accent text-white font-medium text-xs font-mono uppercase tracking-wider hover:bg-accent-deep transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Activating 2FA...</span>
-                      </>
-                    ) : (
-                      <span>Complete Enrollment &amp; Sign In</span>
-                    )}
-                  </button>
-                </div>
-              ) : (
-                <div className="py-8 text-center text-zinc-400 flex flex-col items-center gap-2">
-                  <Loader2 className="w-6 h-6 animate-spin text-accent" />
-                  <span className="text-xs font-mono">Generating enrollment credentials...</span>
-                </div>
-              )}
-
-              <div className="text-center pt-1">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="text-[11px] font-mono text-zinc-400 hover:text-white underline"
-                >
-                  Cancel and sign out
+                  ← Cancel &amp; Sign Out
                 </button>
               </div>
             </form>
           )}
 
           <div className="pt-4 border-t border-zinc-800 flex items-center justify-between text-[10px] font-mono text-zinc-500">
-            <span>D-BST &bull; GrowthMates Dual Engine</span>
-            <span>v3.0 Production &bull; AAL2 Enforced</span>
+            <span>DBST &bull; GrowthMates Unified Admin</span>
+            <span>Email-Approval OTP Gate</span>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto w-full text-center pb-4 text-xs font-mono text-zinc-400">
-          Super Admin Console &bull; Security Level: High (TOTP MFA Required) &bull; RLS Protected
+        <div className="text-center text-[11px] font-mono text-zinc-600 pb-4">
+          Encrypted TLS 1.3 • Authorized Personnel Only • Zero Browser Plaintext Secrets
         </div>
       </div>
     );
@@ -554,82 +565,85 @@ export const SuperAdminPage: React.FC = () => {
 
   // 2. AUTHENTICATED SUPER ADMIN CONTROL CENTER
   return (
-    <div className="min-h-screen bg-zinc-50 text-fg-default font-body selection:bg-accent selection:text-white">
-      {/* Top Multi-Site Status Header */}
-      <header className="bg-[#0E131F] text-white border-b border-zinc-800 sticky top-0 z-50 shadow-md">
+    <div className="min-h-screen bg-[#F8FAFC] text-fg-default font-body selection:bg-accent selection:text-white">
+      {/* Top Super Admin Header */}
+      <header className="sticky top-0 z-40 bg-[#0E131F] text-white border-b border-zinc-800 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo & Portal Info */}
-            <div className="flex items-center gap-3">
-              <LogoMark size="small" variant="icon" onBackground="dark" />
-              <div className="h-6 w-px bg-zinc-700 hidden sm:block" />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-display font-bold text-sm tracking-tight text-white">Unified Super Admin</span>
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-semibold border border-emerald-500/30">
-                    AAL2 SECURED
-                  </span>
-                </div>
-                <div className="text-[10px] font-mono text-zinc-400 hidden sm:block">
-                  Cross-Site Operations: dbstsolutions.com &amp; growthmates.ai
-                </div>
-              </div>
+          <div className="h-16 flex items-center justify-between gap-4">
+            {/* Left: Brand Mark & Admin Title */}
+            <div className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-2.5">
+                <LogoMark size="small" variant="full" onBackground="dark" />
+              </Link>
+              <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full bg-accent/20 border border-accent/40 text-accent text-[10px] font-mono font-bold uppercase tracking-wider">
+                SUPER ADMIN
+              </span>
             </div>
 
-            {/* Target Site Selector */}
-            <div className="flex items-center gap-2 bg-zinc-900/90 p-1 rounded-lg border border-zinc-800 text-xs font-mono">
-              <Globe className="w-3.5 h-3.5 text-zinc-400 ml-1.5" />
-              <span className="text-[11px] text-zinc-400 font-medium hidden md:inline">Scope:</span>
+            {/* Middle: Multi-Site Switcher Selector */}
+            <div className="hidden sm:flex items-center gap-1 bg-zinc-900/90 border border-zinc-800 p-1 rounded-lg text-xs font-mono">
               <button
                 onClick={() => setSelectedSite("all")}
-                className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                  selectedSite === "all"
-                    ? "bg-accent text-white shadow-xs"
-                    : "text-zinc-400 hover:text-white"
+                className={`px-3 py-1 rounded-md transition-colors ${
+                  selectedSite === "all" ? "bg-zinc-800 text-white font-bold" : "text-zinc-400 hover:text-white"
                 }`}
               >
-                All Sites
+                All Properties
               </button>
               <button
                 onClick={() => setSelectedSite("dbst")}
-                className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                  selectedSite === "dbst"
-                    ? "bg-accent text-white shadow-xs"
-                    : "text-zinc-400 hover:text-white"
+                className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition-colors ${
+                  selectedSite === "dbst" ? "bg-accent text-white font-bold" : "text-zinc-400 hover:text-white"
                 }`}
               >
-                D-BST
+                <span>🌐 D-BST</span>
               </button>
               <button
                 onClick={() => setSelectedSite("growthmates")}
-                className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                  selectedSite === "growthmates"
-                    ? "bg-purple-600 text-white shadow-xs"
-                    : "text-zinc-400 hover:text-white"
+                className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition-colors ${
+                  selectedSite === "growthmates" ? "bg-purple-700 text-white font-bold" : "text-zinc-400 hover:text-white"
                 }`}
               >
-                GrowthMates
+                <span>🚀 GrowthMates</span>
               </button>
             </div>
 
-            {/* User Session & Logout */}
+            {/* Right: User Profile & Actions */}
             <div className="flex items-center gap-3">
-              <div className="text-right hidden md:block">
-                <div className="text-xs font-mono font-medium text-white">{adminEmail}</div>
-                <div className="text-[10px] font-mono text-emerald-400 font-bold">SUPER ADMIN</div>
+              <div className="hidden lg:flex flex-col text-right font-mono text-[11px]">
+                <span className="text-white font-semibold">{adminEmail}</span>
+                <span className="text-emerald-400 text-[10px] flex items-center justify-end gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Sync Online (Email Approved)
+                </span>
               </div>
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
-                title="Sign Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+
+              <div className="flex items-center gap-1">
+                <a
+                  href="https://dbstsolutions.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-md hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
+                  title="Visit dbstsolutions.com"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-md hover:bg-red-950/50 text-zinc-400 hover:text-red-400 transition-colors"
+                  title="Sign out of Super Admin"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Module Navigation Tabs */}
-          <div className="flex items-center gap-1 border-t border-zinc-800/80 -mb-px text-xs font-mono overflow-x-auto">
+        {/* Sub-Header Navigation Tabs */}
+        <div className="border-t border-zinc-800/80 bg-[#131A29]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto text-xs font-mono">
             <button
               onClick={() => setActiveTab("inbox")}
               className={`py-3 px-4 border-b-2 font-bold flex items-center gap-2 whitespace-nowrap transition-all ${

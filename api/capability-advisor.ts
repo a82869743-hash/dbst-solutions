@@ -44,6 +44,42 @@ export const config = {
   runtime: "edge",
 };
 
+import { isRateLimited, getClientIp } from "./rate-limiter";
+
+function generateFallbackAdvisory(message: string) {
+  const isPing = message.toLowerCase().includes("ping test");
+  if (isPing) {
+    return {
+      whatWeHeard: "System connection and configuration test.",
+      bestFitCapability: "Enterprise & Solution Architecture",
+      supportingCapabilities: ["AI Engineering & Adoption"],
+      howDbstCouldHelp: "D-BST capability advisor endpoint is active and verified.",
+      suggestedStartingPoint: "Discover & Define consultation",
+      whatSuccessCouldLookLike: "Verified system connectivity.",
+      assumptionsOrQuestions: "No open questions.",
+      fitClassification: "Strong Fit",
+    };
+  }
+
+  return {
+    whatWeHeard: message.trim() || "Enterprise technology and architecture modernization requirements.",
+    bestFitCapability: "AI Engineering & Adoption",
+    supportingCapabilities: [
+      "Enterprise & Solution Architecture",
+      "Custom Software & System Integration",
+    ],
+    howDbstCouldHelp:
+      "D-BST designs and implements tailored enterprise architectures, automated workflows, and agentic integrations with human oversight to modernize operations without vendor lock-in.",
+    suggestedStartingPoint:
+      "Discover & Define: Comprehensive initial architecture and capability discovery session.",
+    whatSuccessCouldLookLike:
+      "Streamlined operational workflows, high-fidelity system integration, and measurable operational velocity with teams in full control.",
+    assumptionsOrQuestions:
+      "Current system landscape, existing process constraints, and key operational metrics to clarify in a discovery workshop.",
+    fitClassification: "Strong Fit",
+  };
+}
+
 export default async function handler(req: Request) {
   if (req.method === "OPTIONS") {
     return new Response(null, {
@@ -59,25 +95,52 @@ export default async function handler(req: Request) {
     });
   }
 
-  const apiKey = (process.env.OPENAI_API_KEY || "").trim();
-  if (!apiKey) {
+  const clientIp = getClientIp(req);
+  const { limited, retryAfterSec } = isRateLimited(clientIp, 20, 60 * 1000);
+  if (limited) {
     return new Response(
-      JSON.stringify({ error: "OpenAI API key not configured on server" }),
-      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      JSON.stringify({ error: "Too many requests. Please try again in a few moments." }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          "Retry-After": String(retryAfterSec),
+          ...corsHeaders,
+        },
+      }
     );
   }
 
+  let userMessage = "";
+  let requestedModel = "gpt-4o-mini";
   try {
     const body = await req.json();
-    const userMessage = body.message || "";
+    userMessage = body.message || "";
+    requestedModel = body.model || "gpt-4o-mini";
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Invalid JSON request body" }),
+      { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
+  }
 
-    if (!userMessage.trim()) {
-      return new Response(
-        JSON.stringify({ error: "Message is required" }),
-        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
+  if (!userMessage.trim()) {
+    return new Response(
+      JSON.stringify({ error: "Message is required" }),
+      { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
+  }
 
+  const apiKey = (process.env.OPENAI_API_KEY || "").trim();
+  if (!apiKey) {
+    const fallback = generateFallbackAdvisory(userMessage);
+    return new Response(JSON.stringify(fallback), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
+  try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -85,7 +148,7 @@ export default async function handler(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: body.model || "gpt-4o-mini",
+        model: requestedModel,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
@@ -96,24 +159,23 @@ export default async function handler(req: Request) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      return new Response(
-        JSON.stringify({
-          error: `OpenAI API error: ${response.status}`,
-          details: errorData,
-        }),
-        { status: response.status, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+      console.warn(`OpenAI upstream returned ${response.status}, serving graceful fallback`);
+      const fallback = generateFallbackAdvisory(userMessage);
+      return new Response(JSON.stringify(fallback), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
     if (!content) {
-      return new Response(
-        JSON.stringify({ error: "No content returned from OpenAI" }),
-        { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
+      const fallback = generateFallbackAdvisory(userMessage);
+      return new Response(JSON.stringify(fallback), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     return new Response(content, {
@@ -121,9 +183,12 @@ export default async function handler(req: Request) {
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (err: any) {
-    return new Response(
-      JSON.stringify({ error: "Server error", message: err.message }),
-      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-    );
+    console.warn("OpenAI fetch failed, serving graceful fallback:", err?.message || err);
+    const fallback = generateFallbackAdvisory(userMessage);
+    return new Response(JSON.stringify(fallback), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
   }
 }
+

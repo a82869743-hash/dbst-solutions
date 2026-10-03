@@ -5,7 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { DbstNavigation } from "@/components/navigation/DbstNavigation";
 import { DbstFooter } from "@/components/navigation/DbstFooter";
 import BlogAdmin from "@/components/blog/BlogAdmin";
-import { checkAdminUser, verifyAdminRole, purgeResidualClientSecrets } from "@/lib/admin/auth";
+import {
+  checkAdminUser,
+  verifyAdminRole,
+  checkIsUserBanned,
+  checkLoginRateLimit,
+  recordLoginAttempt,
+  purgeResidualClientSecrets,
+} from "@/lib/admin/auth";
 import { toast } from "@/hooks/use-toast";
 
 const BlogAdminPage = () => {
@@ -17,7 +24,12 @@ const BlogAdminPage = () => {
   useEffect(() => {
     purgeResidualClientSecrets();
     (async () => {
-      const { user, isAdmin } = await checkAdminUser();
+      const { user, isAdmin, isBanned } = await checkAdminUser();
+      if (isBanned) {
+        await supabase.auth.signOut();
+        setAuthed(false);
+        return;
+      }
       if (user && isAdmin) {
         setAuthed(true);
       }
@@ -28,20 +40,43 @@ const BlogAdminPage = () => {
     setLoading(true);
     try {
       const trimmedEmail = email.trim().toLowerCase();
+      if (!trimmedEmail || !password) {
+        throw new Error("Email and password are required.");
+      }
+
+      const rateLimit = await checkLoginRateLimit(trimmedEmail);
+      if (!rateLimit.allowed) {
+        await recordLoginAttempt(trimmedEmail, "blocked", "Rate limit lockout triggered", "dbst");
+        throw new Error(`Too many failed attempts. Please wait ${rateLimit.lockoutSeconds || 900} seconds before retrying.`);
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: trimmedEmail,
         password,
       });
-      if (error) throw error;
+      if (error) {
+        await recordLoginAttempt(trimmedEmail, "failure", error.message, "dbst");
+        throw error;
+      }
 
       const userId = data.user?.id;
-      const isAdmin = userId ? await verifyAdminRole(userId) : false;
+      if (!userId) throw new Error("Authentication failed: user ID missing");
 
+      const isBanned = await checkIsUserBanned(userId);
+      if (isBanned) {
+        await recordLoginAttempt(trimmedEmail, "blocked", "Banned account attempted login", "dbst");
+        await supabase.auth.signOut();
+        throw new Error("This account has been disabled. Login rejected.");
+      }
+
+      const isAdmin = await verifyAdminRole(userId);
       if (!isAdmin) {
+        await recordLoginAttempt(trimmedEmail, "failure", "Non-admin account attempted blog admin access", "dbst");
         await supabase.auth.signOut();
         throw new Error("Access denied: admin role required in user_roles.");
       }
 
+      await recordLoginAttempt(trimmedEmail, "success", "Blog admin privileges verified", "dbst");
       setAuthed(true);
       toast({ title: "Welcome", description: "Blog admin privileges verified." });
     } catch (e: any) {
