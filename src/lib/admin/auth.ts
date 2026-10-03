@@ -152,7 +152,7 @@ export async function requestEmailOtp({
   recipientHint?: string;
 }> {
   try {
-    const res = await fetch("/api/admin-otp", {
+    const res = await fetch("/api/admin-auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -196,7 +196,7 @@ export async function verifyEmailOtp({
   banned?: boolean;
 }> {
   try {
-    const res = await fetch("/api/admin-otp", {
+    const res = await fetch("/api/admin-auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

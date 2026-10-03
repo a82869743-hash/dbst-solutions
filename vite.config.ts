@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { checkRateLimit, recordAttempt } from "./api/admin-auth";
+import adminAuthHandler, { checkRateLimit, recordAttempt } from "./api/admin-auth";
 import { handleCredentialsUpdate } from "./api/admin-credentials";
 import capabilityAdvisorHandler from "./api/capability-advisor";
 
@@ -34,40 +34,9 @@ function apiDevServerPlugin(env: Record<string, string>) {
       server.middlewares.use(async (req: any, res: any, next: any) => {
         const url = req.url || "";
 
-        if (url.startsWith("/api/admin-auth") && req.method === "POST") {
+        if ((url.startsWith("/api/admin-auth") || url.startsWith("/api/admin-otp")) && req.method === "POST") {
           try {
-            const body = await parseBody(req);
-            const forwarded = req.headers["x-forwarded-for"];
-            const ip =
-              (typeof forwarded === "string" ? forwarded.split(",")[0] : req.socket?.remoteAddress) ||
-              "127.0.0.1";
-            const { action, email, status, reason, target_site = "dbst" } = body || {};
-
-            if (action === "check-rate-limit") {
-              const result = await checkRateLimit(ip, email || "");
-              res.statusCode = 200;
-              res.setHeader("Content-Type", "application/json");
-              res.end(JSON.stringify(result));
-              return;
-            }
-
-            if (action === "record-attempt") {
-              const result = await recordAttempt({
-                ip,
-                email: email || "",
-                status: status || "failure",
-                reason,
-                target_site,
-              });
-              res.statusCode = 200;
-              res.setHeader("Content-Type", "application/json");
-              res.end(JSON.stringify(result));
-              return;
-            }
-
-            res.statusCode = 400;
-            res.setHeader("Content-Type", "application/json");
-            res.end(JSON.stringify({ error: "Unknown action" }));
+            await adminAuthHandler(req, res);
             return;
           } catch (err: any) {
             console.error("Vite Dev Server API Error (/api/admin-auth):", err?.message || err);

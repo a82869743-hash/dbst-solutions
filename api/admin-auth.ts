@@ -406,10 +406,15 @@ async function sendApprovalEmail({
 
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
+      const errorMsg =
+        errData.message ||
+        (typeof errData === "string" ? errData : `HTTP ${res.status}`);
       console.error("[ADMIN_OTP] Resend API error:", JSON.stringify(errData));
-      return { sent: false, error: errData.message || `HTTP ${res.status}` };
+      return { sent: false, error: errorMsg };
     }
 
+    const resendData = await res.json().catch(() => ({}));
+    console.log("[ADMIN_OTP] Email successfully dispatched via Resend:", resendData?.id);
     return { sent: true };
   } catch (err: any) {
     console.error("[ADMIN_OTP] Email delivery failed:", err?.message || err);
@@ -616,6 +621,7 @@ export async function requestOtp({
           device: deviceLabel,
           ip,
           email_sent: emailResult.sent,
+          email_error: emailResult.error || null,
           timestamp: new Date().toISOString(),
         },
       });
@@ -624,6 +630,24 @@ export async function requestOtp({
 
   const notifyRecipient = process.env.ADMIN_OTP_NOTIFY_EMAIL || "bimal.swaroop@gmail.com";
   const maskedRecipient = notifyRecipient.replace(/^(.{2})(.*)(@.*)$/, (_, a, b, c) => `${a}${"*".repeat(Math.max(2, b.length))}${c}`);
+
+  if (!emailResult.sent) {
+    const isTest = process.env.NODE_ENV === "test";
+    if (isTest && !process.env.RESEND_API_KEY) {
+      return {
+        success: true,
+        message: `[TEST MODE] Approval code generated: ${code}`,
+        recipientHint: maskedRecipient,
+        expiresInSeconds: 300,
+      };
+    }
+
+    return {
+      success: false,
+      error: `Email delivery failed: ${emailResult.error || "Unable to send approval email via Resend"}. Please verify RESEND_API_KEY in Vercel settings.`,
+      recipientHint: maskedRecipient,
+    };
+  }
 
   return {
     success: true,
